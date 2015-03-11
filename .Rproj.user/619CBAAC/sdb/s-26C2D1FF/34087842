@@ -1,12 +1,12 @@
 {
-    "contents" : "",
+    "contents" : "leerArchivo <- function(){\n  suppressMessages(require(gdata));\n  comuna <- read.xls(\"data/comuna-10.xls\");\n  densidadFollajeEspecifico(comuna);\n}",
     "created" : 1426041821777.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "2935717486",
     "id" : "34087842",
-    "lastKnownWriteTime" : 1426041878,
+    "lastKnownWriteTime" : 1426042104,
     "path" : "D:/2015/Ut/ReportesLabSIG/reportes.R",
     "project_path" : "reportes.R",
     "properties" : {
