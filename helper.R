@@ -1,5 +1,5 @@
-configurarEntorno();
 leerArchivo <- function(){
+  configurarEntorno();
   comuna <- read.xls("data/comuna-10.xls");
   densidadFollajeGeneral(comuna);
   densidadFollajeEspecifico(comuna);  

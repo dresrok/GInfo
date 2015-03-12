@@ -1,12 +1,12 @@
 {
-    "contents" : "configurarEntorno();\nleerArchivo <- function(){\n  comuna <- read.xls(\"data/comuna-10.xls\");\n  densidadFollajeGeneral(comuna);\n  densidadFollajeEspecifico(comuna);  \n}\nsave.xlsx <- function (file, ...){  \n  objects <- list(...)\n  fargs <- as.list(match.call(expand.dots = TRUE))\n  objnames <- as.character(fargs)[-c(1, 2)]\n  nobjects <- length(objects)\n  for (i in 1:nobjects) {\n    if (i == 1)\n      write.xlsx(objects[[i]], file, sheetName = objnames[i])\n    else write.xlsx(objects[[i]], file, sheetName = objnames[i],\n                    append = TRUE)\n  }\n  print(paste(\"El archivo\", file, \"tiene\", nobjects, \"subhojas.\"))\n}",
+    "contents" : "leerArchivo <- function(){\n  configurarEntorno();\n  comuna <- read.xls(\"data/comuna-10.xls\");\n  densidadFollajeGeneral(comuna);\n  densidadFollajeEspecifico(comuna);  \n}\nsave.xlsx <- function (file, ...){  \n  objects <- list(...)\n  fargs <- as.list(match.call(expand.dots = TRUE))\n  objnames <- as.character(fargs)[-c(1, 2)]\n  nobjects <- length(objects)\n  for (i in 1:nobjects) {\n    if (i == 1)\n      write.xlsx(objects[[i]], file, sheetName = objnames[i])\n    else write.xlsx(objects[[i]], file, sheetName = objnames[i],\n                    append = TRUE)\n  }\n  print(paste(\"El archivo\", file, \"tiene\", nobjects, \"subhojas.\"))\n}",
     "created" : 1426121140009.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1504077951",
+    "hash" : "2018429",
     "id" : "D1C4618",
-    "lastKnownWriteTime" : 1426123390,
+    "lastKnownWriteTime" : 1426125813,
     "path" : "D:/2015/Ut/ReportesLabSIG/helper.R",
     "project_path" : "helper.R",
     "properties" : {

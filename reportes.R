@@ -23,7 +23,7 @@ densidadFollajeEspecifico <- function(comuna){
     xm = round(tmpFollajeBarrios[,2]/sum(tmpFollajeBarrios[,2]), 4),
     ralo = tmpFollajeBarrios[,3],
     xr = round(tmpFollajeBarrios[,3]/sum(tmpFollajeBarrios[,3]), 4)
-  );
+  );  
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)))
   tmpFollajeCorredores <- as.data.frame.matrix(
     table(factor(corredores$barrio), corredores$densidad_follaje)
@@ -70,6 +70,23 @@ densidadFollajeGeneral <- function(comuna){
     arboles = tmpFollajeBarrios$Freq,
     xd = round(tmpFollajeBarrios$Freq/sum(tmpFollajeBarrios$Freq), 4)
   );
+  tmpTop <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$densidad_follaje)
+  );
+  top <- data.frame(
+    barrios = rownames(tmpTop),
+    denso = tmpTop[,1],
+    medio = tmpTop[,2],
+    ralo = tmpTop[,3]
+  );
+  topBarrios <- data.frame(
+    barriosDenso = head(top[ order(-top$denso), 1], 10),
+    arbolesDenso = head(top[ order(-top$denso), 2], 10),
+    barriosMedio = head(top[ order(-top$medio), 1], 10),
+    arbolesMedio = head(top[ order(-top$medio), 3], 10),
+    barriosRalo = head(top[ order(-top$ralo), 1], 10),
+    arbolesRalo = head(top[ order(-top$ralo), 4], 10)
+  );
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)))
   tmpFollajeCorredores <- as.data.frame(
     table(corredores$densidad_follaje)
@@ -88,5 +105,5 @@ densidadFollajeGeneral <- function(comuna){
     arboles = tmpFollajeInstituciones$Freq,
     xd = round(tmpFollajeInstituciones$Freq/sum(tmpFollajeInstituciones$Freq), 4)
   );
-  save.xlsx("F1_densidad_follaje.xlsx", follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones)
+  save.xlsx("F1_densidad_follaje.xlsx", follajeComuna, follajeBarrios, topBarrios, follajeCorredores, follajeInstituciones)
 }
