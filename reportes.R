@@ -1,8 +1,3 @@
-leerArchivo <- function(){
-  suppressMessages(require(gdata));
-  comuna <- read.xls("data/comuna-10.xls");
-  densidadFollajeEspecifico(comuna);
-}
 densidadFollajeEspecifico <- function(comuna){
   tmpFollajeComuna <- as.data.frame.matrix(
     table(comuna$barrio, comuna$densidad_follaje)
@@ -55,20 +50,43 @@ densidadFollajeEspecifico <- function(comuna){
     ralo = tmpFollajeInstituciones[,3],
     xr = round(tmpFollajeInstituciones[,3]/sum(tmpFollajeInstituciones[,3]), 4)
   );
-  save.xlsx("F1_densidad_follaje.xlsx", follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones)
+  save.xlsx("F19_densidad_follaje.xlsx", follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones)
 }
-save.xlsx <- function (file, ...){
-  Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre8')
-  require(xlsx, quietly = TRUE)
-  objects <- list(...)
-  fargs <- as.list(match.call(expand.dots = TRUE))
-  objnames <- as.character(fargs)[-c(1, 2)]
-  nobjects <- length(objects)
-  for (i in 1:nobjects) {
-    if (i == 1)
-      write.xlsx(objects[[i]], file, sheetName = objnames[i])
-    else write.xlsx(objects[[i]], file, sheetName = objnames[i],
-                    append = TRUE)
-  }
-  print(paste("El archivo", file, "tiene", nobjects, "subhojas."))
+densidadFollajeGeneral <- function(comuna){
+  tmpFollajeComuna <- as.data.frame(
+    table(comuna$densidad_follaje)
+  );
+  follajeComuna <- data.frame(
+    densidad = c("Denso", "Medio", "Ralo"),
+    arboles = tmpFollajeComuna$Freq,
+    xd = round(tmpFollajeComuna$Freq/sum(tmpFollajeComuna$Freq), 4)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)))
+  tmpFollajeBarrios <- as.data.frame(
+    table(barrios$densidad_follaje)
+  );
+  follajeBarrios <- data.frame(
+    densidad = c("Denso", "Medio", "Ralo"),
+    arboles = tmpFollajeBarrios$Freq,
+    xd = round(tmpFollajeBarrios$Freq/sum(tmpFollajeBarrios$Freq), 4)
+  );
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)))
+  tmpFollajeCorredores <- as.data.frame(
+    table(corredores$densidad_follaje)
+  );
+  follajeCorredores <- data.frame(
+    densidad = c("Denso", "Medio", "Ralo"),
+    arboles = tmpFollajeCorredores$Freq,
+    xd = round(tmpFollajeCorredores$Freq/sum(tmpFollajeCorredores$Freq), 4)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)))
+  tmpFollajeInstituciones <- as.data.frame(
+    table(instituciones$densidad_follaje)
+  );
+  follajeInstituciones <- data.frame(
+    densidad = c("Denso", "Medio", "Ralo"),
+    arboles = tmpFollajeInstituciones$Freq,
+    xd = round(tmpFollajeInstituciones$Freq/sum(tmpFollajeInstituciones$Freq), 4)
+  );
+  save.xlsx("F1_densidad_follaje.xlsx", follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones)
 }
