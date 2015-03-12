@@ -87,6 +87,24 @@ densidadFollajeGeneral <- function(comuna){
     barriosRalo = head(top[ order(-top$ralo), 1], 10),
     arbolesRalo = head(top[ order(-top$ralo), 4], 10)
   );
+  sep <- data.frame(
+    barriosDenso = "---",
+    arbolesDenso = "---",
+    barriosMedio = "---",
+    arbolesMedio = "---",
+    barriosRalo = "---",
+    arbolesRalo = "---"
+  );
+  topBarrios <- rbind(topBarrios, sep);
+  bottomBarrios <- data.frame(
+    barriosDenso = head(top[ order(top$denso), 1], 5),
+    arbolesDenso = head(top[ order(top$denso), 2], 5),
+    barriosMedio = head(top[ order(top$medio), 1], 5),
+    arbolesMedio = head(top[ order(top$medio), 3], 5),
+    barriosRalo = head(top[ order(top$ralo), 1], 5),
+    arbolesRalo = head(top[ order(top$ralo), 4], 5)
+  );
+  topBarrios <- rbind(topBarrios, bottomBarrios);
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)))
   tmpFollajeCorredores <- as.data.frame(
     table(corredores$densidad_follaje)
