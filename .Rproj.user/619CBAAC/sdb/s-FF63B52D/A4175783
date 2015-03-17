@@ -1,0 +1,17 @@
+{
+    "contents" : "leerArchivo <- function(){\n  configurarEntorno();\n  comuna <- read.xls(\"data/comuna-10.xls\");\n  densidadFollajeGeneral(comuna);\n  densidadFollajeEspecifico(comuna);\n  emplazamientoEspecifico(comuna);\n}\ndominio <- function(dataFrame, dominio, indice, operacion = NULL){\n  if(operacion == 1){\n    switch(dominio, \n      densidad={    \n        if(indice %in% colnames(dataFrame)){\n          return(dataFrame[[as.character(indice)]]);\n        }\n        return(0);            \n      },\n      emplazamiento={      \n        if(indice %in% colnames(dataFrame)){\n          return(dataFrame[[as.character(indice)]]);\n        }\n        return(0);     \n      }\n    );\n  } else if(operacion == 2){\n    switch(dominio, \n      densidad={    \n        if(indice %in% colnames(dataFrame)){\n          return(round(dataFrame[[as.character(indice)]]/sum(dataFrame[[as.character(indice)]]), 4));\n        }\n        return(0);\n      },\n      emplazamiento={      \n        if(indice %in% colnames(dataFrame)){\n          return(round(dataFrame[[as.character(indice)]]/sum(dataFrame[[as.character(indice)]]), 4));\n        }\n        return(0);\n      }\n    );\n  }  \n}\nsave.xlsx <- function (file, ...){  \n  objects <- list(...)\n  fargs <- as.list(match.call(expand.dots = TRUE))\n  objnames <- as.character(fargs)[-c(1, 2)]\n  nobjects <- length(objects)\n  for (i in 1:nobjects) {\n    if (i == 1)\n      write.xlsx(objects[[i]], file, sheetName = objnames[i])\n    else write.xlsx(objects[[i]], file, sheetName = objnames[i],\n                    append = TRUE)\n  }\n  print(paste(\"El archivo\", file, \"tiene\", nobjects, \"subhojas.\"))\n}",
+    "created" : 1426168352753.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2629942506",
+    "id" : "A4175783",
+    "lastKnownWriteTime" : 1426561968,
+    "path" : "D:/2015/Ut/ReportesLabSIG/helper.R",
+    "project_path" : "helper.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
