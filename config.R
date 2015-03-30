@@ -8,7 +8,7 @@ configurarDominios <- function(){
 	CHECK <<- 1;
   SUM <<- 2;
 
-  densidad <- list(
+  densidad <<- list(
     dominio = "densidad",
     encabezado = c("Denso", "Medio", "Ralo"),
     denso = 1,
@@ -16,7 +16,7 @@ configurarDominios <- function(){
     ralo = 3
   );
 
-  emplazamiento <- list(
+  emplazamiento <<- list(
     dominio = "emplazamiento",
     encabezado = c("Parque", "Glorieta", "Andén", "Alcorque", "Separador Vial", "Ante Jardín", "Zona Blanda"),
     pr = 1,
