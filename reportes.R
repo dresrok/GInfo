@@ -475,3 +475,75 @@ estadoSanitarioEspecifico <- function(comuna){
   );
   save.xlsx(estadoSanitario$informeEspecifico, estadoSanitarioComuna, estadoSanitarioBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
 }
+estadoSanitarioGeneral <- function(comuna){
+  tmpEstadoSanitarioComuna <- as.data.frame(
+    table(comuna$estado_sanitario)
+  );
+  estadoFisicoComuna <- data.frame(
+    estadoSanitario = encabezado(estadoSanitario$encabezado, tmpEstadoSanitarioComuna$Var1),
+    arboles = tmpEstadoSanitarioComuna$Freq,
+    xes = round(tmpEstadoSanitarioComuna$Freq/sum(tmpEstadoSanitarioComuna$Freq), 4)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpEstadoFisicoBarrios <- as.data.frame(
+    table(barrios$estado_sanitario)
+  );
+  estadoSanitarioBarrios <- data.frame(
+    estadoSanitario = encabezado(estadoSanitario$encabezado, tmpEstadoFisicoBarrios$Var1),
+    arboles = tmpEstadoFisicoBarrios$Freq,
+    xes = round(tmpEstadoFisicoBarrios$Freq/sum(tmpEstadoFisicoBarrios$Freq), 4)
+  );
+  tmpTop <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$estado_sanitario)
+  );
+  top <- data.frame(
+    barrios = rownames(tmpTop),
+    muerto = dominio(tmpTop, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
+    critico = dominio(tmpTop, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
+    enfermo = dominio(tmpTop, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
+    sano = dominio(tmpTop, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
+    stringsAsFactors=FALSE
+  );
+  topBarrios <- data.frame(
+    barriosMuerto = head(top[ order(-top$muerto), 1], 10),
+    arbolesMuerto = head(top[ order(-top$muerto), 2], 10),
+    barriosCritico = head(top[ order(-top$critico), 1], 10),
+    arbolesCritico = head(top[ order(-top$critico), 3], 10),
+    barriosEnfermo = head(top[ order(-top$enfermo), 1], 10),
+    arbolesEnfermo = head(top[ order(-top$enfermo), 4], 10),
+    barriosSano = head(top[ order(-top$sano), 1], 10),
+    arbolesSano = head(top[ order(-top$sano), 5], 10),
+    stringsAsFactors=FALSE
+  );
+  topBarrios <- rbind(topBarrios, "---");
+  bottomBarrios <- data.frame(
+    barriosMuerto = head(top[ order(-top$muerto), 1], 10),
+    arbolesMuerto = head(top[ order(-top$muerto), 2], 10),
+    barriosCritico = head(top[ order(-top$critico), 1], 10),
+    arbolesCritico = head(top[ order(-top$critico), 3], 10),
+    barriosEnfermo = head(top[ order(-top$enfermo), 1], 10),
+    arbolesEnfermo = head(top[ order(-top$enfermo), 4], 10),
+    barriosSano = head(top[ order(-top$sano), 1], 10),
+    arbolesSano = head(top[ order(-top$sano), 5], 10),
+  );
+  topBarrios <- rbind(topBarrios, bottomBarrios);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpEstadoSanitarioCorredores <- as.data.frame(
+    table(corredores$estado_sanitario)
+  );
+  estadoSanitarioCorredores <- data.frame(
+    estadoSanitario = encabezado(estadoSanitario$encabezado, tmpEstadoSanitarioCorredores$Var1),
+    arboles = tmpEstadoSanitarioCorredores$Freq,
+    xes = round(tmpEstadoSanitarioCorredores$Freq/sum(tmpEstadoSanitarioCorredores$Freq), 4)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpEstadoSanitarioInstituciones <- as.data.frame(
+    table(instituciones$estado_sanitario)
+  );
+  estadoSanitarioInstituciones <- data.frame(
+    estadoSanitario = encabezado(estadoSanitario$encabezado, tmpEstadoSanitarioInstituciones$Var1),
+    arboles = tmpEstadoSanitarioInstituciones$Freq,
+    xes = round(tmpEstadoSanitarioInstituciones$Freq/sum(tmpEstadoSanitarioInstituciones$Freq), 4)
+  );
+  save.xlsx(estadoSanitario$informeGeneral, estadoFisicoComuna, estadoSanitarioBarrios, topBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
+}
