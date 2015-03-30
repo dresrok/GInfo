@@ -9,11 +9,13 @@ configurarDominios <- function(){
   SUM <<- 2;
 
   densidad <<- "densidad";
+  densidad.header <<- c("Denso", "Medio", "Ralo");
   densidad.denso <<- 1;
   densidad.medio <<- 2
   densidad.ralo <<- 3;
 
 	emplazamiento <<- "emplazamiento";
+	emplazamiento.header <<- c("Parque", "Glorieta", "Andén", "Alcorque", "Separador Vial", "Ante Jardín", "Zona Blanda");
 	emplazamiento.pr <<- 1;
 	emplazamiento.gl <<- 2;
 	emplazamiento.an <<- 3;

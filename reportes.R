@@ -4,12 +4,12 @@ densidadFollajeEspecifico <- function(comuna){
   );
   follajeComuna <- data.frame(
     barrio = rownames(tmpFollajeComuna),
-    denso = tmpFollajeComuna[,1],
-    xd = round(tmpFollajeComuna[,1]/sum(tmpFollajeComuna[,1]), 4),
-    medio = tmpFollajeComuna[,2],
-    xm = round(tmpFollajeComuna[,2]/sum(tmpFollajeComuna[,2]), 4),
-    ralo = tmpFollajeComuna[,3],
-    xr = round(tmpFollajeComuna[,3]/sum(tmpFollajeComuna[,3]), 4)
+    denso = dominio(tmpFollajeComuna, densidad, densidad.denso, CHECK),
+    xd = dominio(tmpFollajeComuna, densidad, densidad.denso, SUM),
+    medio = dominio(tmpFollajeComuna, densidad, densidad.medio, CHECK),
+    xm = dominio(tmpFollajeComuna, densidad, densidad.medio, SUM),
+    ralo = dominio(tmpFollajeComuna, densidad, densidad.ralo, CHECK),
+    xr = dominio(tmpFollajeComuna, densidad, densidad.ralo, SUM)
   );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)))
   tmpFollajeBarrios <- as.data.frame.matrix(
@@ -17,12 +17,12 @@ densidadFollajeEspecifico <- function(comuna){
   );
   follajeBarrios <- data.frame(
     barrio = rownames(tmpFollajeBarrios),
-    denso = tmpFollajeBarrios[,1],
-    xd = round(tmpFollajeBarrios[,1]/sum(tmpFollajeBarrios[,1]), 4),
-    medio = tmpFollajeBarrios[,2],
-    xm = round(tmpFollajeBarrios[,2]/sum(tmpFollajeBarrios[,2]), 4),
-    ralo = tmpFollajeBarrios[,3],
-    xr = round(tmpFollajeBarrios[,3]/sum(tmpFollajeBarrios[,3]), 4)
+    denso = dominio(tmpFollajeBarrios, densidad, densidad.denso, CHECK),
+    xd = dominio(tmpFollajeBarrios, densidad, densidad.denso, SUM),
+    medio = dominio(tmpFollajeBarrios, densidad, densidad.medio, CHECK),
+    xm = dominio(tmpFollajeBarrios, densidad, densidad.medio, SUM),
+    ralo = dominio(tmpFollajeBarrios, densidad, densidad.ralo, CHECK),
+    xr = dominio(tmpFollajeBarrios, densidad, densidad.ralo, SUM)
   );  
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)))
   tmpFollajeCorredores <- as.data.frame.matrix(
@@ -30,12 +30,12 @@ densidadFollajeEspecifico <- function(comuna){
   );
   follajeCorredores <- data.frame(
     barrio = rownames(tmpFollajeCorredores),
-    denso = tmpFollajeCorredores[,1],
-    xd = round(tmpFollajeCorredores[,1]/sum(tmpFollajeCorredores[,1]), 4),
-    medio = tmpFollajeCorredores[,2],
-    xm = round(tmpFollajeCorredores[,2]/sum(tmpFollajeCorredores[,2]), 4),
-    ralo = tmpFollajeCorredores[,3],
-    xr = round(tmpFollajeCorredores[,3]/sum(tmpFollajeCorredores[,3]), 4)
+    denso = dominio(tmpFollajeCorredores, densidad, densidad.denso, CHECK),
+    xd = dominio(tmpFollajeCorredores, densidad, densidad.denso, SUM),
+    medio = dominio(tmpFollajeCorredores, densidad, densidad.medio, CHECK),
+    xm = dominio(tmpFollajeCorredores, densidad, densidad.medio, SUM),
+    ralo = dominio(tmpFollajeCorredores, densidad, densidad.ralo, CHECK),
+    xr = dominio(tmpFollajeCorredores, densidad, densidad.ralo, SUM)
   );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)))
   tmpFollajeInstituciones <- as.data.frame.matrix(
@@ -43,12 +43,12 @@ densidadFollajeEspecifico <- function(comuna){
   );
   follajeInstituciones <- data.frame(
     barrio = rownames(tmpFollajeInstituciones),
-    denso = tmpFollajeInstituciones[,1],
-    xd = round(tmpFollajeInstituciones[,1]/sum(tmpFollajeInstituciones[,1]), 4),
-    medio = tmpFollajeInstituciones[,2],
-    xm = round(tmpFollajeInstituciones[,2]/sum(tmpFollajeInstituciones[,2]), 4),
-    ralo = tmpFollajeInstituciones[,3],
-    xr = round(tmpFollajeInstituciones[,3]/sum(tmpFollajeInstituciones[,3]), 4)
+    denso = dominio(tmpFollajeInstituciones, densidad, densidad.denso, CHECK),
+    xd = dominio(tmpFollajeInstituciones, densidad, densidad.denso, SUM),
+    medio = dominio(tmpFollajeInstituciones, densidad, densidad.medio, CHECK),
+    xm = dominio(tmpFollajeInstituciones, densidad, densidad.medio, SUM),
+    ralo = dominio(tmpFollajeInstituciones, densidad, densidad.ralo, CHECK),
+    xr = dominio(tmpFollajeInstituciones, densidad, densidad.ralo, SUM)
   );
   save.xlsx("F19_densidad_follaje.xlsx", follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones)
 }
@@ -57,7 +57,7 @@ densidadFollajeGeneral <- function(comuna){
     table(comuna$densidad_follaje)
   );
   follajeComuna <- data.frame(
-    densidad = c("Denso", "Medio", "Ralo"),
+    densidad = densidad.header,
     arboles = tmpFollajeComuna$Freq,
     xd = round(tmpFollajeComuna$Freq/sum(tmpFollajeComuna$Freq), 4)
   );
@@ -66,7 +66,7 @@ densidadFollajeGeneral <- function(comuna){
     table(barrios$densidad_follaje)
   );
   follajeBarrios <- data.frame(
-    densidad = c("Denso", "Medio", "Ralo"),
+    densidad = densidad.header,
     arboles = tmpFollajeBarrios$Freq,
     xd = round(tmpFollajeBarrios$Freq/sum(tmpFollajeBarrios$Freq), 4)
   );
@@ -75,9 +75,9 @@ densidadFollajeGeneral <- function(comuna){
   );
   top <- data.frame(
     barrios = rownames(tmpTop),
-    denso = tmpTop[,1],
-    medio = tmpTop[,2],
-    ralo = tmpTop[,3]
+    denso = dominio(tmpTop, densidad, densidad.denso, CHECK),
+    medio = dominio(tmpTop, densidad, densidad.medio, CHECK),
+    ralo = dominio(tmpTop, densidad, densidad.ralo, CHECK)
   );
   topBarrios <- data.frame(
     barriosDenso = head(top[ order(-top$denso), 1], 10),
@@ -110,7 +110,7 @@ densidadFollajeGeneral <- function(comuna){
     table(corredores$densidad_follaje)
   );
   follajeCorredores <- data.frame(
-    densidad = c("Denso", "Medio", "Ralo"),
+    densidad = densidad.header,
     arboles = tmpFollajeCorredores$Freq,
     xd = round(tmpFollajeCorredores$Freq/sum(tmpFollajeCorredores$Freq), 4)
   );
@@ -119,7 +119,7 @@ densidadFollajeGeneral <- function(comuna){
     table(instituciones$densidad_follaje)
   );
   follajeInstituciones <- data.frame(
-    densidad = c("Denso", "Medio", "Ralo"),
+    densidad = densidad.header,
     arboles = tmpFollajeInstituciones$Freq,
     xd = round(tmpFollajeInstituciones$Freq/sum(tmpFollajeInstituciones$Freq), 4)
   );
@@ -131,20 +131,20 @@ emplazamientoEspecifico <- function(comuna){
   );
   emplazamientoComuna <- data.frame(
     barrio = rownames(tmpEmplazamientoComuna),
-    parque = tmpEmplazamientoComuna[,1],
-    xpr = round(tmpEmplazamientoComuna[,1]/sum(tmpEmplazamientoComuna[,1]), 4),
-    glorieta = tmpEmplazamientoComuna[,2],
-    xgl = round(tmpEmplazamientoComuna[,2]/sum(tmpEmplazamientoComuna[,2]), 4),
-    anden = tmpEmplazamientoComuna[,3],
-    xan = round(tmpEmplazamientoComuna[,3]/sum(tmpEmplazamientoComuna[,3]), 4),
-    alcorque = tmpEmplazamientoComuna[,4],
-    xal = round(tmpEmplazamientoComuna[,4]/sum(tmpEmplazamientoComuna[,4]), 4),
-    separador = tmpEmplazamientoComuna[,5],
-    xsp = round(tmpEmplazamientoComuna[,5]/sum(tmpEmplazamientoComuna[,5]), 4),
-    antejardin = tmpEmplazamientoComuna[,6],
-    xant = round(tmpEmplazamientoComuna[,6]/sum(tmpEmplazamientoComuna[,6]), 4),
-    zonablanda = tmpEmplazamientoComuna[,7],
-    xzb = round(tmpEmplazamientoComuna[,7]/sum(tmpEmplazamientoComuna[,7]), 4)
+    parque = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.pr, CHECK),
+    xpr = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.pr, SUM),
+    glorieta = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.gl, CHECK),
+    xgl = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.gl, SUM),
+    anden = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.an, CHECK),
+    xan = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.an, SUM),
+    alcorque = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.al, CHECK),
+    xal = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.al, SUM),
+    separador = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.sp, CHECK),
+    xsp = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.sp, SUM),
+    antejardin = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.ant, CHECK),
+    xant = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.ant, SUM),
+    zonablanda = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.zb, CHECK),
+    xzb = dominio(tmpEmplazamientoComuna, emplazamiento, emplazamiento.zb, SUM)
   );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)))
   tmpEmplazamientoBarrios <- as.data.frame.matrix(
@@ -152,20 +152,20 @@ emplazamientoEspecifico <- function(comuna){
   );
   emplazamientoBarrios <- data.frame(
     barrio = rownames(tmpEmplazamientoBarrios),
-    parque = tmpEmplazamientoBarrios[,1],
-    xpr = round(tmpEmplazamientoBarrios[,1]/sum(tmpEmplazamientoBarrios[,1]), 4),
-    glorieta = tmpEmplazamientoBarrios[,2],
-    xgl = round(tmpEmplazamientoBarrios[,2]/sum(tmpEmplazamientoBarrios[,2]), 4),
-    anden = tmpEmplazamientoBarrios[,3],
-    xan = round(tmpEmplazamientoBarrios[,3]/sum(tmpEmplazamientoBarrios[,3]), 4),
-    alcorque = tmpEmplazamientoBarrios[,4],
-    xal = round(tmpEmplazamientoBarrios[,4]/sum(tmpEmplazamientoBarrios[,4]), 4),
-    separador = tmpEmplazamientoBarrios[,5],
-    xsp = round(tmpEmplazamientoBarrios[,5]/sum(tmpEmplazamientoBarrios[,5]), 4),
-    antejardin = tmpEmplazamientoBarrios[,6],
-    xant = round(tmpEmplazamientoBarrios[,6]/sum(tmpEmplazamientoBarrios[,6]), 4),
-    zonablanda = tmpEmplazamientoBarrios[,7],
-    xzb = round(tmpEmplazamientoBarrios[,7]/sum(tmpEmplazamientoBarrios[,7]), 4)
+    parque = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.pr, CHECK),
+    xpr = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.pr, SUM),
+    glorieta = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.gl, CHECK),
+    xgl = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.gl, SUM),
+    anden = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.an, CHECK),
+    xan = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.an, SUM),
+    alcorque = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.al, CHECK),
+    xal = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.al, SUM),
+    separador = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.sp, CHECK),
+    xsp = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.sp, SUM),
+    antejardin = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.ant, CHECK),
+    xant = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.ant, SUM),
+    zonablanda = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.zb, CHECK),
+    xzb = dominio(tmpEmplazamientoBarrios, emplazamiento, emplazamiento.zb, SUM)
   );
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)))
   tmpEmplazamientoCorredores <- as.data.frame.matrix(
@@ -173,18 +173,18 @@ emplazamientoEspecifico <- function(comuna){
   );
   emplazamientoCorredores <- data.frame(
     barrio = rownames(tmpEmplazamientoCorredores),
-    parque = tmpEmplazamientoCorredores[,1],
-    xpr = round(tmpEmplazamientoCorredores[,1]/sum(tmpEmplazamientoCorredores[,1])),
+    parque = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.pr, CHECK),
+    xpr = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.pr, SUM),
     glorieta = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.gl, CHECK),
     xgl = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.gl, SUM),
-    anden = tmpEmplazamientoCorredores[,3],
-    xan = round(tmpEmplazamientoCorredores[,3]/sum(tmpEmplazamientoCorredores[,3])),
-    alcorque = tmpEmplazamientoCorredores[,4],
-    xal = round(tmpEmplazamientoCorredores[,4]/sum(tmpEmplazamientoCorredores[,4])),
-    separador = tmpEmplazamientoCorredores[,5],
-    xsp = round(tmpEmplazamientoCorredores[,5]/sum(tmpEmplazamientoCorredores[,5])),
-    antejardin = tmpEmplazamientoCorredores[,6],
-    xant = round(tmpEmplazamientoCorredores[,6]/sum(tmpEmplazamientoCorredores[,6])),
+    anden = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.an, CHECK),
+    xan = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.an, SUM),
+    alcorque = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.al, CHECK),
+    xal = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.al, SUM),
+    separador = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.sp, CHECK),
+    xsp = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.sp, SUM),
+    antejardin = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.ant, CHECK),
+    xant = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.ant, SUM),
     zonablanda = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.zb, CHECK),
     xzb = dominio(tmpEmplazamientoCorredores, emplazamiento, emplazamiento.zb, SUM)
   );
@@ -194,20 +194,121 @@ emplazamientoEspecifico <- function(comuna){
   );
   emplazamientoInstituciones <- data.frame(
     barrio = rownames(tmpEmplazamientoInstituciones),
-    parque = tmpEmplazamientoInstituciones[,1],
-    xpr = round(tmpEmplazamientoInstituciones[,1]/sum(tmpEmplazamientoInstituciones[,1])),
-    glorieta = tmpEmplazamientoInstituciones[,2],
-    xgl = round(tmpEmplazamientoInstituciones[,2]/sum(tmpEmplazamientoInstituciones[,2])),
-    anden = tmpEmplazamientoInstituciones[,3],
-    xan = round(tmpEmplazamientoInstituciones[,3]/sum(tmpEmplazamientoInstituciones[,3])),
-    alcorque = tmpEmplazamientoInstituciones[,4],
-    xal = round(tmpEmplazamientoInstituciones[,4]/sum(tmpEmplazamientoInstituciones[,4])),
-    separador = tmpEmplazamientoInstituciones[,5],
-    xsp = round(tmpEmplazamientoInstituciones[,5]/sum(tmpEmplazamientoInstituciones[,5])),
-    antejardin = tmpEmplazamientoInstituciones[,6],
-    xant = round(tmpEmplazamientoInstituciones[,6]/sum(tmpEmplazamientoInstituciones[,6])),
+    parque = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.pr, CHECK),
+    xpr = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.pr, SUM),
+    glorieta = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.gl, CHECK),
+    xgl = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.gl, SUM),
+    anden = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.an, CHECK),
+    xan = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.an, SUM),
+    alcorque = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.al, CHECK),
+    xal = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.al, SUM),
+    separador = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.sp, CHECK),
+    xsp = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.sp, SUM),
+    antejardin = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.ant, CHECK),
+    xant = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.ant, SUM),
     zonablanda = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.zb, CHECK),
     xzb = dominio(tmpEmplazamientoInstituciones, emplazamiento, emplazamiento.zb, SUM)
   );
   save.xlsx("F20_emplazamientos.xlsx", emplazamientoComuna, emplazamientoBarrios, emplazamientoCorredores, emplazamientoInstituciones)
+}
+emplazamientoGeneral <- function(comuna){
+  tmpEmplazamientoBarrios <- as.data.frame(
+    table(comuna$emplazamiento)
+  );
+  emplazamientoComuna <- data.frame(
+    emplazamiento = emplazamiento.header,
+    arboles = tmpEmplazamientoBarrios$Freq,
+    xe = round(tmpEmplazamientoBarrios$Freq/sum(tmpEmplazamientoBarrios$Freq), 4)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)))
+  tmpEmplazamientoBarrios <- as.data.frame(
+    table(barrios$emplazamiento)
+  );
+  emplazamientoBarrios <- data.frame(
+    densidad = emplazamiento.header,
+    arboles = tmpEmplazamientoBarrios$Freq,
+    xe = round(tmpEmplazamientoBarrios$Freq/sum(tmpEmplazamientoBarrios$Freq), 4)
+  );
+  tmpTop <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$emplazamiento)
+  );
+  top <- data.frame(
+    barrios = rownames(tmpTop),
+    parque = dominio(tmpTop, emplazamiento, emplazamiento.pr, CHECK),
+    glorieta = dominio(tmpTop, emplazamiento, emplazamiento.gl, CHECK),
+    anden = dominio(tmpTop, emplazamiento, emplazamiento.an, CHECK),
+    alcorque = dominio(tmpTop, emplazamiento, emplazamiento.al, CHECK),
+    separador = dominio(tmpTop, emplazamiento, emplazamiento.sp, CHECK),
+    antejardin = dominio(tmpTop, emplazamiento, emplazamiento.ant, CHECK),
+    zonablanda = dominio(tmpTop, emplazamiento, emplazamiento.zb, CHECK)
+  );
+  topBarrios <- data.frame(
+    barriosParque = head(top[ order(-top$parque), 1], 10),
+    arbolesParque = head(top[ order(-top$parque), 2], 10),
+    barriosGlorieta = head(top[ order(-top$glorieta), 1], 10),
+    arbolesGlorieta = head(top[ order(-top$glorieta), 3], 10),
+    barriosAnden = head(top[ order(-top$anden), 1], 10),
+    arbolesAnden = head(top[ order(-top$anden), 4], 10),
+    barriosAlcorque = head(top[ order(-top$alcorque), 1], 10),
+    arbolesAlcorque = head(top[ order(-top$alcorque), 5], 10),
+    barriosSeparador = head(top[ order(-top$separador), 1], 10),
+    arbolesSeparador = head(top[ order(-top$separador), 6], 10),
+    barriosAntejardin = head(top[ order(-top$antejardin), 1], 10),
+    arbolesAntejardin = head(top[ order(-top$antejardin), 7], 10),
+    barriosZonaBlanda = head(top[ order(-top$zonablanda), 1], 10),
+    arbolesZonaBlanda = head(top[ order(-top$zonablanda), 8], 10)
+  );
+  sep <- data.frame(
+    barriosParque = "---",
+    arbolesParque = "---",
+    barriosGlorieta = "---",
+    arbolesGlorieta = "---",
+    barriosAnden = "---",
+    arbolesAnden = "---",
+    barriosAlcorque = "---",
+    arbolesAlcorque = "---",
+    barriosSeparador = "---",
+    arbolesSeparador = "---",
+    barriosAntejardin = "---",
+    arbolesAntejardin = "---",
+    barriosZonaBlanda = "---",
+    arbolesZonaBlanda = "---"
+  );
+  topBarrios <- rbind(topBarrios, sep);
+  bottomBarrios <- data.frame(
+    barriosParque = head(top[ order(top$parque), 1], 5),
+    arbolesParque = head(top[ order(top$parque), 2], 5),
+    barriosGlorieta = head(top[ order(top$glorieta), 1], 5),
+    arbolesGlorieta = head(top[ order(top$glorieta), 3], 5),
+    barriosAnden = head(top[ order(top$anden), 1], 5),
+    arbolesAnden = head(top[ order(top$anden), 4], 5),
+    barriosAlcorque = head(top[ order(top$alcorque), 1], 5),
+    arbolesAlcorque = head(top[ order(top$alcorque), 5], 5),
+    barriosSeparador = head(top[ order(top$separador), 1], 5),
+    arbolesSeparador = head(top[ order(top$separador), 6], 5),
+    barriosAntejardin = head(top[ order(top$separador), 1], 5),
+    arbolesAntejardin = head(top[ order(top$antejardin), 7], 5),
+    barriosZonaBlanda = head(top[ order(top$antejardin), 1], 5),
+    arbolesZonaBlanda = head(top[ order(top$antejardin), 8], 5)
+  );
+  topBarrios <- rbind(topBarrios, bottomBarrios);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)))
+  tmpEmplazamientoCorredores <<- as.data.frame(
+    table(corredores$emplazamiento)
+  );
+  emplazamientoCorredores <- data.frame(
+    emplazamiento = encabezado(emplazamiento.header, tmpEmplazamientoCorredores$Var1),
+    arboles = tmpEmplazamientoCorredores$Freq,
+    xe = round(tmpEmplazamientoCorredores$Freq/sum(tmpEmplazamientoCorredores$Freq), 4)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)))
+  tmpEmplazamientoInstituciones <- as.data.frame(
+    table(instituciones$emplazamiento)
+  );
+  emplazamientoInstituciones <- data.frame(
+    emplazamiento = encabezado(emplazamiento.header, tmpEmplazamientoCorredores$Var1),
+    arboles = tmpEmplazamientoInstituciones$Freq,
+    xe = round(tmpEmplazamientoInstituciones$Freq/sum(tmpEmplazamientoInstituciones$Freq), 4)
+  );
+  save.xlsx("F2_emplazamiento.xlsx", emplazamientoComuna, emplazamientoBarrios, topBarrios, emplazamientoCorredores, emplazamientoInstituciones)
 }

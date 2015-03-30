@@ -4,6 +4,7 @@ leerArchivo <- function(){
   densidadFollajeGeneral(comuna);
   densidadFollajeEspecifico(comuna);
   emplazamientoEspecifico(comuna);
+  emplazamientoGeneral(comuna);
 }
 dominio <- function(dataFrame, dominio, indice, operacion = NULL){
   if(operacion == 1){
@@ -36,7 +37,16 @@ dominio <- function(dataFrame, dominio, indice, operacion = NULL){
         return(0);
       }
     );
-  }  
+  }
+}
+encabezado <- function(encabezado, data) {
+  nuevoEncabezado = character(0);
+  for(i in 1:length(encabezado)){
+    if(i %in% data){
+      nuevoEncabezado <- c(nuevoEncabezado, encabezado[i]);
+    }
+  }
+  return(nuevoEncabezado);
 }
 save.xlsx <- function (file, ...){  
   objects <- list(...)
