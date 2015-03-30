@@ -50,7 +50,7 @@ densidadFollajeEspecifico <- function(comuna){
     ralo = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$ralo, CHECK),
     xr = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$ralo, SUM)
   );
-  save.xlsx("F19_densidad_follaje.xlsx", follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones);
+  save.xlsx(densidad$informeEspecifico, follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones);
 }
 densidadFollajeGeneral <- function(comuna){
   tmpFollajeComuna <- as.data.frame(
@@ -117,7 +117,7 @@ densidadFollajeGeneral <- function(comuna){
     arboles = tmpFollajeInstituciones$Freq,
     xd = round(tmpFollajeInstituciones$Freq/sum(tmpFollajeInstituciones$Freq), 4)
   );
-  save.xlsx("F1_densidad_follaje.xlsx", follajeComuna, follajeBarrios, topBarrios, follajeCorredores, follajeInstituciones);
+  save.xlsx(densidad$informeGeneral, follajeComuna, follajeBarrios, topBarrios, follajeCorredores, follajeInstituciones);
 }
 emplazamientoEspecifico <- function(comuna){
   tmpEmplazamientoComuna <- as.data.frame.matrix(
@@ -203,7 +203,7 @@ emplazamientoEspecifico <- function(comuna){
     zonablanda = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$zb, CHECK),
     xzb = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$zb, SUM)
   );
-  save.xlsx("F20_emplazamientos.xlsx", emplazamientoComuna, emplazamientoBarrios, emplazamientoCorredores, emplazamientoInstituciones);
+  save.xlsx(emplazamiento$informeEspecifico, emplazamientoComuna, emplazamientoBarrios, emplazamientoCorredores, emplazamientoInstituciones);
 }
 emplazamientoGeneral <- function(comuna){
   tmpEmplazamientoComuna <- as.data.frame(
@@ -290,7 +290,7 @@ emplazamientoGeneral <- function(comuna){
     arboles = tmpEmplazamientoInstituciones$Freq,
     xe = round(tmpEmplazamientoInstituciones$Freq/sum(tmpEmplazamientoInstituciones$Freq), 4)
   );
-  save.xlsx("F2_emplazamiento.xlsx", emplazamientoComuna, emplazamientoBarrios, topBarrios, emplazamientoCorredores, emplazamientoInstituciones);
+  save.xlsx(emplazamiento$informeGeneral, emplazamientoComuna, emplazamientoBarrios, topBarrios, emplazamientoCorredores, emplazamientoInstituciones);
 }
 estadoFisicoEspecifico <- function(comuna){
   tmpEstadoFisicoComuna <- as.data.frame.matrix(
@@ -344,7 +344,7 @@ estadoFisicoEspecifico <- function(comuna){
     bueno = dominio(tmpEstadoFisicoInstituciones, estadoFisico$dominio, estadoFisico$bueno, CHECK),
     xb = dominio(tmpEstadoFisicoInstituciones, estadoFisico$dominio, estadoFisico$bueno, SUM)
   );
-  save.xlsx("F21_estado_fisico.xlsx", estadoFisicoComuna, estadoFisicoBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
+  save.xlsx(estadoFisico$informeEspecifico, estadoFisicoComuna, estadoFisicoBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
 }
 estadoFisicoGeneral <- function(comuna){
   tmpEstadoFisicoComuna <- as.data.frame(
@@ -411,7 +411,7 @@ estadoFisicoGeneral <- function(comuna){
     arboles = tmpEstadoFisicoInstituciones$Freq,
     xef = round(tmpEstadoFisicoInstituciones$Freq/sum(tmpEstadoFisicoInstituciones$Freq), 4)
   );
-  save.xlsx("F3_estado_fisico.xlsx", estadoFisicoComuna, estadoFisicoBarrios, topBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
+  save.xlsx(estadoFisico$informeGeneral, estadoFisicoComuna, estadoFisicoBarrios, topBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
 }
 estadoSanitarioEspecifico <- function(comuna){
   tmpEstadoSanitarioComuna <- as.data.frame.matrix(
@@ -473,5 +473,5 @@ estadoSanitarioEspecifico <- function(comuna){
     sano = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
     xs = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$sano, SUM)
   );
-  save.xlsx("F23_estado_sanitario.xlsx", estadoSanitarioComuna, estadoSanitarioBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
+  save.xlsx(estadoSanitario$informeEspecifico, estadoSanitarioComuna, estadoSanitarioBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
 }
