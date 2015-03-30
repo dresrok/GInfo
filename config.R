@@ -1,13 +1,12 @@
 configurarEntorno <- function(){
   suppressMessages(require(gdata));
   Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre8');
-  require(xlsx, quietly = TRUE);  
+  require(xlsx, quietly = TRUE);
+  CHECK <<- 1;
+  SUM <<- 2;
   configurarDominios();
 }
-configurarDominios <- function(){
-	CHECK <<- 1;
-  SUM <<- 2;
-
+configurarDominios <- function(){	
   densidad <<- list(
     dominio = "densidad",
     encabezado = c("Denso", "Medio", "Ralo"),
@@ -26,5 +25,20 @@ configurarDominios <- function(){
     sp = 5,
     ant = 6,
     zb = 7
+  );
+  estadoFisico <<- list(
+    dominio = "estadoFisico",
+    encabezado = c("Malo", "Regular", "Bueno"),
+    malo = 1,
+    regular = 2,
+    bueno = 3
+  );
+  estadoSanitario <<- list(
+    dominio = "estadoSanitario",
+    encabezado = c("Muerto", "Crítico", "Enfermo", "Sano"),
+    muerto = 1,
+    critico = 2,
+    enfermo = 3,
+    sano = 4
   );
 }
