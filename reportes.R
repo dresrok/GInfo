@@ -417,53 +417,61 @@ estadoSanitarioEspecifico <- function(comuna){
   tmpEstadoSanitarioComuna <- as.data.frame.matrix(
     table(comuna$barrio, comuna$estado_sanitario)
   );
-  follajeComuna <- data.frame(
+  estadoSanitarioComuna <- data.frame(
     barrio = rownames(tmpEstadoSanitarioComuna),
-    denso = dominio(tmpEstadoSanitarioComuna, densidad$dominio, densidad$denso, CHECK),
-    xd = dominio(tmpEstadoSanitarioComuna, densidad$dominio, densidad$denso, SUM),
-    medio = dominio(tmpEstadoSanitarioComuna, densidad$dominio, densidad$medio, CHECK),
-    xm = dominio(tmpEstadoSanitarioComuna, densidad$dominio, densidad$medio, SUM),
-    ralo = dominio(tmpEstadoSanitarioComuna, densidad$dominio, densidad$ralo, CHECK),
-    xr = dominio(tmpEstadoSanitarioComuna, densidad$dominio, densidad$ralo, SUM)
+    muerto = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
+    xm = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$muerto, SUM),
+    critico = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
+    xc = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$critico, SUM),
+    enfermo = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
+    xe = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$enfermo, SUM),
+    sano = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
+    xs = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$sano, SUM)
   );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpFollajeBarrios <- as.data.frame.matrix(
+  tmpEstadoSanitarioBarrios <- as.data.frame.matrix(
     table(factor(barrios$barrio), barrios$estado_sanitario)
   );
-  follajeBarrios <- data.frame(
-    barrio = rownames(tmpFollajeBarrios),
-    denso = dominio(tmpFollajeBarrios, densidad$dominio, densidad$denso, CHECK),
-    xd = dominio(tmpFollajeBarrios, densidad$dominio, densidad$denso, SUM),
-    medio = dominio(tmpFollajeBarrios, densidad$dominio, densidad$medio, CHECK),
-    xm = dominio(tmpFollajeBarrios, densidad$dominio, densidad$medio, SUM),
-    ralo = dominio(tmpFollajeBarrios, densidad$dominio, densidad$ralo, CHECK),
-    xr = dominio(tmpFollajeBarrios, densidad$dominio, densidad$ralo, SUM)
+  estadoSanitarioBarrios <- data.frame(
+    barrio = rownames(tmpEstadoSanitarioBarrios),
+    muerto = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
+    xm = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$muerto, SUM),
+    critico = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
+    xc = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$critico, SUM),
+    enfermo = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
+    xe = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$enfermo, SUM),
+    sano = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
+    xs = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$sano, SUM)
   );  
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpFollajeCorredores <- as.data.frame.matrix(
+  tmpEstadoSanitarioCorredores <- as.data.frame.matrix(
     table(factor(corredores$barrio), corredores$estado_sanitario)
   );
-  follajeCorredores <- data.frame(
-    barrio = rownames(tmpFollajeCorredores),
-    denso = dominio(tmpFollajeCorredores, densidad$dominio, densidad$denso, CHECK),
-    xd = dominio(tmpFollajeCorredores, densidad$dominio, densidad$denso, SUM),
-    medio = dominio(tmpFollajeCorredores, densidad$dominio, densidad$medio, CHECK),
-    xm = dominio(tmpFollajeCorredores, densidad$dominio, densidad$medio, SUM),
-    ralo = dominio(tmpFollajeCorredores, densidad$dominio, densidad$ralo, CHECK),
-    xr = dominio(tmpFollajeCorredores, densidad$dominio, densidad$ralo, SUM)
+  estadoSanitarioCorredores <- data.frame(
+    barrio = rownames(tmpEstadoSanitarioCorredores),
+    muerto = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
+    xm = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$muerto, SUM),
+    critico = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
+    xc = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$critico, SUM),
+    enfermo = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
+    xe = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$enfermo, SUM),
+    sano = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
+    xs = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$sano, SUM)
   );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpFollajeInstituciones <- as.data.frame.matrix(
+  tmpEstadoSanitarioInstituciones <- as.data.frame.matrix(
     table(factor(instituciones$institucion), instituciones$estado_sanitario)
   );
-  follajeInstituciones <- data.frame(
-    barrio = rownames(tmpFollajeInstituciones),
-    denso = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$denso, CHECK),
-    xd = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$denso, SUM),
-    medio = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$medio, CHECK),
-    xm = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$medio, SUM),
-    ralo = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$ralo, CHECK),
-    xr = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$ralo, SUM)
+  estadoSanitarioInstituciones <- data.frame(
+    barrio = rownames(tmpEstadoSanitarioInstituciones),
+    muerto = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
+    xm = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$muerto, SUM),
+    critico = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
+    xc = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$critico, SUM),
+    enfermo = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
+    xe = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$enfermo, SUM),
+    sano = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
+    xs = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$sano, SUM)
   );
-  save.xlsx("F19_densidad_follaje.xlsx", follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones);
+  save.xlsx("F23_estado_sanitario.xlsx", estadoSanitarioComuna, estadoSanitarioBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
 }

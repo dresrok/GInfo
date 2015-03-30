@@ -10,5 +10,6 @@ main <- function(){
   emplazamientoGeneral(comuna);
   estadoFisicoEspecifico(comuna);
   estadoFisicoGeneral(comuna);
+  estadoSanitarioEspecifico(comuna);
 }
 main();
