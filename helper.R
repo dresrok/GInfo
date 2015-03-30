@@ -23,6 +23,12 @@ dominio <- function(dataFrame, dominio, indice, operacion = NULL){
         }
         return(0); 
       },
+      estadoHoja={
+        if(indice %in% colnames(dataFrame)){
+          return(dataFrame[[as.character(indice)]]);
+        }
+        return(0); 
+      },
       estadoSanitario={
         if(indice %in% colnames(dataFrame)){
           return(dataFrame[[as.character(indice)]]);
@@ -45,6 +51,12 @@ dominio <- function(dataFrame, dominio, indice, operacion = NULL){
         return(0);
       },
       estadoFisico={
+        if(indice %in% colnames(dataFrame)){
+          return(round(dataFrame[[as.character(indice)]]/sum(dataFrame[[as.character(indice)]]), 4));
+        }
+        return(0);
+      },
+      estadoHoja={
         if(indice %in% colnames(dataFrame)){
           return(round(dataFrame[[as.character(indice)]]/sum(dataFrame[[as.character(indice)]]), 4));
         }

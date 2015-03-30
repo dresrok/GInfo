@@ -39,6 +39,15 @@ configurarVaribales <- function(){
     regular = 2,
     bueno = 3
   );
+  estadoHoja <<- list(
+    informeGeneral = "F4_estado_hojas.xlsx",
+    informeEspecifico = "F22_estado_hojas.xlsx",
+    dominio = "estadoHoja",
+    encabezado = c("Estado Natural", "Deficiencia Nutricional", "No Registra"),
+    en = 1,
+    dn = 2,
+    nr = 3
+  );
   estadoSanitario <<- list(
     informeGeneral = "F5_estado_sanitario.xlsx",
     informeEspecifico = "F23_estado_sanitario.xlsx",

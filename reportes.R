@@ -413,6 +413,116 @@ estadoFisicoGeneral <- function(comuna){
   );
   save.xlsx(estadoFisico$informeGeneral, estadoFisicoComuna, estadoFisicoBarrios, topBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
 }
+estadoHojaEspecifico <- function(comuna){
+  tmpCloroticaComuna <- as.data.frame.matrix(
+    table(comuna$barrio, comuna$hc)
+  );
+  cloroticaComuna <- data.frame(
+    barrio = rownames(tmpCloroticaComuna),
+    en = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$en, CHECK),
+    xen = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$en, SUM),
+    dn = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$dn, CHECK),
+    xdn = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$dn, SUM),
+    nr = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$nr, CHECK),
+    xnr = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$nr, SUM)
+  );
+  tmpCaducifoliaComuna <- as.data.frame.matrix(
+    table(comuna$barrio, comuna$hcf)
+  );
+  caducifoliaComuna <- data.frame(
+    barrio = rownames(tmpCaducifoliaComuna),
+    en = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$en, CHECK),
+    xen = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$en, SUM),
+    dn = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$dn, CHECK),
+    xdn = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$dn, SUM),
+    nr = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$nr, CHECK),
+    xnr = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$nr, SUM)
+  );
+  estadoHojaComuna <- cbind(cloroticaComuna, caducifoliaComuna);
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpCloroticaBarrios <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$hc)
+  );
+  cloroticaBarrios <- data.frame(
+    barrio = rownames(tmpCloroticaBarrios),
+    en = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$en, CHECK),
+    xen = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$en, SUM),
+    dn = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$dn, CHECK),
+    xdn = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$dn, SUM),
+    nr = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$nr, CHECK),
+    xnr = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$nr, SUM)
+  );
+  tmpCaducifoliaBarrios <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$hcf)
+  );
+  caducifoliaBarrios <- data.frame(
+    barrio = rownames(tmpCaducifoliaBarrios),
+    en = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$en, CHECK),
+    xen = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$en, SUM),
+    dn = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$dn, CHECK),
+    xdn = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$dn, SUM),
+    nr = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$nr, CHECK),
+    xnr = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$nr, SUM)
+  );
+  estadoHojaBarrios <- cbind(cloroticaBarrios, caducifoliaBarrios);
+
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpCloroticaCorredores <- as.data.frame.matrix(
+    table(factor(corredores$barrio), corredores$hc)
+  );
+  cloroticaCorredores <- data.frame(
+    barrio = rownames(tmpCloroticaCorredores),
+    en = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$en, CHECK),
+    xen = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$en, SUM),
+    dn = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$dn, CHECK),
+    xdn = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$dn, SUM),
+    nr = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$nr, CHECK),
+    xnr = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$nr, SUM)
+  );
+  tmpCaducifoliaCorredores <- as.data.frame.matrix(
+    table(factor(corredores$barrio), corredores$hcf)
+  );
+  caducifoliaCorredores <- data.frame(
+    barrio = rownames(tmpCaducifoliaCorredores),
+    en = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$en, CHECK),
+    xen = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$en, SUM),
+    dn = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$dn, CHECK),
+    xdn = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$dn, SUM),
+    nr = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$nr, CHECK),
+    xnr = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$nr, SUM)
+  );
+  estadoHojaCorredores <- cbind(cloroticaCorredores, caducifoliaCorredores);
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpCloroticaInstituciones <- as.data.frame.matrix(
+    table(factor(instituciones$institucion), instituciones$hc)
+  );
+  cloroticaInstituciones <- data.frame(
+    barrio = rownames(tmpCloroticaInstituciones),
+    en = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$en, CHECK),
+    xen = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$en, SUM),
+    dn = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$dn, CHECK),
+    xdn = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$dn, SUM),
+    nr = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$nr, CHECK),
+    xnr = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$nr, SUM)
+  );
+  tmpCaducifoliaInstituciones <- as.data.frame.matrix(
+    table(factor(instituciones$institucion), instituciones$hcf)
+  );
+  caducifoliaInstituciones <- data.frame(
+    barrio = rownames(tmpCloroticaInstituciones),
+    en = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$en, CHECK),
+    xen = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$en, SUM),
+    dn = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$dn, CHECK),
+    xdn = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$dn, SUM),
+    nr = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$nr, CHECK),
+    xnr = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$nr, SUM)
+  );
+  estadoHojaInstituciones <- cbind(cloroticaInstituciones, caducifoliaInstituciones);
+  save.xlsx(estadoHoja$informeEspecifico, estadoHojaComuna, estadoHojaBarrios, estadoHojaCorredores, estadoHojaInstituciones);
+}
+estadoHojaGeneral <- function(comuna){
+  
+}
 estadoSanitarioEspecifico <- function(comuna){
   tmpEstadoSanitarioComuna <- as.data.frame.matrix(
     table(comuna$barrio, comuna$estado_sanitario)
@@ -517,14 +627,14 @@ estadoSanitarioGeneral <- function(comuna){
   );
   topBarrios <- rbind(topBarrios, "---");
   bottomBarrios <- data.frame(
-    barriosMuerto = head(top[ order(-top$muerto), 1], 10),
-    arbolesMuerto = head(top[ order(-top$muerto), 2], 10),
-    barriosCritico = head(top[ order(-top$critico), 1], 10),
-    arbolesCritico = head(top[ order(-top$critico), 3], 10),
-    barriosEnfermo = head(top[ order(-top$enfermo), 1], 10),
-    arbolesEnfermo = head(top[ order(-top$enfermo), 4], 10),
-    barriosSano = head(top[ order(-top$sano), 1], 10),
-    arbolesSano = head(top[ order(-top$sano), 5], 10),
+    barriosMuerto = head(top[ order(top$muerto), 1], 5),
+    arbolesMuerto = head(top[ order(top$muerto), 2], 5),
+    barriosCritico = head(top[ order(top$critico), 1], 5),
+    arbolesCritico = head(top[ order(top$critico), 3], 5),
+    barriosEnfermo = head(top[ order(top$enfermo), 1], 5),
+    arbolesEnfermo = head(top[ order(top$enfermo), 4], 5),
+    barriosSano = head(top[ order(top$sano), 1], 5),
+    arbolesSano = head(top[ order(top$sano), 5], 5)
   );
   topBarrios <- rbind(topBarrios, bottomBarrios);
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
