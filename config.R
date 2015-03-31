@@ -40,6 +40,8 @@ configurarVaribales <- function(){
     bueno = 3
   );
   estadoHoja <<- list(
+    clorotica = "Hoja Clorótica",
+    caducifolia = "Hoja Caducifolia",
     informeGeneral = "F4_estado_hojas.xlsx",
     informeEspecifico = "F22_estado_hojas.xlsx",
     dominio = "estadoHoja",

@@ -7,12 +7,13 @@ main <- function(){
   comuna <- leerArchivo();
   densidadFollajeGeneral(comuna);
   densidadFollajeEspecifico(comuna);
-  emplazamientoEspecifico(comuna);
   emplazamientoGeneral(comuna);
-  estadoFisicoEspecifico(comuna);
+  emplazamientoEspecifico(comuna);
   estadoFisicoGeneral(comuna);
+  estadoFisicoEspecifico(comuna);
+  estadoHojaGeneral(comuna);
   estadoHojaEspecifico(comuna);
-  estadoSanitarioEspecifico(comuna);
   estadoSanitarioGeneral(comuna);
+  estadoSanitarioEspecifico(comuna);
 }
 main();
