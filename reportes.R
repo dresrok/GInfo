@@ -219,7 +219,7 @@ emplazamientoGeneral <- function(comuna){
     table(barrios$emplazamiento)
   );
   emplazamientoBarrios <- data.frame(
-    densidad = encabezado(emplazamiento$encabezado, tmpEmplazamientoBarrios$Var1),
+    emplazamiento = encabezado(emplazamiento$encabezado, tmpEmplazamientoBarrios$Var1),
     arboles = tmpEmplazamientoBarrios$Freq,
     xe = round(tmpEmplazamientoBarrios$Freq/sum(tmpEmplazamientoBarrios$Freq), 4)
   );
@@ -286,7 +286,7 @@ emplazamientoGeneral <- function(comuna){
     table(instituciones$emplazamiento)
   );
   emplazamientoInstituciones <- data.frame(
-    emplazamiento = encabezado(emplazamiento$encabezado, tmpEmplazamientoCorredores$Var1),
+    emplazamiento = encabezado(emplazamiento$encabezado, tmpEmplazamientoInstituciones$Var1),
     arboles = tmpEmplazamientoInstituciones$Freq,
     xe = round(tmpEmplazamientoInstituciones$Freq/sum(tmpEmplazamientoInstituciones$Freq), 4)
   );
@@ -767,4 +767,209 @@ estadoSanitarioGeneral <- function(comuna){
     xes = round(tmpEstadoSanitarioInstituciones$Freq/sum(tmpEstadoSanitarioInstituciones$Freq), 4)
   );
   save.xlsx(estadoSanitario$informeGeneral, estadoFisicoComuna, estadoSanitarioBarrios, topBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
+}
+valorEsteticoEspecifico <- function(comuna){
+  tmpValorEsteticoComuna <- as.data.frame.matrix(
+    table(comuna$barrio, comuna$valor_estetico)
+  );
+  valorEsteticoComuna <- data.frame(
+    barrio = rownames(tmpValorEsteticoComuna),
+    emblematico = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$emb, CHECK),
+    xemb = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$emb, SUM),
+    esencial = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ese, CHECK),
+    xese = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ese, SUM),
+    deseable = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$des, CHECK),
+    xdes = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$des, SUM),
+    indiferente = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ind, CHECK),
+    xind = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ind, SUM),
+    inaceptable = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ina, CHECK),
+    xina = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ina, SUM)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpValorEstetiBarrios <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$valor_estetico)
+  );
+  valorEsteticoBarrios <- data.frame(
+    barrio = rownames(tmpValorEstetiBarrios),
+    emblematico = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$emb, CHECK),
+    xemb = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$emb, SUM),
+    esencial = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ese, CHECK),
+    xese = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ese, SUM),
+    deseable = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$des, CHECK),
+    xdes = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$des, SUM),
+    indiferente = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ind, CHECK),
+    xind = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ind, SUM),
+    inaceptable = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ina, CHECK),
+    xina = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ina, SUM)
+  );
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpValorEsteticoCorredores <- as.data.frame.matrix(
+    table(factor(corredores$barrio), corredores$valor_estetico)
+  );
+  valorEsteticoCorredores <- data.frame(
+    barrio = rownames(tmpValorEsteticoCorredores),
+    emblematico = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$emb, CHECK),
+    xemb = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$emb, SUM),
+    esencial = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ese, CHECK),
+    xese = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ese, SUM),
+    deseable = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$des, CHECK),
+    xdes = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$des, SUM),
+    indiferente = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ind, CHECK),
+    xind = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ind, SUM),
+    inaceptable = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ina, CHECK),
+    xina = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ina, SUM)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpValorEsteticoInstituciones <- as.data.frame.matrix(
+    table(factor(instituciones$institucion), instituciones$valor_estetico)
+  );
+  valorEsteticoInstituciones <- data.frame(
+    barrio = rownames(tmpValorEsteticoInstituciones),
+    emblematico = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$emb, CHECK),
+    xemb = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$emb, SUM),
+    esencial = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ese, CHECK),
+    xese = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ese, SUM),
+    deseable = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$des, CHECK),
+    xdes = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$des, SUM),
+    indiferente = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ind, CHECK),
+    xind = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ind, SUM),
+    inaceptable = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ina, CHECK),
+    xina = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ina, SUM)
+  );
+  save.xlsx(valorEstetico$informeEspecifico, valorEsteticoComuna, valorEsteticoBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);
+}
+valorEsteticoGeneral <- function(comuna){
+  tmpValorEsteticoComuna <- as.data.frame(
+    table(comuna$valor_estetico)
+  );
+  valorEsteticoComuna <- data.frame(
+    valorEstetico = encabezado(valorEstetico$encabezado, tmpValorEsteticoComuna$Var1),
+    arboles = tmpValorEsteticoComuna$Freq,
+    xve = round(tmpValorEsteticoComuna$Freq/sum(tmpValorEsteticoComuna$Freq), 4)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpValorEsteticoBarrios <- as.data.frame(
+    table(barrios$valor_estetico)
+  );
+  valorEsteticoBarrios <- data.frame(
+    valorEstetico = encabezado(valorEstetico$encabezado, tmpValorEsteticoBarrios$Var1),
+    arboles = tmpValorEsteticoBarrios$Freq,
+    xve = round(tmpValorEsteticoBarrios$Freq/sum(tmpValorEsteticoBarrios$Freq), 4)
+  );
+  tmpTop <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$valor_estetico)
+  );
+  top <- data.frame(
+    barrios = rownames(tmpTop),
+    emblematico = dominio(tmpTop, valorEstetico$dominio, valorEstetico$emb, CHECK),
+    esencial = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ese, CHECK),
+    deseable = dominio(tmpTop, valorEstetico$dominio, valorEstetico$des, CHECK),
+    indiferente = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ind, CHECK),
+    inaceptable = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ina, CHECK),
+    stringsAsFactors=FALSE
+  );
+  topBarrios <- data.frame(
+    barriosEmblematico = head(top[ order(-top$emb), 1], 10),
+    arbolesEmblematico = head(top[ order(-top$emb), 2], 10),
+    barriosEsencial = head(top[ order(-top$ese), 1], 10),
+    arbolesEsencial = head(top[ order(-top$ese), 3], 10),
+    barriosDeseable = head(top[ order(-top$des), 1], 10),
+    arbolesDeseable = head(top[ order(-top$des), 4], 10),
+    barriosIndiferente = head(top[ order(-top$ind), 1], 10),
+    arbolesIndiferente = head(top[ order(-top$ind), 5], 10),
+    barriosInaceptable = head(top[ order(-top$ina), 1], 10),
+    arbolesInaceptable = head(top[ order(-top$ina), 6], 10),
+    stringsAsFactors=FALSE
+  );
+  topBarrios <- rbind(topBarrios, "---");
+  bottomBarrios <- data.frame(
+    barriosEmblematico = head(top[ order(-top$emb), 1], 5),
+    arbolesEmblematico = head(top[ order(-top$emb), 2], 5),
+    barriosEsencial = head(top[ order(-top$ese), 1], 5),
+    arbolesEsencial = head(top[ order(-top$ese), 3], 5),
+    barriosDeseable = head(top[ order(-top$des), 1], 5),
+    arbolesDeseable = head(top[ order(-top$des), 4], 5),
+    barriosIndiferente = head(top[ order(-top$ind), 1], 5),
+    arbolesIndiferente = head(top[ order(-top$ind), 5], 5),
+    barriosInaceptable = head(top[ order(-top$ina), 1], 5),
+    arbolesInaceptable = head(top[ order(-top$ina), 6], 5)
+  );
+  topBarrios <- rbind(topBarrios, bottomBarrios);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpValorEsteticoCorredores <- as.data.frame(
+    table(corredores$valor_estetico)
+  );
+  valorEsteticoCorredores <- data.frame(
+    valorEstetico = encabezado(valorEstetico$encabezado, tmpValorEsteticoCorredores$Var1),
+    arboles = tmpValorEsteticoCorredores$Freq,
+    xve = round(tmpValorEsteticoCorredores$Freq/sum(tmpValorEsteticoCorredores$Freq), 4)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpValorEsteticoInstituciones <- as.data.frame(
+    table(instituciones$valor_estetico)
+  );
+  valorEsteticoInstituciones <- data.frame(
+    valorEstetico = encabezado(valorEstetico$encabezado, tmpValorEsteticoInstituciones$Var1),
+    arboles = tmpValorEsteticoInstituciones$Freq,
+    xe = round(tmpValorEsteticoInstituciones$Freq/sum(tmpValorEsteticoInstituciones$Freq), 4)
+  );
+  save.xlsx(valorEstetico$informeGeneral, valorEsteticoComuna, valorEsteticoBarrios, topBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);
+}
+general <- function(comuna){
+  tmpComuna <- as.data.frame(
+    table(comuna$barrio)
+  );
+  comunaGeneral <- data.frame(
+    barrios = tmpComuna$Var1,
+    arboles = tmpComuna$Freq,
+    xa = round(tmpComuna$Freq/sum(tmpComuna$Freq), 4)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpBarrios <- as.data.frame(
+    table(factor(barrios$barrio))
+  );
+  barriosGeneral <- data.frame(
+    barrios = tmpBarrios$Var1,
+    arboles = tmpBarrios$Freq,
+    xa = round(tmpBarrios$Freq/sum(tmpBarrios$Freq), 4)
+  );
+  tmpTop <- as.data.frame(
+    table(factor(barrios$barrio))
+  );
+  top <- data.frame(
+    barrios = tmpTop$Var1,
+    arboles = tmpTop$Freq,
+    stringsAsFactors=FALSE
+  );
+  topBarrios <- data.frame(
+    barrios = as.character(head(top[ order(-top$arboles), 1], 10)),
+    arboles = head(top[ order(-top$arboles), 2], 10),
+    stringsAsFactors=FALSE  
+  );
+  topBarrios <- rbind(topBarrios, "---");
+  bottomBarrios <- data.frame(
+    barrios = head(top[ order(top$arboles), 1], 5),
+    arboles = head(top[ order(top$arboles), 2], 5)    
+  );
+  topBarrios <- rbind(topBarrios, bottomBarrios);
+
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpCorredores <- as.data.frame(
+    table(factor(corredores$barrio))
+  );
+  corredoresGeneral <- data.frame(
+    barrios = tmpCorredores$Var1,
+    arboles = tmpCorredores$Freq,
+    xa = round(tmpCorredores$Freq/sum(tmpCorredores$Freq), 4)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpInstituciones <- as.data.frame(
+    table(factor(instituciones$institucion))
+  );
+  institucionesGeneral <- data.frame(
+    barrios = tmpInstituciones$Var1,
+    arboles = tmpInstituciones$Freq,
+    xa = round(tmpInstituciones$Freq/sum(tmpInstituciones$Freq), 4)
+  );
+  save.xlsx(informeComuna$informeGeneral, comunaGeneral, barriosGeneral, topBarrios, corredoresGeneral, institucionesGeneral);
 }

@@ -5,6 +5,7 @@ source('D:/2015/Ut/ReportesLabSIG/reportes.R');
 configurarEntorno();
 main <- function(){
   comuna <- leerArchivo();
+  general(comuna);
   densidadFollajeGeneral(comuna);
   densidadFollajeEspecifico(comuna);
   emplazamientoGeneral(comuna);
@@ -15,5 +16,7 @@ main <- function(){
   estadoHojaEspecifico(comuna);
   estadoSanitarioGeneral(comuna);
   estadoSanitarioEspecifico(comuna);
+  valorEsteticoGeneral(comuna);
+  valorEsteticoEspecifico(comuna);
 }
 main();

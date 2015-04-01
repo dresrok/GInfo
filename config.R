@@ -8,6 +8,9 @@ configurarVaribales <- function(){
   CHECK <<- 1;
   SUM <<- 2;
 
+  informeComuna <<- list(
+    informeGeneral= "F18_general_comuna.xlsx"
+  )
   densidad <<- list(
     informeGeneral = "F1_densidad_follaje.xlsx",
     informeEspecifico = "F19_densidad_follaje.xlsx",
@@ -59,5 +62,16 @@ configurarVaribales <- function(){
     critico = 2,
     enfermo = 3,
     sano = 4
+  );
+  valorEstetico <<- list(
+    informeGeneral = "F6_valor_estetico.xlsx",
+    informeEspecifico = "F24_valor_estetico.xlsx",
+    dominio = "valorEstetico",
+    encabezado = c("Emblemático", "Esencial", "Deseable", "Indiferente", "Inaceptable"),
+    emb = 1,
+    ese = 2,
+    des = 3,
+    ind = 4,
+    ina = 5
   );
 }
