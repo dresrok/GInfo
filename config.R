@@ -10,7 +10,7 @@ configurarVaribales <- function(){
 
   informeComuna <<- list(
     informeGeneral= "F18_general_comuna.xlsx"
-  )
+  );
   densidad <<- list(
     informeGeneral = "F1_densidad_follaje.xlsx",
     informeEspecifico = "F19_densidad_follaje.xlsx",
@@ -78,5 +78,13 @@ configurarVaribales <- function(){
     conteoGeneral = 1,
     conteoEspecifico = 2,
     informeEspecifico = "F28_especies.xlsx"
+  );
+  procedencia <<- list(
+    informeGeneral = "F11_procedencia.xlsx",
+    informeEspecifico = "F29_procedencia.xlsx",
+    dominio = "procedencia",
+    encabezado = c("Nativa", "Exótia"),
+    nativa = 1,
+    exotica = 2
   );
 }

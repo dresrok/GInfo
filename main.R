@@ -20,5 +20,7 @@ main <- function(){
   valorEsteticoGeneral(comuna);
   valorEsteticoEspecifico(comuna);
   especiesEspecifico(comuna);
+  procedenciaGeneral(comuna);
+  procedenciaEspecifico(comuna);
 }
 main();

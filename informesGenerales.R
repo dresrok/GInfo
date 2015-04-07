@@ -540,3 +540,41 @@ valorEsteticoGeneral <- function(comuna){
   );
   save.xlsx(valorEstetico$informeGeneral, valorEsteticoComuna, valorEsteticoBarrios, topBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);
 }
+procedenciaGeneral <- function(comuna){
+  tmpProcedenciaComuna <- as.data.frame(
+    table(comuna$procedencia)
+  );
+  procedenciaComuna <- data.frame(
+    procedencia = encabezado(procedencia$encabezado, tmpProcedenciaComuna$Var1),
+    arboles = tmpProcedenciaComuna$Freq,
+    xp = round(tmpProcedenciaComuna$Freq/sum(tmpProcedenciaComuna$Freq), 4)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpProcedenciaBarrios <- as.data.frame(
+    table(barrios$procedencia)
+  );
+  procedenciaBarrios <- data.frame(
+    procedencia = encabezado(procedencia$encabezado, tmpProcedenciaBarrios$Var1),
+    arboles = tmpProcedenciaBarrios$Freq,
+    xp = round(tmpProcedenciaBarrios$Freq/sum(tmpProcedenciaBarrios$Freq), 4)
+  );
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpProcedenciaCorredores <- as.data.frame(
+    table(corredores$procedencia)
+  );
+  procedenciaCorredores <- data.frame(
+    procedencia = encabezado(procedencia$encabezado, tmpProcedenciaCorredores$Var1),
+    arboles = tmpProcedenciaCorredores$Freq,
+    xp = round(tmpProcedenciaCorredores$Freq/sum(tmpProcedenciaCorredores$Freq), 4)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpProcedenciaInstituciones <- as.data.frame(
+    table(instituciones$procedencia)
+  );
+  procedenciaInstituciones <- data.frame(
+    procedencia = encabezado(procedencia$encabezado, tmpProcedenciaInstituciones$Var1),
+    arboles = tmpProcedenciaInstituciones$Freq,
+    xd = round(tmpProcedenciaInstituciones$Freq/sum(tmpProcedenciaInstituciones$Freq), 4)
+  );
+  save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, procedenciaInstituciones);
+}

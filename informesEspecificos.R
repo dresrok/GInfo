@@ -458,3 +458,49 @@ especiesEspecifico <- function(comuna){
 
   save.xlsx(especies$informeEspecifico, especiesComunas, encabezadoBarrio, encabezadoCorredor, encabezadoInstitucion);
 }
+procedenciaEspecifico <- function(comuna){
+  tmpProcedenciaComuna <- as.data.frame.matrix(
+    table(comuna$barrio, comuna$procedencia)
+  );
+  procedenciaComuna <- data.frame(
+    barrio = rownames(tmpProcedenciaComuna),
+    nativa = dominio(tmpProcedenciaComuna, procedencia$dominio, procedencia$nativa, CHECK),
+    xn = dominio(tmpProcedenciaComuna, procedencia$dominio, procedencia$nativa, SUM),
+    exotica = dominio(tmpProcedenciaComuna, procedencia$dominio, procedencia$exotica, CHECK),
+    xe = dominio(tmpProcedenciaComuna, procedencia$dominio, procedencia$exotica, SUM)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpProcedenciaBarrios <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$procedencia)
+  );
+  procedenciaBarrios <- data.frame(
+    barrio = rownames(tmpProcedenciaBarrios),
+    nativa = dominio(tmpProcedenciaBarrios, procedencia$dominio, procedencia$nativa, CHECK),
+    xn = dominio(tmpProcedenciaBarrios, procedencia$dominio, procedencia$nativa, SUM),
+    exotica = dominio(tmpProcedenciaBarrios, procedencia$dominio, procedencia$exotica, CHECK),
+    xe = dominio(tmpProcedenciaBarrios, procedencia$dominio, procedencia$exotica, SUM)
+  );  
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpProcedenciaCorredores <- as.data.frame.matrix(
+    table(factor(corredores$barrio), corredores$procedencia)
+  );
+  procedenciaCorredores <- data.frame(
+    barrio = rownames(tmpProcedenciaCorredores),
+    nativa = dominio(tmpProcedenciaCorredores, procedencia$dominio, procedencia$nativa, CHECK),
+    xn = dominio(tmpProcedenciaCorredores, procedencia$dominio, procedencia$nativa, SUM),
+    exotica = dominio(tmpProcedenciaCorredores, procedencia$dominio, procedencia$exotica, CHECK),
+    xe = dominio(tmpProcedenciaCorredores, procedencia$dominio, procedencia$exotica, SUM)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpProcedenciaInstituciones <- as.data.frame.matrix(
+    table(factor(instituciones$institucion), instituciones$procedencia)
+  );
+  follajeInstituciones <- data.frame(
+    barrio = rownames(tmpProcedenciaInstituciones),
+    nativa = dominio(tmpProcedenciaInstituciones, procedencia$dominio, procedencia$nativa, CHECK),
+    xn = dominio(tmpProcedenciaInstituciones, procedencia$dominio, procedencia$nativa, SUM),
+    exotica = dominio(tmpProcedenciaInstituciones, procedencia$dominio, procedencia$exotica, CHECK),
+    xe = dominio(tmpProcedenciaInstituciones, procedencia$dominio, procedencia$exotica, SUM)
+  );
+  save.xlsx(procedencia$informeEspecifico, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, follajeInstituciones);
+}
