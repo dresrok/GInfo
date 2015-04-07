@@ -22,5 +22,8 @@ main <- function(){
   especiesEspecifico(comuna);
   procedenciaGeneral(comuna);
   procedenciaEspecifico(comuna);
+  tipoPlantaGeneral(comuna);
+  tipoPlantaEspecifico(comuna);
+  #Conflictos, Familias
 }
 main();

@@ -46,6 +46,12 @@ dominio <- function(dataFrame, dominio, indice, operacion = NULL){
           return(dataFrame[[as.character(indice)]]);
         }
         return(0);
+      },
+      tipoPlanta={
+        if(indice %in% colnames(dataFrame)){
+          return(dataFrame[[as.character(indice)]]);
+        }
+        return(0);
       }
     );
   } else if(operacion == 2){
@@ -87,6 +93,12 @@ dominio <- function(dataFrame, dominio, indice, operacion = NULL){
         return(0);
       },
       procedencia={
+        if(indice %in% colnames(dataFrame)){
+          return(round(dataFrame[[as.character(indice)]]/sum(dataFrame[[as.character(indice)]]), 4));
+        }
+        return(0);
+      },
+      tipoPlanta={
         if(indice %in% colnames(dataFrame)){
           return(round(dataFrame[[as.character(indice)]]/sum(dataFrame[[as.character(indice)]]), 4));
         }

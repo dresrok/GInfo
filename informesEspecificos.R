@@ -504,3 +504,65 @@ procedenciaEspecifico <- function(comuna){
   );
   save.xlsx(procedencia$informeEspecifico, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, follajeInstituciones);
 }
+tipoPlantaEspecifico <- function(comuna){
+  tmpTipoPlantaComuna <- as.data.frame.matrix(
+    table(comuna$barrio, comuna$habito_crecimiento)
+  );
+  tipoPlantaComuna <- data.frame(
+    barrio = rownames(tmpTipoPlantaComuna),
+    arbol = dominio(tmpTipoPlantaComuna, tipoPlanta$dominio, tipoPlanta$arbol, CHECK),
+    xa = dominio(tmpTipoPlantaComuna, tipoPlanta$dominio, tipoPlanta$arbol, SUM),
+    arbusto = dominio(tmpTipoPlantaComuna, tipoPlanta$dominio, tipoPlanta$arbusto, CHECK),
+    xabto = dominio(tmpTipoPlantaComuna, tipoPlanta$dominio, tipoPlanta$arbusto, SUM),
+    palma = dominio(tmpTipoPlantaComuna, tipoPlanta$dominio, tipoPlanta$palma, CHECK),
+    xp = dominio(tmpTipoPlantaComuna, tipoPlanta$dominio, tipoPlanta$palma, SUM),
+    bambu = dominio(tmpTipoPlantaComuna, tipoPlanta$dominio, tipoPlanta$bambu, CHECK),
+    xb = dominio(tmpTipoPlantaComuna, tipoPlanta$dominio, tipoPlanta$bambu, SUM)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpTipoPlantaBarrios <- as.data.frame.matrix(
+    table(factor(barrios$barrio), barrios$habito_crecimiento)
+  );
+  tipoPlantaBarrios <- data.frame(
+    barrio = rownames(tmpTipoPlantaBarrios),
+    arbol = dominio(tmpTipoPlantaBarrios, tipoPlanta$dominio, tipoPlanta$arbol, CHECK),
+    xa = dominio(tmpTipoPlantaBarrios, tipoPlanta$dominio, tipoPlanta$arbol, SUM),
+    arbusto = dominio(tmpTipoPlantaBarrios, tipoPlanta$dominio, tipoPlanta$arbusto, CHECK),
+    xabto = dominio(tmpTipoPlantaBarrios, tipoPlanta$dominio, tipoPlanta$arbusto, SUM),
+    palma = dominio(tmpTipoPlantaBarrios, tipoPlanta$dominio, tipoPlanta$palma, CHECK),
+    xp = dominio(tmpTipoPlantaBarrios, tipoPlanta$dominio, tipoPlanta$palma, SUM),
+    bambu = dominio(tmpTipoPlantaBarrios, tipoPlanta$dominio, tipoPlanta$bambu, CHECK),
+    xb = dominio(tmpTipoPlantaBarrios, tipoPlanta$dominio, tipoPlanta$bambu, SUM)
+  );  
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpTipoPlantaCorredores <- as.data.frame.matrix(
+    table(factor(corredores$barrio), corredores$habito_crecimiento)
+  );
+  tipoPlantaCorredores <- data.frame(
+    barrio = rownames(tmpTipoPlantaCorredores),
+    arbol = dominio(tmpTipoPlantaCorredores, tipoPlanta$dominio, tipoPlanta$arbol, CHECK),
+    xa = dominio(tmpTipoPlantaCorredores, tipoPlanta$dominio, tipoPlanta$arbol, SUM),
+    arbusto = dominio(tmpTipoPlantaCorredores, tipoPlanta$dominio, tipoPlanta$arbusto, CHECK),
+    xabto = dominio(tmpTipoPlantaCorredores, tipoPlanta$dominio, tipoPlanta$arbusto, SUM),
+    palma = dominio(tmpTipoPlantaCorredores, tipoPlanta$dominio, tipoPlanta$palma, CHECK),
+    xp = dominio(tmpTipoPlantaCorredores, tipoPlanta$dominio, tipoPlanta$palma, SUM),
+    bambu = dominio(tmpTipoPlantaCorredores, tipoPlanta$dominio, tipoPlanta$bambu, CHECK),
+    xb = dominio(tmpTipoPlantaCorredores, tipoPlanta$dominio, tipoPlanta$bambu, SUM)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpTipoPlantaInstituciones <- as.data.frame.matrix(
+    table(factor(instituciones$institucion), instituciones$habito_crecimiento)
+  );
+  tipoPlantaInstituciones <- data.frame(
+    barrio = rownames(tmpTipoPlantaInstituciones),
+    arbol = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$arbol, CHECK),
+    xa = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$arbol, SUM),
+    arbusto = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$arbusto, CHECK),
+    xabto = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$arbusto, SUM),
+    palma = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$palma, CHECK),
+    xp = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$palma, SUM),
+    bambu = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$bambu, CHECK),
+    xb = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$bambu, SUM)
+  );
+  save.xlsx(tipoPlanta$informeEspecifico, tipoPlantaComuna, tipoPlantaBarrios, tipoPlantaCorredores, tipoPlantaInstituciones);
+}

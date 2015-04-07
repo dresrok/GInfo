@@ -574,7 +574,45 @@ procedenciaGeneral <- function(comuna){
   procedenciaInstituciones <- data.frame(
     procedencia = encabezado(procedencia$encabezado, tmpProcedenciaInstituciones$Var1),
     arboles = tmpProcedenciaInstituciones$Freq,
-    xd = round(tmpProcedenciaInstituciones$Freq/sum(tmpProcedenciaInstituciones$Freq), 4)
+    xp = round(tmpProcedenciaInstituciones$Freq/sum(tmpProcedenciaInstituciones$Freq), 4)
   );
   save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, procedenciaInstituciones);
+}
+tipoPlantaGeneral <- function(comuna){
+  tmTipoPlantapComuna <- as.data.frame(
+    table(comuna$habito_crecimiento)
+  );
+  tipoPlantaComuna <- data.frame(
+    tipoPlanta = encabezado(tipoPlanta$encabezado, tmTipoPlantapComuna$Var1),
+    arboles = tmTipoPlantapComuna$Freq,
+    xtp = round(tmTipoPlantapComuna$Freq/sum(tmTipoPlantapComuna$Freq), 4)
+  );
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  tmpTipoPlantaBarrios <- as.data.frame(
+    table(barrios$habito_crecimiento)
+  );
+  tipoPlantaBarrios <- data.frame(
+    tipoPlanta = encabezado(tipoPlanta$encabezado, tmpTipoPlantaBarrios$Var1),
+    arboles = tmpTipoPlantaBarrios$Freq,
+    xtp = round(tmpTipoPlantaBarrios$Freq/sum(tmpTipoPlantaBarrios$Freq), 4)
+  );
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  tmpTipoPlantaCorredores <- as.data.frame(
+    table(corredores$habito_crecimiento)
+  );
+  tipoPlantaCorredores <- data.frame(
+    tipoPlanta = encabezado(tipoPlanta$encabezado, tmpTipoPlantaCorredores$Var1),
+    arboles = tmpTipoPlantaCorredores$Freq,
+    xtp = round(tmpTipoPlantaCorredores$Freq/sum(tmpTipoPlantaCorredores$Freq), 4)
+  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  tmpTipoPlantaInstituciones <- as.data.frame(
+    table(instituciones$habito_crecimiento)
+  );
+  tipoPlantaInstituciones <- data.frame(
+    tipoPlanta = encabezado(tipoPlanta$encabezado, tmpTipoPlantaInstituciones$Var1),
+    arboles = tmpTipoPlantaInstituciones$Freq,
+    xtp = round(tmpTipoPlantaInstituciones$Freq/sum(tmpTipoPlantaInstituciones$Freq), 4)
+  );
+  save.xlsx(tipoPlanta$informeGeneral, tipoPlantaComuna, tipoPlantaBarrios, tipoPlantaCorredores, tipoPlantaInstituciones);
 }

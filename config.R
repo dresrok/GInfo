@@ -87,4 +87,14 @@ configurarVaribales <- function(){
     nativa = 1,
     exotica = 2
   );
+  tipoPlanta <<- list(
+    informeGeneral = "F12_tipo_planta.xlsx",
+    informeEspecifico = "F30_tipo_planta.xlsx",
+    dominio = "tipoPlanta",
+    encabezado = c("Árbol", "Arbusto", "Palma", "Bambu"),
+    arbol = 1,
+    arbusto = 2,
+    palma = 3,
+    bambu = 4
+  );
 }
