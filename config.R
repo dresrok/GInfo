@@ -74,4 +74,9 @@ configurarVaribales <- function(){
     ind = 4,
     ina = 5
   );
+  especies <<- list(
+    conteoGeneral = 1,
+    conteoEspecifico = 2,
+    informeEspecifico = "F28_especies.xlsx"
+  );
 }

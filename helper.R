@@ -83,7 +83,7 @@ dominio <- function(dataFrame, dominio, indice, operacion = NULL){
     );
   }
 }
-encabezado <- function(encabezado, data) {
+encabezado <- function(encabezado, data){
   nuevoEncabezado = character(0);
   for(i in 1:length(encabezado)){
     if(i %in% data){
@@ -91,6 +91,65 @@ encabezado <- function(encabezado, data) {
     }
   }
   return(nuevoEncabezado);
+}
+contarEspecies <- function(sector, dataFrame, conteo){
+  switch(conteo,
+    "1"={
+      for (i in 1:length(sector$nombreCientifico)){
+        sector$familia[i] <- as.character(
+          dataFrame$familia[ which( dataFrame$nom_cientifico == sector$nombreCientifico[i] )[1] ]
+        );
+        sector$nombreComun[i] <- as.character(
+          dataFrame$nom_comun[ which( dataFrame$nom_cientifico == sector$nombreCientifico[i] )[1] ]
+        );
+      }      
+      return(sector[c(4,1,5,2,3)]);
+    },
+    "2"={
+      tmpEspeciesSector <- data.frame();
+      encabezadoSector <- data.frame();
+      for (i in 1:length(sector)){
+        tmpEspeciesSector <- data.frame(
+          nombreCientifico = sector[i],
+          abundancia = "---",
+          x = "---",
+          familia = "---",
+          nombreComun = "---",
+          stringsAsFactors=FALSE
+        );
+        encabezadoSector <- rbind(encabezadoSector, tmpEspeciesSector);
+        if("barrio" %in% colnames(dataFrame)){
+          tmpEspeciesSector <- as.data.frame(
+            table(
+              factor( dataFrame$nom_cientifico[ which( dataFrame$barrio == sector[i] ) ] )
+            )
+          );
+        } else{
+          tmpEspeciesSector <- as.data.frame(
+            table(
+              factor( dataFrame$nom_cientifico[ which( dataFrame$institucion == sector[i] ) ] )
+            )
+          );
+        }
+        especiesSector <- data.frame(
+          nombreCientifico = as.character(tmpEspeciesSector$Var1),
+          abundancia = tmpEspeciesSector$Freq,
+          x = round(tmpEspeciesSector$Freq/sum(tmpEspeciesSector$Freq), 4),      
+          stringsAsFactors=FALSE
+        );    
+        for (j in 1:length(especiesSector$nombreCientifico)){
+          especiesSector$familia[j] <- as.character(
+            dataFrame$familia[ which( dataFrame$nom_cientifico == especiesSector$nombreCientifico[j] )[1] ]
+          );
+          especiesSector$nombreComun[j] <- as.character(
+            dataFrame$nom_comun[ which( dataFrame$nom_cientifico == especiesSector$nombreCientifico[j] )[1] ]
+          );
+        }
+        encabezadoSector <- rbind(encabezadoSector, especiesSector);
+      }
+      return(encabezadoSector[c(4,1,5,2,3)])     
+    }
+  );
 }
 save.xlsx <- function (file, ...){  
   objects <- list(...)

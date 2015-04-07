@@ -5,22 +5,20 @@ source('D:/2015/Ut/ReportesLabSIG/informesEspecificos.R');
 
 configurarEntorno();
 main <- function(){
-  comuna <- leerArchivo();
+  comuna <- leerArchivo();  
+  general(comuna);
+  densidadFollajeGeneral(comuna);
+  densidadFollajeEspecifico(comuna);
+  emplazamientoGeneral(comuna);
+  emplazamientoEspecifico(comuna);
+  estadoFisicoGeneral(comuna);
+  estadoFisicoEspecifico(comuna);
+  estadoHojaGeneral(comuna);
+  estadoHojaEspecifico(comuna);
+  estadoSanitarioGeneral(comuna);
+  estadoSanitarioEspecifico(comuna);
+  valorEsteticoGeneral(comuna);
+  valorEsteticoEspecifico(comuna);
   especiesEspecifico(comuna);
-  if(FALSE){
-    general(comuna);
-    densidadFollajeGeneral(comuna);
-    densidadFollajeEspecifico(comuna);
-    emplazamientoGeneral(comuna);
-    emplazamientoEspecifico(comuna);
-    estadoFisicoGeneral(comuna);
-    estadoFisicoEspecifico(comuna);
-    estadoHojaGeneral(comuna);
-    estadoHojaEspecifico(comuna);
-    estadoSanitarioGeneral(comuna);
-    estadoSanitarioEspecifico(comuna);
-    valorEsteticoGeneral(comuna);
-    valorEsteticoEspecifico(comuna);
-  }    
 }
 main();

@@ -440,39 +440,21 @@ especiesEspecifico <- function(comuna){
     abundancia = tmpEspeciesComuna$Freq,
     x = round(tmpEspeciesComuna$Freq/sum(tmpEspeciesComuna$Freq), 4),
     stringsAsFactors=FALSE
-  );  
-  for (i in 1:length(especiesComunas$nombreCientifico)){
-    especiesComunas$familia[i] <- as.character(
-      comuna$familia[ which( comuna$nom_cientifico == especiesComunas$nombreCientifico[i] )[1] ]
-    );
-    especiesComunas$nombreComun[i] <- as.character(
-      comuna$nom_comun[ which( comuna$nom_cientifico == especiesComunas$nombreCientifico[i] )[1] ]
-    );
-  }
-  especiesComunas <<- especiesComunas[c(5,4,1,2,3)];
+  );
+  especiesComunas <- contarEspecies(especiesComunas, comuna, especies$conteoGeneral);
+
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  nombresBarrios <- as.character(factor(unique(barrios$barrio)));
+  encabezadoBarrio <- contarEspecies(sort(nombresBarrios), barrios, especies$conteoEspecifico);
 
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpEspeciesCorredores <<- as.data.frame(
-    table(
-      factor( corredores$nom_cientifico[ which( corredores$barrio == "Corredor Av Ferrocarril" ) ] )
-    )
-  );
-  #for (i in 1:length(corredores)){
-  #  tmpEspeciesCorredores <- table(
-  #    factor( corredores$nom_cientifico[ which( corredores$barrio == "Corredor Vial Av Ferrocarril" ) ] )
-  #  );
+  nombresCorredores <- as.character(factor(unique(corredores$barrio)));
+  encabezadoCorredor <- contarEspecies(sort(nombresCorredores), corredores, especies$conteoEspecifico);
 
-  #  especiesCorredores <- data.frame(
-  #    nombreCientifico = corredores$barrio[i],
-  #    abundancia = "---",
-  #    x = 0,
-  #    familia = "---",
-  #    nombreComun = "---",
-  #    stringsAsFactors=FALSE
-  #  );
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  instituciones$barrio <- NULL;
+  nombresInstituciones <- as.character(factor(unique(instituciones$institucion)));
+  encabezadoInstitucion <- contarEspecies(sort(nombresInstituciones), instituciones, especies$conteoEspecifico);
 
-  #  for (j in 1:length(corredores$nom_cientifico)){
-
-  #  }
-  #}  
+  save.xlsx(especies$informeEspecifico, especiesComunas, encabezadoBarrio, encabezadoCorredor, encabezadoInstitucion);
 }
