@@ -175,6 +175,50 @@ contarEspecies <- function(sector, dataFrame, conteo){
     }
   );
 }
+contarConflictos <- function(dataFrame, conteo, limite){
+  switch(conteo,
+    "1"={          
+      tmpConflictos <- data.frame();
+      for (i in limite$inicio:limite$fin){      
+        tmp <- as.data.frame.list(
+          table(dataFrame[i])
+        );
+        if(!"X2" %in% colnames(tmp)){
+          tmp$X2 <- 0;
+        }
+        tmpConflictos <- rbind(tmpConflictos, tmp)
+      }
+      colnames(tmpConflictos) <- conflictos$encabezado;
+      return(tmpConflictos);
+    },
+    "2"={
+      tmpConflictos <- data.frame();
+      for (i in limite$inicio:limite$fin){      
+        tmp <- as.data.frame.matrix(
+          table(dataFrame$barrio, dataFrame[,i])
+        );
+        tmpConflictos <- cbind(tmpConflictos, tmp)
+      }
+      #colnames(tmpConflictos) <- conflictos$encabezado;
+      return(tmpConflictos);
+    }
+  );
+}
+darValor <- function(dataFrame, opcion){
+  switch(opcion,
+    total={
+      total <- nrow(dataFrame);
+      return(total);
+    },
+    limite={
+      limite <- list(
+        inicio = which(colnames(dataFrame)=="cre"),
+        fin = which(colnames(dataFrame)=="cap")
+      );
+      return(limite);
+    }
+  );  
+}
 save.xlsx <- function (file, ...){  
   objects <- list(...)
   fargs <- as.list(match.call(expand.dots = TRUE))

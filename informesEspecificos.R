@@ -441,20 +441,20 @@ especiesEspecifico <- function(comuna){
     x = round(tmpEspeciesComuna$Freq/sum(tmpEspeciesComuna$Freq), 4),
     stringsAsFactors=FALSE
   );
-  especiesComunas <- contarEspecies(especiesComunas, comuna, especies$conteoGeneral);
+  especiesComunas <- contarEspecies(especiesComunas, comuna, conteo$general);
 
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
   nombresBarrios <- as.character(factor(unique(barrios$barrio)));
-  encabezadoBarrio <- contarEspecies(sort(nombresBarrios), barrios, especies$conteoEspecifico);
+  encabezadoBarrio <- contarEspecies(sort(nombresBarrios), barrios, conteo$especifico);
 
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
   nombresCorredores <- as.character(factor(unique(corredores$barrio)));
-  encabezadoCorredor <- contarEspecies(sort(nombresCorredores), corredores, especies$conteoEspecifico);
+  encabezadoCorredor <- contarEspecies(sort(nombresCorredores), corredores, conteo$especifico);
 
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
   instituciones$barrio <- NULL;
   nombresInstituciones <- as.character(factor(unique(instituciones$institucion)));
-  encabezadoInstitucion <- contarEspecies(sort(nombresInstituciones), instituciones, especies$conteoEspecifico);
+  encabezadoInstitucion <- contarEspecies(sort(nombresInstituciones), instituciones, conteo$especifico);
 
   save.xlsx(especies$informeEspecifico, especiesComunas, encabezadoBarrio, encabezadoCorredor, encabezadoInstitucion);
 }
@@ -565,4 +565,7 @@ tipoPlantaEspecifico <- function(comuna){
     xb = dominio(tmpTipoPlantaInstituciones, tipoPlanta$dominio, tipoPlanta$bambu, SUM)
   );
   save.xlsx(tipoPlanta$informeEspecifico, tipoPlantaComuna, tipoPlantaBarrios, tipoPlantaCorredores, tipoPlantaInstituciones);
+}
+conflictoEspecifico <- function(comuna){
+  tmpConflictosComuna <<- contarConflictos(comuna, conteo$especifico, darValor(comuna, conteo$limite)); 
 }

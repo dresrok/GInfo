@@ -8,6 +8,12 @@ configurarVaribales <- function(){
   CHECK <<- 1;
   SUM <<- 2;
 
+  conteo <<- list(
+    general = 1,
+    especifico = 2,
+    total = "total",
+    limite = "limite"
+  );
   informeComuna <<- list(
     informeGeneral= "F18_general_comuna.xlsx"
   );
@@ -74,9 +80,7 @@ configurarVaribales <- function(){
     ind = 4,
     ina = 5
   );
-  especies <<- list(
-    conteoGeneral = 1,
-    conteoEspecifico = 2,
+  especies <<- list(      
     informeEspecifico = "F28_especies.xlsx"
   );
   procedencia <<- list(
@@ -96,5 +100,15 @@ configurarVaribales <- function(){
     arbusto = 2,
     palma = 3,
     bambu = 4
+  );
+  conflictos <<- list(
+    informeGeneral = "F13_conflictos.xlsx",
+    encabezado = c("sinConflicto", "conConflicto"),
+    nombres = c("Redes eléctricas", "Redes hidráulicas", "Redes de alcantarillado",
+              "Otros árboles", "Estructuras", "Infraestructura vial", "Redes telefónicas",
+              "Redes de gas", "Alumbrado público"),
+    encabezadoEspecifico = list(
+      "44" = c("creSin", "creCon")
+    );
   );
 }

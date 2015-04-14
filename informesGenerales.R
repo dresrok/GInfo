@@ -579,13 +579,13 @@ procedenciaGeneral <- function(comuna){
   save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, procedenciaInstituciones);
 }
 tipoPlantaGeneral <- function(comuna){
-  tmTipoPlantapComuna <- as.data.frame(
+  tmpTipoPlantaComuna <- as.data.frame(
     table(comuna$habito_crecimiento)
   );
   tipoPlantaComuna <- data.frame(
-    tipoPlanta = encabezado(tipoPlanta$encabezado, tmTipoPlantapComuna$Var1),
-    arboles = tmTipoPlantapComuna$Freq,
-    xtp = round(tmTipoPlantapComuna$Freq/sum(tmTipoPlantapComuna$Freq), 4)
+    tipoPlanta = encabezado(tipoPlanta$encabezado, tmpTipoPlantaComuna$Var1),
+    arboles = tmpTipoPlantaComuna$Freq,
+    xtp = round(tmpTipoPlantaComuna$Freq/sum(tmpTipoPlantaComuna$Freq), 4)
   );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
   tmpTipoPlantaBarrios <- as.data.frame(
@@ -615,4 +615,50 @@ tipoPlantaGeneral <- function(comuna){
     xtp = round(tmpTipoPlantaInstituciones$Freq/sum(tmpTipoPlantaInstituciones$Freq), 4)
   );
   save.xlsx(tipoPlanta$informeGeneral, tipoPlantaComuna, tipoPlantaBarrios, tipoPlantaCorredores, tipoPlantaInstituciones);
+}
+conflictoGeneral <- function(comuna){  
+  tmpConflictosComuna <- contarConflictos(comuna, conteo$general, darValor(comuna, conteo$limite));  
+  totalComuna <- darValor(comuna, conteo$total);
+  conflictosComuna <- data.frame(
+    conflictos = conflictos$nombres,
+    sinConflicto = tmpConflictosComuna$sinConflicto,
+    xsi = round(tmpConflictosComuna$sinConflicto/totalComuna, 4),
+    conConflicto = tmpConflictosComuna$conConflicto,
+    xno = round(tmpConflictosComuna$conConflicto/totalComuna, 4)
+  );
+
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  totalBarrios <- darValor(barrios, conteo$total);
+  tmpConflictosBarrios <- contarConflictos(barrios, conteo$general, darValor(comuna, conteo$limite));
+  conflictosBarrios <- data.frame(
+    conflictos = conflictos$nombres,
+    sinConflicto = tmpConflictosBarrios$sinConflicto,
+    xsi = round(tmpConflictosBarrios$sinConflicto/totalBarrios, 4),
+    conConflicto = tmpConflictosBarrios$conConflicto,
+    xno = round(tmpConflictosBarrios$conConflicto/totalBarrios, 4)
+  );
+
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  totalCorredores <- darValor(corredores, conteo$total);
+  tmpConflictosCorredores <- contarConflictos(corredores, conteo$general, darValor(comuna, conteo$limite));
+  conflictosCorredores <- data.frame(
+    conflictos = conflictos$nombres,
+    sinConflicto = tmpConflictosCorredores$sinConflicto,
+    xsi = round(tmpConflictosCorredores$sinConflicto/totalCorredores, 4),
+    conConflicto = tmpConflictosCorredores$conConflicto,
+    xno = round(tmpConflictosCorredores$conConflicto/totalCorredores, 4)
+  );
+
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  totalInstituciones <- darValor(instituciones, conteo$total);
+  tmpConflictosInstituciones <- contarConflictos(instituciones, conteo$general, darValor(comuna, conteo$limite));
+  conflictosInstituciones <- data.frame(
+    conflictos = conflictos$nombres,
+    sinConflicto = tmpConflictosInstituciones$sinConflicto,
+    xsi = round(tmpConflictosInstituciones$sinConflicto/totalInstituciones, 4),
+    conConflicto = tmpConflictosInstituciones$conConflicto,
+    xno = round(tmpConflictosInstituciones$conConflicto/totalInstituciones, 4)
+  );
+
+  save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
 }
