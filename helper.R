@@ -192,14 +192,20 @@ contarConflictos <- function(dataFrame, conteo, limite){
       return(tmpConflictos);
     },
     "2"={
-      tmpConflictos <- data.frame();
+      tmpConflictos <- data.frame(0);
       for (i in limite$inicio:limite$fin){      
         tmp <- as.data.frame.matrix(
           table(dataFrame$barrio, dataFrame[,i])
         );
+        if(!"2" %in% colnames(tmp)){
+          tmp$'2' <- 0;
+        }
+        colnames(tmp) <- conflictos$encabezadoEspecifico[[as.character(i)]]
         tmpConflictos <- cbind(tmpConflictos, tmp)
-      }
-      #colnames(tmpConflictos) <- conflictos$encabezado;
+        if("X0" %in% colnames(tmpConflictos)){
+          tmpConflictos$X0 <- NULL;
+        }
+      }      
       return(tmpConflictos);
     }
   );

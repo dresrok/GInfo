@@ -5,9 +5,9 @@ source('D:/2015/Ut/ReportesLabSIG/informesEspecificos.R');
 
 configurarEntorno();
 main <- function(){
-  comuna <<- leerArchivo();
+  comuna <- leerArchivo();
   conflictoGeneral(comuna);
-  #conflictoEspecifico(comuna);
+  conflictoEspecifico(comuna);
   #general(comuna);
   #densidadFollajeGeneral(comuna);
   #densidadFollajeEspecifico(comuna);

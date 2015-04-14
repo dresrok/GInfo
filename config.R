@@ -108,7 +108,15 @@ configurarVaribales <- function(){
               "Otros árboles", "Estructuras", "Infraestructura vial", "Redes telefónicas",
               "Redes de gas", "Alumbrado público"),
     encabezadoEspecifico = list(
-      "44" = c("creSin", "creCon")
-    );
+      "36" = c("creSin", "creCon"),
+      "37" = c("crhSin", "crhCon"),
+      "38" = c("craSin", "craCon"),
+      "39" = c("coaSin", "coaCon"),
+      "40" = c("ceSin", "ceCon"),
+      "41" = c("civSin", "civCon"),
+      "42" = c("crtSin", "crtCon"),
+      "43" = c("crgSin", "crgCon"),
+      "44" = c("capSin", "capCon")
+    )
   );
 }
