@@ -103,20 +103,21 @@ configurarVaribales <- function(){
   );
   conflictos <<- list(
     informeGeneral = "F13_conflictos.xlsx",
+    informeEspecifico = "F31_conflictos.xlsx",
     encabezado = c("sinConflicto", "conConflicto"),
     nombres = c("Redes eléctricas", "Redes hidráulicas", "Redes de alcantarillado",
               "Otros árboles", "Estructuras", "Infraestructura vial", "Redes telefónicas",
               "Redes de gas", "Alumbrado público"),
     encabezadoEspecifico = list(
-      "36" = c("creSin", "creCon"),
-      "37" = c("crhSin", "crhCon"),
-      "38" = c("craSin", "craCon"),
-      "39" = c("coaSin", "coaCon"),
-      "40" = c("ceSin", "ceCon"),
-      "41" = c("civSin", "civCon"),
-      "42" = c("crtSin", "crtCon"),
-      "43" = c("crgSin", "crgCon"),
-      "44" = c("capSin", "capCon")
+      "36" = c("creSin","xCreSin", "creCon","xCreCon", "totalCre"),
+      "37" = c("crhSin", "xCrhSin", "crhCon","xCrhCon", "totalCrh"),
+      "38" = c("craSin", "xCraSin", "craCon","xCraCon", "totalCra"),
+      "39" = c("coaSin", "xCoaSin", "coaCon","xCoaCon", "totalCoa"),
+      "40" = c("ceSin", "xCeSin", "ceCon","xCeCon", "totalCe"),
+      "41" = c("civSin", "xCivSin", "civCon","xCivCon", "totalCiv"),
+      "42" = c("crtSin", "xCrtSin", "crtCon","xCrtCon", "totalCrt"),
+      "43" = c("crgSin", "xCrgSin", "crgCon","xCrgCon", "totalCrg"),
+      "44" = c("capSin", "xCapSin", "capCon","xCapCon", "totalCap")
     )
   );
 }

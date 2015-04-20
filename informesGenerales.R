@@ -662,3 +662,7 @@ conflictoGeneral <- function(comuna){
 
   save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
 }
+alturas <- function(comuna){  
+  alturaFusteComuna <<- calcularRangos(comuna, 1);
+  alturaTotalComuna <<- calcularRangos(comuna, 2);
+}

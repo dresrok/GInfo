@@ -5,9 +5,8 @@ source('D:/2015/Ut/ReportesLabSIG/informesEspecificos.R');
 
 configurarEntorno();
 main <- function(){
-  comuna <- leerArchivo();
-  conflictoGeneral(comuna);
-  conflictoEspecifico(comuna);
+  comuna <<- leerArchivo();
+  alturas(comuna);
   #general(comuna);
   #densidadFollajeGeneral(comuna);
   #densidadFollajeEspecifico(comuna);
@@ -26,6 +25,7 @@ main <- function(){
   #procedenciaEspecifico(comuna);
   #tipoPlantaGeneral(comuna);
   #tipoPlantaEspecifico(comuna);
-  #Conflictos, Familias
+  #conflictoGeneral(comuna);
+  #conflictoEspecifico(comuna);
 }
 main();

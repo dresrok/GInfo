@@ -567,5 +567,16 @@ tipoPlantaEspecifico <- function(comuna){
   save.xlsx(tipoPlanta$informeEspecifico, tipoPlantaComuna, tipoPlantaBarrios, tipoPlantaCorredores, tipoPlantaInstituciones);
 }
 conflictoEspecifico <- function(comuna){
-  tmpConflictosComuna <<- contarConflictos(comuna, conteo$especifico, darValor(comuna, conteo$limite)); 
+  conflictosComuna <- contarConflictos(comuna, conteo$especifico, darValor(comuna, conteo$limite));
+
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  conflictosBarrios <- contarConflictos(barrios, conteo$especifico, darValor(barrios, conteo$limite));
+
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  conflictosCorredores <- contarConflictos(corredores, conteo$especifico, darValor(barrios, conteo$limite));
+
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  conflictosInstituciones <- contarConflictos(instituciones, conteo$especifico, darValor(barrios, conteo$limite));
+
+  save.xlsx(conflictos$informeEspecifico, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
 }

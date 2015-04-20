@@ -193,14 +193,20 @@ contarConflictos <- function(dataFrame, conteo, limite){
     },
     "2"={
       tmpConflictos <- data.frame(0);
+      str <- character(0);
       for (i in limite$inicio:limite$fin){      
         tmp <- as.data.frame.matrix(
-          table(dataFrame$barrio, dataFrame[,i])
+          table(factor(dataFrame$barrio), dataFrame[,i])
         );
         if(!"2" %in% colnames(tmp)){
           tmp$'2' <- 0;
         }
-        colnames(tmp) <- conflictos$encabezadoEspecifico[[as.character(i)]]
+        totalConflicto <- tmp$"1" + tmp$"2";
+        tmp$"3" <- round(tmp$"1"/totalConflicto, 4);
+        tmp$"4" <- round(tmp$"2"/totalConflicto, 4);
+        tmp$"5" <- tmp$"1" + tmp$"2";
+        tmp <- tmp[c(1,3,2,4,5)];
+        colnames(tmp) <- conflictos$encabezadoEspecifico[[as.character(i)]]     
         tmpConflictos <- cbind(tmpConflictos, tmp)
         if("X0" %in% colnames(tmpConflictos)){
           tmpConflictos$X0 <- NULL;
@@ -209,6 +215,34 @@ contarConflictos <- function(dataFrame, conteo, limite){
       return(tmpConflictos);
     }
   );
+}
+calcularRangos <- function(dataFrame, opcion){
+  switch(opcion,
+    "1"={
+      inferior <- min(comuna$altura_fuste);
+      superior <- max(comuna$altura_fuste);
+      intervalo <- ceiling((superior-inferior)/5)
+      alturaFuste <- cut(
+        comuna$altura_fuste, 
+        breaks = seq(inferior, superior+intervalo, by = intervalo), 
+        include.lowest = TRUE
+      );
+      rangos <- as.data.frame(table(alturaFuste));
+      return(rangos);
+    },
+    "2"={
+      inferior <- min(comuna$altura_total);
+      superior <- max(comuna$altura_total);
+      intervalo <- ceiling((superior-inferior)/5)
+      alturaTotal <- cut(
+        comuna$altura_total, 
+        breaks = seq(inferior, superior+intervalo, by = intervalo), 
+        include.lowest = TRUE
+      );
+      rangos <- as.data.frame(table(alturaTotal));
+      return(rangos);
+    }
+  );    
 }
 darValor <- function(dataFrame, opcion){
   switch(opcion,
