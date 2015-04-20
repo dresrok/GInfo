@@ -1,13 +1,13 @@
-source.with.encoding('D:/2015/Ut/ReportesLabSIG/config.R', encoding='UTF-8')
-source('D:/2015/Ut/ReportesLabSIG/helper.R');
-source('D:/2015/Ut/ReportesLabSIG/informesGenerales.R');
-source('D:/2015/Ut/ReportesLabSIG/informesEspecificos.R');
+source.with.encoding('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/config.R', encoding='UTF-8')
+source('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/helper.R');
+source('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/informesGenerales.R');
+source('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/informesEspecificos.R');
 
 configurarEntorno();
 main <- function(){
   comuna <<- leerArchivo();
-  alturas(comuna);
-  #general(comuna);
+  #alturas(comuna);
+  general(comuna);
   #densidadFollajeGeneral(comuna);
   #densidadFollajeEspecifico(comuna);
   #emplazamientoGeneral(comuna);

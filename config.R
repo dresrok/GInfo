@@ -1,6 +1,6 @@
 configurarEntorno <- function(){
   suppressMessages(require(gdata));
-  Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre8');
+  Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_45');
   require(xlsx, quietly = TRUE);  
   configurarVaribales();
 }
@@ -15,7 +15,8 @@ configurarVaribales <- function(){
     limite = "limite"
   );
   informeComuna <<- list(
-    informeGeneral= "F18_general_comuna.xlsx"
+    informeGeneral = "F18_general_comuna.xlsx",
+    encabezado = c("Barrios", "Instituciones", "Corredor Vial")
   );
   densidad <<- list(
     informeGeneral = "F1_densidad_follaje.xlsx",
