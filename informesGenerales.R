@@ -532,47 +532,52 @@ procedenciaGeneral <- function(comuna){
   save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, procedenciaInstituciones);
   # Fin Procedencia de las especies encontradas
 }
-tipoPlantaGeneral <- function(comuna){
-  tmpTipoPlantaComuna <- as.data.frame(
-    table(comuna$habito_crecimiento)
-  );
-  tipoPlantaComuna <- data.frame(
-    habito = encabezado(habito$encabezado, tmpTipoPlantaComuna$Var1),
-    especies = length(unique(comuna$especies)),
-    individuos = tmpTipoPlantaComuna$Freq,
-    xi = round(tmpTipoPlantaComuna$Freq/sum(tmpTipoPlantaComuna$Freq), 4)
-  );
+habitoGeneral <- function(comuna){
+
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpTipoPlantaBarrios <- as.data.frame(
-    table(barrios$habito_crecimiento)
-  );
-  tipoPlantaBarrios <- data.frame(
-    habito = encabezado(habito$encabezado, tmpTipoPlantaBarrios$Var1),
-    especies = length(unique(barrios$especies)),
-    individuos = tmpTipoPlantaBarrios$Freq,
-    xi = round(tmpTipoPlantaBarrios$Freq/sum(tmpTipoPlantaBarrios$Freq), 4)
-  );
-  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpTipoPlantaCorredores <- as.data.frame(
-    table(corredores$habito_crecimiento)
-  );
-  tipoPlantaCorredores <- data.frame(
-    habito = encabezado(habito$encabezado, tmpTipoPlantaCorredores$Var1),
-    especies = length(unique(corredores$especies)),
-    individuos = tmpTipoPlantaCorredores$Freq,
-    xi = round(tmpTipoPlantaCorredores$Freq/sum(tmpTipoPlantaCorredores$Freq), 4)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpTipoPlantaInstituciones <- as.data.frame(
-    table(instituciones$habito_crecimiento)
-  );
-  tipoPlantaInstituciones <- data.frame(
-    habito = encabezado(habito$encabezado, tmpTipoPlantaInstituciones$Var1),
-    especies = length(unique(instituciones$especies)),
-    individuos = tmpTipoPlantaInstituciones$Freq,
-    xi = round(tmpTipoPlantaInstituciones$Freq/sum(tmpTipoPlantaInstituciones$Freq), 4)
-  );
-  save.xlsx(habito$informeGeneral, tipoPlantaComuna, tipoPlantaBarrios, tipoPlantaCorredores, tipoPlantaInstituciones);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  habitoComuna <- especiesProcedenciaHabito(comuna, habito$dominio);  
+  habitoBarrios <- especiesProcedenciaHabito(barrios, habito$dominio);
+  habitoCorredores <- especiesProcedenciaHabito(corredores, habito$dominio);
+  habitoInstituciones <- especiesProcedenciaHabito(instituciones, habito$dominio);
+
+  save.xlsx(habito$informeGeneral, habitoComuna, habitoBarrios, habitoCorredores, habitoInstituciones);
+
+  if(FALSE){
+    barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+    tmpTipoPlantaBarrios <- as.data.frame(
+      table(barrios$habito_crecimiento)
+    );
+    tipoPlantaBarrios <- data.frame(
+      habito = encabezado(habito$encabezado, tmpTipoPlantaBarrios$Var1),
+      especies = length(unique(barrios$especies)),
+      individuos = tmpTipoPlantaBarrios$Freq,
+      xi = round(tmpTipoPlantaBarrios$Freq/sum(tmpTipoPlantaBarrios$Freq), 4)
+    );
+    corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+    tmpTipoPlantaCorredores <- as.data.frame(
+      table(corredores$habito_crecimiento)
+    );
+    tipoPlantaCorredores <- data.frame(
+      habito = encabezado(habito$encabezado, tmpTipoPlantaCorredores$Var1),
+      especies = length(unique(corredores$especies)),
+      individuos = tmpTipoPlantaCorredores$Freq,
+      xi = round(tmpTipoPlantaCorredores$Freq/sum(tmpTipoPlantaCorredores$Freq), 4)
+    );
+    instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+    tmpTipoPlantaInstituciones <- as.data.frame(
+      table(instituciones$habito_crecimiento)
+    );
+    tipoPlantaInstituciones <- data.frame(
+      habito = encabezado(habito$encabezado, tmpTipoPlantaInstituciones$Var1),
+      especies = length(unique(instituciones$especies)),
+      individuos = tmpTipoPlantaInstituciones$Freq,
+      xi = round(tmpTipoPlantaInstituciones$Freq/sum(tmpTipoPlantaInstituciones$Freq), 4)
+    );
+    save.xlsx(habito$informeGeneral, tipoPlantaComuna, tipoPlantaBarrios, tipoPlantaCorredores, tipoPlantaInstituciones);
+  }
 }
 conflictoGeneral <- function(comuna){  
   tmpConflictosComuna <- contarConflictos(comuna, conteo$general, darValor(comuna, conteo$limite));  

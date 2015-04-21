@@ -238,7 +238,24 @@ especiesProcedenciaHabito <- function(dataFrame, opcion){
       return(procedencia);
     },
     "habito"={
-      
+      tmpHabito <- as.data.frame(
+        table(dataFrame$habito_crecimiento)
+      );
+      habito <- data.frame(
+        habito = encabezado(habito$encabezado, tmpHabito$Var1),
+        individuos = tmpHabito$Freq,
+        xi = round(tmpHabito$Freq/sum(tmpHabito$Freq), 4)
+      );
+      maxHabito <- max(dataFrame$habito_crecimiento);
+      especies <- data.frame(0);
+      for (i in 1:maxHabito){
+        tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$habito_crecimiento == i)));
+        especies[as.character(i),1] <- tmpEspecies;
+      }
+      habito$especies <- especies$X0;
+      habito$xe <- round(habito$especies/sum(habito$especies), 4)
+      habito <- habito[c(1,4,5,2,3)];
+      return(habito);
     }
   );
 }

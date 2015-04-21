@@ -23,7 +23,7 @@ main <- function(){
   #especiesEspecifico(comuna);
   procedenciaGeneral(comuna);
   #procedenciaEspecifico(comuna);
-  tipoPlantaGeneral(comuna);
+  habitoGeneral(comuna);
   #tipoPlantaEspecifico(comuna);
   #conflictoGeneral(comuna);
   #conflictoEspecifico(comuna);
