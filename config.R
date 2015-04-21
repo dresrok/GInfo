@@ -88,14 +88,14 @@ configurarVaribales <- function(){
     informeGeneral = "F11_procedencia.xlsx",
     informeEspecifico = "F29_procedencia.xlsx",
     dominio = "procedencia",
-    encabezado = c("Nativa", "Exótia"),
+    encabezado = c("Nativa", "Exótica"),
     nativa = 1,
     exotica = 2
   );
-  tipoPlanta <<- list(
-    informeGeneral = "F12_tipo_planta.xlsx",
-    informeEspecifico = "F30_tipo_planta.xlsx",
-    dominio = "tipoPlanta",
+  habito <<- list(
+    informeGeneral = "F12_habito_crecimiento.xlsx",
+    informeEspecifico = "F30_habito_crecimiento.xlsx",
+    dominio = "habito",
     encabezado = c("Árbol", "Arbusto", "Palma", "Bambu"),
     arbol = 1,
     arbusto = 2,

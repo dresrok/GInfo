@@ -1,5 +1,5 @@
 leerArchivo <- function(){  
-  comuna <- read.xls("data/comuna-10.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
+  comuna <- read.xls("data/comuna11.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
   return(comuna);
 }
 dominio <- function(dataFrame, dominio, indice, operacion = NULL){
@@ -175,6 +175,74 @@ contarEspecies <- function(sector, dataFrame, conteo){
     }
   );
 }
+#Nuevo 1
+contarFamilias <- function(dataFrame){
+  tmpFamilias <- as.data.frame(
+    table(dataFrame$familia)
+  );
+  tmpFamilias <- tmpFamilias[order(-tmpFamilias$Freq),];
+  familias <- data.frame(
+    familia = tmpFamilias$Var1[1:10],
+    individuos = tmpFamilias$Freq[1:10],
+    xi = round(tmpFamilias$Freq[1:10]/sum(tmpFamilias$Freq), 4)
+  );
+  totalEspecies <- length(unique(dataFrame$nom_cientifico));
+  for (i in 1:length(familias$familia)){
+    especies <- unique(dataFrame$nom_cientifico[ dataFrame$familia == familias$familia[i] ]);
+    numeroEspecies <- length(especies);
+    familias$especies[i] <- numeroEspecies;
+    familias$xe[i] = round(familias$especies[i]/totalEspecies, 4);
+  }
+  familias <- familias[c(1,4,5,2,3)];
+  filaTotal <- data.frame(
+    familia = "Total",
+    especies = totalEspecies,
+    xe = 100,
+    individuos = nrow(dataFrame),
+    xi = 100
+  );
+  familias <- rbind(familias, filaTotal);
+  return(familias);
+}
+#Fin nuevo 1
+#Nuevo 2
+especiesProcedenciaHabito <- function(dataFrame, opcion){
+  switch(opcion,
+    "procedencia"={
+      tmpProcedencia <- as.data.frame.matrix(
+        table(dataFrame$procedencia, dataFrame$habito_crecimiento)
+      );
+      tmpProcedencia$procedencia <- procedencia$encabezado;
+      procedencia <- data.frame(
+        procedencia = tmpProcedencia$procedencia,
+        arboles = tmpProcedencia$"1",
+        arbustos = tmpProcedencia$"2",
+        palmas = tmpProcedencia$"3"
+      );
+      maxProcedencia <- max(dataFrame$procedencia);
+      maxHabito <- max(dataFrame$habito_crecimiento);
+      especies <- data.frame(0);
+      for (i in 1:maxProcedencia){
+        for (j in 1:maxHabito){
+          tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$procedencia == i & dataFrame$habito_crecimiento == j)));
+          especies[i,as.character(j)] <- tmpEspecies;
+        }
+      }
+      #angelica moncaleano
+      procedencia$especiesArboles <- especies$"1";
+      procedencia$especiesArbustos <- especies$"2";
+      procedencia$especiesPalmas <- especies$"3";
+      procedencia <- procedencia[c(1,2,5,3,6,4,7)];
+      procedencia$totalIndividuos <- procedencia$arboles + procedencia$arbustos + procedencia$palmas;
+      procedencia$totalEspecies <- procedencia$especiesArboles + procedencia$especiesArbustos + procedencia$especiesPalmas;
+      return(procedencia);
+    },
+    "habito"={
+      
+    }
+  );
+}
+#Fin nuevo 2
 contarConflictos <- function(dataFrame, conteo, limite){
   switch(conteo,
     "1"={          

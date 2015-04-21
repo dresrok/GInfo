@@ -21,9 +21,9 @@ main <- function(){
   #valorEsteticoGeneral(comuna);
   #valorEsteticoEspecifico(comuna);
   #especiesEspecifico(comuna);
-  #procedenciaGeneral(comuna);
+  procedenciaGeneral(comuna);
   #procedenciaEspecifico(comuna);
-  #tipoPlantaGeneral(comuna);
+  tipoPlantaGeneral(comuna);
   #tipoPlantaEspecifico(comuna);
   #conflictoGeneral(comuna);
   #conflictoEspecifico(comuna);
