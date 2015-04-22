@@ -176,7 +176,7 @@ contarEspecies <- function(sector, dataFrame, conteo){
   );
 }
 #Nuevo 1
-contarFamilias <- function(dataFrame){
+getFamilias <- function(dataFrame){
   tmpFamilias <- as.data.frame(
     table(dataFrame$familia)
   );
@@ -206,60 +206,80 @@ contarFamilias <- function(dataFrame){
 }
 #Fin nuevo 1
 #Nuevo 2
-especiesProcedenciaHabito <- function(dataFrame, opcion){
-  switch(opcion,
-    "procedencia"={
-      tmpProcedencia <- as.data.frame.matrix(
-        table(dataFrame$procedencia, dataFrame$habito_crecimiento)
-      );
-      tmpProcedencia$procedencia <- procedencia$encabezado;
-      procedencia <- data.frame(
-        procedencia = tmpProcedencia$procedencia,
-        arboles = tmpProcedencia$"1",
-        arbustos = tmpProcedencia$"2",
-        palmas = tmpProcedencia$"3"
-      );
-      maxProcedencia <- max(dataFrame$procedencia);
-      maxHabito <- max(dataFrame$habito_crecimiento);
-      especies <- data.frame(0);
-      for (i in 1:maxProcedencia){
-        for (j in 1:maxHabito){
-          tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$procedencia == i & dataFrame$habito_crecimiento == j)));
-          especies[i,as.character(j)] <- tmpEspecies;
-        }
-      }
-      #angelica moncaleano
-      procedencia$especiesArboles <- especies$"1";
-      procedencia$especiesArbustos <- especies$"2";
-      procedencia$especiesPalmas <- especies$"3";
-      procedencia <- procedencia[c(1,2,5,3,6,4,7)];
-      procedencia$totalIndividuos <- procedencia$arboles + procedencia$arbustos + procedencia$palmas;
-      procedencia$totalEspecies <- procedencia$especiesArboles + procedencia$especiesArbustos + procedencia$especiesPalmas;
-      return(procedencia);
-    },
-    "habito"={
-      tmpHabito <- as.data.frame(
-        table(dataFrame$habito_crecimiento)
-      );
-      habito <- data.frame(
-        habito = encabezado(habito$encabezado, tmpHabito$Var1),
-        individuos = tmpHabito$Freq,
-        xi = round(tmpHabito$Freq/sum(tmpHabito$Freq), 4)
-      );
-      maxHabito <- max(dataFrame$habito_crecimiento);
-      especies <- data.frame(0);
-      for (i in 1:maxHabito){
-        tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$habito_crecimiento == i)));
-        especies[as.character(i),1] <- tmpEspecies;
-      }
-      habito$especies <- especies$X0;
-      habito$xe <- round(habito$especies/sum(habito$especies), 4)
-      habito <- habito[c(1,4,5,2,3)];
-      return(habito);
-    }
+getEspeciesProcedencia <- function(dataFrame){
+  tmpProcedencia <- as.data.frame.matrix(
+    table(dataFrame$procedencia, dataFrame$habito_crecimiento)
   );
+  tmpProcedencia$procedencia <- procedencia$encabezado;
+  procedencia <- data.frame(
+    procedencia = tmpProcedencia$procedencia,
+    arboles = tmpProcedencia$"1",
+    arbustos = tmpProcedencia$"2",
+    palmas = tmpProcedencia$"3"
+  );
+  maxProcedencia <- max(dataFrame$procedencia);
+  maxHabito <- max(dataFrame$habito_crecimiento);
+  especies <- data.frame(0);
+  for (i in 1:maxProcedencia){
+    for (j in 1:maxHabito){
+      tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$procedencia == i & dataFrame$habito_crecimiento == j)));
+      especies[i,as.character(j)] <- tmpEspecies;
+    }
+  }
+  #angelica moncaleano
+  procedencia$especiesArboles <- especies$"1";
+  procedencia$especiesArbustos <- especies$"2";
+  procedencia$especiesPalmas <- especies$"3";
+  procedencia <- procedencia[c(1,2,5,3,6,4,7)];
+  procedencia$totalIndividuos <- procedencia$arboles + procedencia$arbustos + procedencia$palmas;
+  procedencia$totalEspecies <- procedencia$especiesArboles + procedencia$especiesArbustos + procedencia$especiesPalmas;
+  return(procedencia);
 }
-#Fin nuevo 2
+#Fin Nuevo 2
+#Nuevo 3
+getEspeciesHabito <- function(dataFrame){
+  tmpHabito <- as.data.frame(
+    table(dataFrame$habito_crecimiento)
+  );
+  habito <- data.frame(
+    habito = encabezado(habito$encabezado, tmpHabito$Var1),
+    individuos = tmpHabito$Freq,
+    xi = round(tmpHabito$Freq/sum(tmpHabito$Freq), 4)
+  );
+  maxHabito <- max(dataFrame$habito_crecimiento);
+  especies <- data.frame(0);
+  for (i in 1:maxHabito){
+    tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$habito_crecimiento == i)));
+    especies[as.character(i),1] <- tmpEspecies;
+  }
+  habito$especies <- especies$X0;
+  habito$xe <- round(habito$especies/sum(habito$especies), 4)
+  habito <- habito[c(1,4,5,2,3)];
+  filaTotal <- data.frame(
+    habito = "Total",
+    especies = sum(habito$especies),
+    xe = sum(habito$xe),
+    individuos = sum(habito$individuos),
+    xi = sum(habito$xi)
+  );
+  habito <- rbind(habito, filaTotal);
+  return(habito);
+}
+#Fin nuevo 3
+getValorEstetico <- function(dataFrame){
+  tmpValorEstetico <- as.data.frame.matrix(
+    table(dataFrame$valor_estetico, dataFrame$habito_crecimiento)
+  );
+  tmpValorEstetico$valorEstetico <- encabezado(valorEstetico$encabezado, row.names(tmpValorEstetico));
+  valorEstetico <- data.frame(
+    valorEstetico = tmpValorEstetico$valorEstetico,
+    arboles = tmpValorEstetico$"1",
+    arbustos = tmpValorEstetico$"2",
+    palmas = tmpValorEstetico$"3"
+  );
+  valorEstetico$totalIndividuos <- valorEstetico$arboles + valorEstetico$arbustos + valorEstetico$palmas;
+  return(valorEstetico);
+}
 contarConflictos <- function(dataFrame, conteo, limite){
   switch(conteo,
     "1"={          
@@ -301,19 +321,36 @@ contarConflictos <- function(dataFrame, conteo, limite){
     }
   );
 }
-calcularRangos <- function(dataFrame, opcion){
+getAlturas <- function(dataFrame, opcion){
   switch(opcion,
     "1"={
-      inferior <- min(comuna$altura_fuste);
-      superior <- max(comuna$altura_fuste);
-      intervalo <- ceiling((superior-inferior)/5)
-      alturaFuste <- cut(
-        comuna$altura_fuste, 
-        breaks = seq(inferior, superior+intervalo, by = intervalo), 
-        include.lowest = TRUE
-      );
-      rangos <- as.data.frame(table(alturaFuste));
-      return(rangos);
+      maxHabito <- max(dataFrame$habito_crecimiento);
+      alturaTotal <- data.frame();
+      for (i in 1:maxHabito) {
+        sector <- subset(dataFrame, habito_crecimiento == i);
+        inferior <- min(sector$altura_total);
+        superior <- max(sector$altura_total);
+        sturges <- (1 + 3.322) * log10(nrow(sector));
+        clase <- (superior-inferior)/sturges
+        rangos <- cut(
+          sector$altura_total, 
+          breaks = seq(inferior, superior+clase, by = clase), 
+          include.lowest = TRUE
+        );
+        tmpAlturaTotal <- as.data.frame(
+          table(rangos),
+          stringsAsFactors=FALSE
+        );
+        colnames(tmpAlturaTotal) <- c("rangos", "individuos");
+        sep <- data.frame(
+          rangos = "Total",
+          individuos = sum(as.integer(tmpAlturaTotal$individuos)),
+          stringsAsFactors=FALSE
+        );
+        tmpAlturaTotal <- rbind(tmpAlturaTotal, sep);
+        alturaTotal <- rbind(alturaTotal, tmpAlturaTotal);
+      }
+      return(alturaTotal);
     },
     "2"={
       inferior <- min(comuna$altura_total);

@@ -28,11 +28,12 @@ general <- function(comuna){
   # Fin Distribución de los arboles por ubicación
 
   # Inicio Familias más abundantes registradas 
-  familiasComuna <- contarFamilias(comuna);
-  familiasBarrios <- contarFamilias(barrios);
-  familiasCorredores <- contarFamilias(corredores);
-  familiasInstituciones <- contarFamilias(instituciones);
-  # Fin Familias más abundantes registradas 
+  familiasComuna <- getFamilias(comuna);
+  familiasBarrios <- getFamilias(barrios);
+  familiasCorredores <- getFamilias(corredores);
+  familiasInstituciones <- getFamilias(instituciones);
+  # Fin Familias más abundantes registradas
+
   save.xlsx(informeComuna$informeGeneral, comunaGeneral, familiasComuna, familiasBarrios, familiasCorredores, familiasInstituciones);
 }
 densidadFollajeGeneral <- function(comuna){
@@ -443,81 +444,60 @@ estadoSanitarioGeneral <- function(comuna){
   save.xlsx(estadoSanitario$informeGeneral, estadoFisicoComuna, estadoSanitarioBarrios, topBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
 }
 valorEsteticoGeneral <- function(comuna){
-  tmpValorEsteticoComuna <- as.data.frame(
-    table(comuna$valor_estetico)
-  );
-  valorEsteticoComuna <- data.frame(
-    valorEstetico = encabezado(valorEstetico$encabezado, tmpValorEsteticoComuna$Var1),
-    arboles = tmpValorEsteticoComuna$Freq,
-    xve = round(tmpValorEsteticoComuna$Freq/sum(tmpValorEsteticoComuna$Freq), 4)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpValorEsteticoBarrios <- as.data.frame(
-    table(barrios$valor_estetico)
-  );
-  valorEsteticoBarrios <- data.frame(
-    valorEstetico = encabezado(valorEstetico$encabezado, tmpValorEsteticoBarrios$Var1),
-    arboles = tmpValorEsteticoBarrios$Freq,
-    xve = round(tmpValorEsteticoBarrios$Freq/sum(tmpValorEsteticoBarrios$Freq), 4)
-  );
-  tmpTop <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$valor_estetico)
-  );
-  top <- data.frame(
-    barrios = rownames(tmpTop),
-    emblematico = dominio(tmpTop, valorEstetico$dominio, valorEstetico$emb, CHECK),
-    esencial = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ese, CHECK),
-    deseable = dominio(tmpTop, valorEstetico$dominio, valorEstetico$des, CHECK),
-    indiferente = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ind, CHECK),
-    inaceptable = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ina, CHECK),
-    stringsAsFactors=FALSE
-  );
-  topBarrios <- data.frame(
-    barriosEmblematico = head(top[ order(-top$emb), 1], 10),
-    arbolesEmblematico = head(top[ order(-top$emb), 2], 10),
-    barriosEsencial = head(top[ order(-top$ese), 1], 10),
-    arbolesEsencial = head(top[ order(-top$ese), 3], 10),
-    barriosDeseable = head(top[ order(-top$des), 1], 10),
-    arbolesDeseable = head(top[ order(-top$des), 4], 10),
-    barriosIndiferente = head(top[ order(-top$ind), 1], 10),
-    arbolesIndiferente = head(top[ order(-top$ind), 5], 10),
-    barriosInaceptable = head(top[ order(-top$ina), 1], 10),
-    arbolesInaceptable = head(top[ order(-top$ina), 6], 10),
-    stringsAsFactors=FALSE
-  );
-  topBarrios <- rbind(topBarrios, "---");
-  bottomBarrios <- data.frame(
-    barriosEmblematico = head(top[ order(-top$emb), 1], 5),
-    arbolesEmblematico = head(top[ order(-top$emb), 2], 5),
-    barriosEsencial = head(top[ order(-top$ese), 1], 5),
-    arbolesEsencial = head(top[ order(-top$ese), 3], 5),
-    barriosDeseable = head(top[ order(-top$des), 1], 5),
-    arbolesDeseable = head(top[ order(-top$des), 4], 5),
-    barriosIndiferente = head(top[ order(-top$ind), 1], 5),
-    arbolesIndiferente = head(top[ order(-top$ind), 5], 5),
-    barriosInaceptable = head(top[ order(-top$ina), 1], 5),
-    arbolesInaceptable = head(top[ order(-top$ina), 6], 5)
-  );
-  topBarrios <- rbind(topBarrios, bottomBarrios);
-  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpValorEsteticoCorredores <- as.data.frame(
-    table(corredores$valor_estetico)
-  );
-  valorEsteticoCorredores <- data.frame(
-    valorEstetico = encabezado(valorEstetico$encabezado, tmpValorEsteticoCorredores$Var1),
-    arboles = tmpValorEsteticoCorredores$Freq,
-    xve = round(tmpValorEsteticoCorredores$Freq/sum(tmpValorEsteticoCorredores$Freq), 4)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpValorEsteticoInstituciones <- as.data.frame(
-    table(instituciones$valor_estetico)
-  );
-  valorEsteticoInstituciones <- data.frame(
-    valorEstetico = encabezado(valorEstetico$encabezado, tmpValorEsteticoInstituciones$Var1),
-    arboles = tmpValorEsteticoInstituciones$Freq,
-    xe = round(tmpValorEsteticoInstituciones$Freq/sum(tmpValorEsteticoInstituciones$Freq), 4)
-  );
-  save.xlsx(valorEstetico$informeGeneral, valorEsteticoComuna, valorEsteticoBarrios, topBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  # Inicio Valor estético de los individuos
+  valorEsteticoComuna <- getValorEstetico(comuna);
+  valorEsteticoBarrios <- getValorEstetico(barrios);
+  valorEsteticoCorredores <- getValorEstetico(corredores);
+  valorEsteticoInstituciones <- getValorEstetico(instituciones);
+  # Fin Valor estético de los individuos
+
+  save.xlsx(valorEstetico$informeGeneral, valorEsteticoComuna, valorEsteticoBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);
+
+  if(FALSE){
+    tmpTop <- as.data.frame.matrix(
+      table(factor(barrios$barrio), barrios$valor_estetico)
+    );
+    top <- data.frame(
+      barrios = rownames(tmpTop),
+      emblematico = dominio(tmpTop, valorEstetico$dominio, valorEstetico$emb, CHECK),
+      esencial = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ese, CHECK),
+      deseable = dominio(tmpTop, valorEstetico$dominio, valorEstetico$des, CHECK),
+      indiferente = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ind, CHECK),
+      inaceptable = dominio(tmpTop, valorEstetico$dominio, valorEstetico$ina, CHECK),
+      stringsAsFactors=FALSE
+    );
+    topBarrios <- data.frame(
+      barriosEmblematico = head(top[ order(-top$emb), 1], 10),
+      arbolesEmblematico = head(top[ order(-top$emb), 2], 10),
+      barriosEsencial = head(top[ order(-top$ese), 1], 10),
+      arbolesEsencial = head(top[ order(-top$ese), 3], 10),
+      barriosDeseable = head(top[ order(-top$des), 1], 10),
+      arbolesDeseable = head(top[ order(-top$des), 4], 10),
+      barriosIndiferente = head(top[ order(-top$ind), 1], 10),
+      arbolesIndiferente = head(top[ order(-top$ind), 5], 10),
+      barriosInaceptable = head(top[ order(-top$ina), 1], 10),
+      arbolesInaceptable = head(top[ order(-top$ina), 6], 10),
+      stringsAsFactors=FALSE
+    );
+    topBarrios <- rbind(topBarrios, "---");
+    bottomBarrios <- data.frame(
+      barriosEmblematico = head(top[ order(-top$emb), 1], 5),
+      arbolesEmblematico = head(top[ order(-top$emb), 2], 5),
+      barriosEsencial = head(top[ order(-top$ese), 1], 5),
+      arbolesEsencial = head(top[ order(-top$ese), 3], 5),
+      barriosDeseable = head(top[ order(-top$des), 1], 5),
+      arbolesDeseable = head(top[ order(-top$des), 4], 5),
+      barriosIndiferente = head(top[ order(-top$ind), 1], 5),
+      arbolesIndiferente = head(top[ order(-top$ind), 5], 5),
+      barriosInaceptable = head(top[ order(-top$ina), 1], 5),
+      arbolesInaceptable = head(top[ order(-top$ina), 6], 5)
+    );
+    topBarrios <- rbind(topBarrios, bottomBarrios);
+  }
 }
 procedenciaGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
@@ -525,59 +505,26 @@ procedenciaGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Procedencia de las especies encontradas
-  procedenciaComuna <- especiesProcedenciaHabito(comuna, procedencia$dominio);
-  procedenciaBarrios <- especiesProcedenciaHabito(barrios, procedencia$dominio);
-  procedenciaCorredores <- especiesProcedenciaHabito(corredores, procedencia$dominio);
-  procedenciaInstituciones <- especiesProcedenciaHabito(instituciones, procedencia$dominio);
+  procedenciaComuna <- getEspeciesProcedencia(comuna);
+  procedenciaBarrios <- getEspeciesProcedencia(barrios);
+  procedenciaCorredores <- getEspeciesProcedencia(corredores);
+  procedenciaInstituciones <- getEspeciesProcedencia(instituciones);
   save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, procedenciaInstituciones);
   # Fin Procedencia de las especies encontradas
 }
 habitoGeneral <- function(comuna){
-
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
-  habitoComuna <- especiesProcedenciaHabito(comuna, habito$dominio);  
-  habitoBarrios <- especiesProcedenciaHabito(barrios, habito$dominio);
-  habitoCorredores <- especiesProcedenciaHabito(corredores, habito$dominio);
-  habitoInstituciones <- especiesProcedenciaHabito(instituciones, habito$dominio);
+  # Inicio Hábito de crecimiento de las especies
+  habitoComuna <- getEspeciesHabito(comuna);  
+  habitoBarrios <- getEspeciesHabito(barrios);
+  habitoCorredores <- getEspeciesHabito(corredores);
+  habitoInstituciones <- getEspeciesHabito(instituciones);
+  # Fin Hábito de crecimiento de las especies
 
   save.xlsx(habito$informeGeneral, habitoComuna, habitoBarrios, habitoCorredores, habitoInstituciones);
-
-  if(FALSE){
-    barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-    tmpTipoPlantaBarrios <- as.data.frame(
-      table(barrios$habito_crecimiento)
-    );
-    tipoPlantaBarrios <- data.frame(
-      habito = encabezado(habito$encabezado, tmpTipoPlantaBarrios$Var1),
-      especies = length(unique(barrios$especies)),
-      individuos = tmpTipoPlantaBarrios$Freq,
-      xi = round(tmpTipoPlantaBarrios$Freq/sum(tmpTipoPlantaBarrios$Freq), 4)
-    );
-    corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-    tmpTipoPlantaCorredores <- as.data.frame(
-      table(corredores$habito_crecimiento)
-    );
-    tipoPlantaCorredores <- data.frame(
-      habito = encabezado(habito$encabezado, tmpTipoPlantaCorredores$Var1),
-      especies = length(unique(corredores$especies)),
-      individuos = tmpTipoPlantaCorredores$Freq,
-      xi = round(tmpTipoPlantaCorredores$Freq/sum(tmpTipoPlantaCorredores$Freq), 4)
-    );
-    instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-    tmpTipoPlantaInstituciones <- as.data.frame(
-      table(instituciones$habito_crecimiento)
-    );
-    tipoPlantaInstituciones <- data.frame(
-      habito = encabezado(habito$encabezado, tmpTipoPlantaInstituciones$Var1),
-      especies = length(unique(instituciones$especies)),
-      individuos = tmpTipoPlantaInstituciones$Freq,
-      xi = round(tmpTipoPlantaInstituciones$Freq/sum(tmpTipoPlantaInstituciones$Freq), 4)
-    );
-    save.xlsx(habito$informeGeneral, tipoPlantaComuna, tipoPlantaBarrios, tipoPlantaCorredores, tipoPlantaInstituciones);
-  }
 }
 conflictoGeneral <- function(comuna){  
   tmpConflictosComuna <- contarConflictos(comuna, conteo$general, darValor(comuna, conteo$limite));  
@@ -625,7 +572,15 @@ conflictoGeneral <- function(comuna){
 
   save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
 }
-alturas <- function(comuna){  
-  alturaFusteComuna <<- calcularRangos(comuna, 1);
-  alturaTotalComuna <<- calcularRangos(comuna, 2);
+alturas <- function(comuna){
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  alturaTotalComuna <- getAlturas(comuna, "1");
+  alturaTotalBarrios <- getAlturas(barrios, "1");
+  alturaTotalCorredores <- getAlturas(corredores, "1");
+  alturaTotalInstituciones <- getAlturas(corredores, "1");
+
+  save.xlsx("alturas.xlsx", alturaTotalComuna, alturaTotalBarrios, alturaTotalCorredores, alturaTotalInstituciones);
 }

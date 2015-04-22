@@ -6,8 +6,8 @@ source('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/informesEspecificos.R');
 configurarEntorno();
 main <- function(){
   comuna <<- leerArchivo();
-  #alturas(comuna);
-  general(comuna);
+  alturas(comuna);
+  #general(comuna);
   #densidadFollajeGeneral(comuna);
   #densidadFollajeEspecifico(comuna);
   #emplazamientoGeneral(comuna);
@@ -21,9 +21,9 @@ main <- function(){
   #valorEsteticoGeneral(comuna);
   #valorEsteticoEspecifico(comuna);
   #especiesEspecifico(comuna);
-  procedenciaGeneral(comuna);
+  #procedenciaGeneral(comuna);
   #procedenciaEspecifico(comuna);
-  habitoGeneral(comuna);
+  #habitoGeneral(comuna);
   #tipoPlantaEspecifico(comuna);
   #conflictoGeneral(comuna);
   #conflictoEspecifico(comuna);
