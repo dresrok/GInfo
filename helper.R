@@ -342,9 +342,25 @@ getAlturas <- function(dataFrame, opcion){
           stringsAsFactors=FALSE
         );
         colnames(tmpAlturaTotal) <- c("rangos", "individuos");
+        for (i in 1:nrow(tmpAlturaTotal)){
+          cadena <- tmpAlturaTotal$rangos[i];
+          cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
+          listaRango <- strsplit(cadenaRango, ",");
+          r1 <- as.integer(listaRango[[1]][1]);
+          r2 <- as.integer(listaRango[[1]][2]);
+          especies <- subset(sector$nom_cientifico, sector$altura_total >= r1 & sector$altura_total <= r2);
+          dfEspecies <- as.data.frame(table(especies));
+          especieMasComun <- as.character(
+            dfEspecies[order(-dfEspecies$Freq),1][1]
+          );
+          tmpAlturaTotal$nombreComun[i] <- as.character(
+            sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
+          );
+        }
         sep <- data.frame(
           rangos = "Total",
           individuos = sum(as.integer(tmpAlturaTotal$individuos)),
+          nombreComun = "---",
           stringsAsFactors=FALSE
         );
         tmpAlturaTotal <- rbind(tmpAlturaTotal, sep);
@@ -353,16 +369,45 @@ getAlturas <- function(dataFrame, opcion){
       return(alturaTotal);
     },
     "2"={
-      inferior <- min(comuna$altura_total);
-      superior <- max(comuna$altura_total);
-      intervalo <- ceiling((superior-inferior)/5)
-      alturaTotal <- cut(
-        comuna$altura_total, 
-        breaks = seq(inferior, superior+intervalo, by = intervalo), 
+      alturaFuste <- data.frame();  
+      inferior <- min(dataFrame$altura_fuste);
+      superior <- max(dataFrame$altura_fuste);
+      sturges <- (1 + 3.322) * log10(nrow(dataFrame));
+      clase <- (superior-inferior)/sturges
+      rangos <- cut(
+        dataFrame$altura_fuste, 
+        breaks = seq(inferior, superior+clase, by = clase), 
         include.lowest = TRUE
       );
-      rangos <- as.data.frame(table(alturaTotal));
-      return(rangos);
+      tmpAlturaFuste <- as.data.frame(
+        table(rangos),
+        stringsAsFactors=FALSE
+      );
+      colnames(tmpAlturaFuste) <- c("rangos", "individuos");
+      for (i in 1:nrow(tmpAlturaFuste)){
+        cadena <- tmpAlturaFuste$rangos[i];
+        cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
+        listaRango <- strsplit(cadenaRango, ",");
+        r1 <- as.integer(listaRango[[1]][1]);
+        r2 <- as.integer(listaRango[[1]][2]);
+        especies <- subset(dataFrame$nom_cientifico, dataFrame$altura_total >= r1 & dataFrame$altura_total <= r2);
+        dfEspecies <- as.data.frame(table(especies));
+        especieMasComun <- as.character(
+          dfEspecies[order(-dfEspecies$Freq),1][1]
+        );
+        tmpAlturaFuste$nombreComun[i] <- as.character(
+          dataFrame$nom_comun[ dataFrame$nom_cientifico == especieMasComun ][1]
+        );
+      }
+      sep <- data.frame(
+        rangos = "Total",
+        individuos = sum(as.integer(tmpAlturaFuste$individuos)),
+        nombreComun = "---",
+        stringsAsFactors=FALSE
+      );
+      tmpAlturaFuste <- rbind(tmpAlturaFuste, sep);
+      alturaFuste <- rbind(alturaFuste, tmpAlturaFuste);
+      return(alturaFuste);
     }
   );    
 }

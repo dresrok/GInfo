@@ -573,14 +573,22 @@ conflictoGeneral <- function(comuna){
   save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
 }
 alturas <- function(comuna){
-  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  barrios <<- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  instituciones <<- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  corredores <<- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   alturaTotalComuna <- getAlturas(comuna, "1");
   alturaTotalBarrios <- getAlturas(barrios, "1");
   alturaTotalCorredores <- getAlturas(corredores, "1");
   alturaTotalInstituciones <- getAlturas(corredores, "1");
 
-  save.xlsx("alturas.xlsx", alturaTotalComuna, alturaTotalBarrios, alturaTotalCorredores, alturaTotalInstituciones);
+  alturaFusteComuna <- getAlturas(comuna, "2");
+  alturaFusteBarrios <- getAlturas(barrios, "2");
+  alturaFusteCorredores <- getAlturas(corredores, "2");
+  alturaFusteInstituciones <- getAlturas(instituciones, "2");
+
+  save.xlsx("alturas.xlsx", alturaTotalComuna, alturaFusteComuna, 
+    alturaTotalBarrios, alturaFusteBarrios, 
+    alturaTotalCorredores, alturaFusteCorredores, 
+    alturaTotalInstituciones, alturaFusteInstituciones);
 }
