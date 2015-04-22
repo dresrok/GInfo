@@ -7,7 +7,7 @@ configurarEntorno();
 main <- function(){
   comuna <<- leerArchivo();
   alturas(comuna);
-  #general(comuna);
+  general(comuna);
   #densidadFollajeGeneral(comuna);
   #densidadFollajeEspecifico(comuna);
   #emplazamientoGeneral(comuna);
@@ -18,12 +18,12 @@ main <- function(){
   #estadoHojaEspecifico(comuna);
   #estadoSanitarioGeneral(comuna);
   #estadoSanitarioEspecifico(comuna);
-  #valorEsteticoGeneral(comuna);
+  valorEsteticoGeneral(comuna);
   #valorEsteticoEspecifico(comuna);
   #especiesEspecifico(comuna);
-  #procedenciaGeneral(comuna);
+  procedenciaGeneral(comuna);
   #procedenciaEspecifico(comuna);
-  #habitoGeneral(comuna);
+  habitoGeneral(comuna);
   #tipoPlantaEspecifico(comuna);
   #conflictoGeneral(comuna);
   #conflictoEspecifico(comuna);

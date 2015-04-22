@@ -342,18 +342,22 @@ getAlturas <- function(dataFrame, opcion){
           stringsAsFactors=FALSE
         );
         colnames(tmpAlturaTotal) <- c("rangos", "individuos");
-        for (i in 1:nrow(tmpAlturaTotal)){
-          cadena <- tmpAlturaTotal$rangos[i];
+        for (j in 1:nrow(tmpAlturaTotal)){
+          cadena <- tmpAlturaTotal$rangos[j];
           cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
           listaRango <- strsplit(cadenaRango, ",");
-          r1 <- as.integer(listaRango[[1]][1]);
-          r2 <- as.integer(listaRango[[1]][2]);
-          especies <- subset(sector$nom_cientifico, sector$altura_total >= r1 & sector$altura_total <= r2);
+          r1 <- as.double(listaRango[[1]][1]);
+          r2 <- as.double(listaRango[[1]][2]);
+          if(j == 1){
+            especies <- factor(subset(sector$nom_cientifico, sector$altura_total >= r1 & sector$altura_total <= r2));
+          } else{
+            especies <- factor(subset(sector$nom_cientifico, sector$altura_total > r1 & sector$altura_total <= r2));
+          }
           dfEspecies <- as.data.frame(table(especies));
           especieMasComun <- as.character(
             dfEspecies[order(-dfEspecies$Freq),1][1]
           );
-          tmpAlturaTotal$nombreComun[i] <- as.character(
+          tmpAlturaTotal$nombreComun[j] <- as.character(
             sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
           );
         }
@@ -388,9 +392,13 @@ getAlturas <- function(dataFrame, opcion){
         cadena <- tmpAlturaFuste$rangos[i];
         cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
         listaRango <- strsplit(cadenaRango, ",");
-        r1 <- as.integer(listaRango[[1]][1]);
-        r2 <- as.integer(listaRango[[1]][2]);
-        especies <- subset(dataFrame$nom_cientifico, dataFrame$altura_total >= r1 & dataFrame$altura_total <= r2);
+        r1 <- as.double(listaRango[[1]][1]);
+        r2 <- as.double(listaRango[[1]][2]);
+        if(i == 1){
+          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$altura_fuste >= r1 & dataFrame$altura_fuste <= r2));
+        } else {
+          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$altura_fuste > r1 & dataFrame$altura_fuste <= r2));
+        }
         dfEspecies <- as.data.frame(table(especies));
         especieMasComun <- as.character(
           dfEspecies[order(-dfEspecies$Freq),1][1]
