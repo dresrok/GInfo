@@ -573,22 +573,64 @@ conflictoGeneral <- function(comuna){
   save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
 }
 alturas <- function(comuna){
-  barrios <<- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  instituciones <<- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  corredores <<- subset(comuna, grepl("^corredor", tolower(barrio)));
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
+  # Inicio Distribución de altura total
   alturaTotalComuna <- getAlturas(comuna, "1");
   alturaTotalBarrios <- getAlturas(barrios, "1");
   alturaTotalCorredores <- getAlturas(corredores, "1");
   alturaTotalInstituciones <- getAlturas(corredores, "1");
+  # Fin Distribución de altura total
 
+  # Inicio Distribución de altura de fuste
   alturaFusteComuna <- getAlturas(comuna, "2");
   alturaFusteBarrios <- getAlturas(barrios, "2");
   alturaFusteCorredores <- getAlturas(corredores, "2");
   alturaFusteInstituciones <- getAlturas(instituciones, "2");
+  # Fin Distribución de altura de fuste
 
   save.xlsx("alturas.xlsx", alturaTotalComuna, alturaFusteComuna, 
     alturaTotalBarrios, alturaFusteBarrios, 
     alturaTotalCorredores, alturaFusteCorredores, 
     alturaTotalInstituciones, alturaFusteInstituciones);
+}
+diametros <- function(comuna){
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  # Inicio Distribución de DAP
+  diametroNormalComuna <- getDiametros(comuna, "1");
+  diametroNormalBarrios <- getDiametros(barrios, "1");
+  diametroNormalCorredores <- getDiametros(corredores, "1");
+  diametroNormalInstituciones <- getDiametros(instituciones, "1");
+  # Fin Distribución de DAP
+
+  # Inicio Distribución del diámetro de copa
+  diametroCopaComuna <- getDiametros(comuna, "2");
+  diametroCopaBarrios <- getDiametros(barrios, "2");
+  diametroCopaCorredores <- getDiametros(corredores, "2");
+  diametroCopaInstituciones <- getDiametros(instituciones, "2");
+  # Fin Distribución del diámetro de copa
+
+  save.xlsx("diametros.xlsx", diametroNormalComuna, diametroCopaComuna, 
+    diametroNormalBarrios, diametroCopaBarrios, 
+    diametroNormalCorredores, diametroCopaCorredores,
+    diametroNormalInstituciones, diametroCopaInstituciones);
+}
+volumen <- function(comuna){
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  # Inicio Distribución del volumen
+  volumenComuna <<- getVolumen(comuna);
+  volumenBarrios <<- getVolumen(barrios);
+  volumenCorredores <<- getVolumen(corredores);
+  volumenInstituciones <<- getVolumen(instituciones);
+  # Fin Distribución del volumen
+
+  save.xlsx("volumen.xlsx", volumenComuna, volumenBarrios, volumenCorredores, volumenInstituciones);
 }

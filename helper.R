@@ -205,7 +205,7 @@ getFamilias <- function(dataFrame){
   return(familias);
 }
 #Fin nuevo 1
-#Nuevo 2
+#Nuevo 3
 getEspeciesProcedencia <- function(dataFrame){
   tmpProcedencia <- as.data.frame.matrix(
     table(dataFrame$procedencia, dataFrame$habito_crecimiento)
@@ -235,8 +235,8 @@ getEspeciesProcedencia <- function(dataFrame){
   procedencia$totalEspecies <- procedencia$especiesArboles + procedencia$especiesArbustos + procedencia$especiesPalmas;
   return(procedencia);
 }
-#Fin Nuevo 2
-#Nuevo 3
+#Fin Nuevo 3
+#Nuevo 4
 getEspeciesHabito <- function(dataFrame){
   tmpHabito <- as.data.frame(
     table(dataFrame$habito_crecimiento)
@@ -265,7 +265,8 @@ getEspeciesHabito <- function(dataFrame){
   habito <- rbind(habito, filaTotal);
   return(habito);
 }
-#Fin nuevo 3
+#Fin nuevo 4
+#Nuevo 2
 getValorEstetico <- function(dataFrame){
   tmpValorEstetico <- as.data.frame.matrix(
     table(dataFrame$valor_estetico, dataFrame$habito_crecimiento)
@@ -280,6 +281,7 @@ getValorEstetico <- function(dataFrame){
   valorEstetico$totalIndividuos <- valorEstetico$arboles + valorEstetico$arbustos + valorEstetico$palmas;
   return(valorEstetico);
 }
+#Fin Nuevo 2
 contarConflictos <- function(dataFrame, conteo, limite){
   switch(conteo,
     "1"={          
@@ -321,6 +323,7 @@ contarConflictos <- function(dataFrame, conteo, limite){
     }
   );
 }
+#Nuevo 5
 getAlturas <- function(dataFrame, opcion){
   switch(opcion,
     "1"={
@@ -418,6 +421,156 @@ getAlturas <- function(dataFrame, opcion){
       return(alturaFuste);
     }
   );    
+}
+#Fin Nuevo 5
+#Nuevo 6
+getDiametros <- function(dataFrame, opcion){
+  switch(opcion,
+    "1"={
+      maxHabito <- max(dataFrame$habito_crecimiento);
+      diametroNormal <- data.frame();
+      for (i in 1:maxHabito) {
+        sector <- subset(dataFrame, habito_crecimiento == i);
+        inferior <- min(sector$diametro_normal);
+        superior <- max(sector$diametro_normal);
+        sturges <- (1 + 3.322) * log10(nrow(sector));
+        clase <- (superior-inferior)/sturges
+        rangos <- cut(
+          sector$diametro_normal, 
+          breaks = seq(inferior, superior+clase, by = clase), 
+          include.lowest = TRUE
+        );
+        tmpDiametroNormal <- as.data.frame(
+          table(rangos),
+          stringsAsFactors=FALSE
+        );
+        colnames(tmpDiametroNormal) <- c("rangos", "individuos");
+        for (j in 1:nrow(tmpDiametroNormal)){
+          cadena <- tmpDiametroNormal$rangos[j];
+          cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
+          listaRango <- strsplit(cadenaRango, ",");
+          r1 <- as.double(listaRango[[1]][1]);
+          r2 <- as.double(listaRango[[1]][2]);
+          if(j == 1){
+            especies <- factor(subset(sector$nom_cientifico, sector$diametro_normal >= r1 & sector$diametro_normal <= r2));
+          } else{
+            especies <- factor(subset(sector$nom_cientifico, sector$diametro_normal > r1 & sector$diametro_normal <= r2));
+          }
+          dfEspecies <- as.data.frame(table(especies));
+          especieMasComun <- as.character(
+            dfEspecies[order(-dfEspecies$Freq),1][1]
+          );
+          tmpDiametroNormal$nombreComun[j] <- as.character(
+            sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
+          );
+        }
+        sep <- data.frame(
+          rangos = "Total",
+          individuos = sum(as.integer(tmpDiametroNormal$individuos)),
+          nombreComun = "---",
+          stringsAsFactors=FALSE
+        );
+        tmpDiametroNormal <- rbind(tmpDiametroNormal, sep);
+        diametroNormal <- rbind(diametroNormal, tmpDiametroNormal);
+      }
+      return(diametroNormal);
+    },
+    "2"={
+      diametroCopa <- data.frame();  
+      inferior <- min(dataFrame$diametro_normal);
+      superior <- max(dataFrame$diametro_normal);
+      sturges <- (1 + 3.322) * log10(nrow(dataFrame));
+      clase <- (superior-inferior)/sturges
+      rangos <- cut(
+        dataFrame$diametro_normal, 
+        breaks = seq(inferior, superior+clase, by = clase), 
+        include.lowest = TRUE
+      );
+      tmpDiametroCopa <- as.data.frame(
+        table(rangos),
+        stringsAsFactors=FALSE
+      );
+      colnames(tmpDiametroCopa) <- c("rangos", "individuos");
+      for (i in 1:nrow(tmpDiametroCopa)){
+        cadena <- tmpDiametroCopa$rangos[i];
+        cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
+        listaRango <- strsplit(cadenaRango, ",");
+        r1 <- as.double(listaRango[[1]][1]);
+        r2 <- as.double(listaRango[[1]][2]);
+        if(i == 1){
+          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_normal >= r1 & dataFrame$diametro_normal <= r2));
+        } else {
+          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_normal > r1 & dataFrame$diametro_normal <= r2));
+        }
+        dfEspecies <- as.data.frame(table(especies));
+        especieMasComun <- as.character(
+          dfEspecies[order(-dfEspecies$Freq),1][1]
+        );
+        tmpDiametroCopa$nombreComun[i] <- as.character(
+          dataFrame$nom_comun[ dataFrame$nom_cientifico == especieMasComun ][1]
+        );
+      }
+      sep <- data.frame(
+        rangos = "Total",
+        individuos = sum(as.integer(tmpDiametroCopa$individuos)),
+        nombreComun = "---",
+        stringsAsFactors=FALSE
+      );
+      tmpDiametroCopa <- rbind(tmpDiametroCopa, sep);
+      diametroCopa <- rbind(diametroCopa, tmpDiametroCopa);
+      return(diametroCopa);
+    }
+  );
+}
+#Fin Nuevo 6
+getVolumen <- function(dataFrame){
+  maxHabito <- max(dataFrame$habito_crecimiento);
+  volumen <- data.frame();
+  for (i in 1:maxHabito) {
+    sector <- subset(dataFrame, habito_crecimiento == i);
+    inferior <- min(sector$volumen);
+    superior <- max(sector$volumen);
+    sturges <- (1 + 3.322) * log10(nrow(sector));
+    clase <- (superior-inferior)/sturges
+    rangos <- cut(
+      sector$volumen, 
+      breaks = seq(inferior, superior+clase, by = clase), 
+      include.lowest = TRUE
+    );
+    tmpVolumen <- as.data.frame(
+      table(rangos),
+      stringsAsFactors=FALSE
+    );
+    colnames(tmpVolumen) <- c("rangos", "individuos");
+    for (j in 1:nrow(tmpVolumen)){
+      cadena <- tmpVolumen$rangos[j];
+      cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
+      listaRango <- strsplit(cadenaRango, ",");
+      r1 <- as.double(listaRango[[1]][1]);
+      r2 <- as.double(listaRango[[1]][2]);
+      if(j == 1){
+        especies <- factor(subset(sector$nom_cientifico, sector$volumen >= r1 & sector$volumen <= r2));
+      } else{
+        especies <- factor(subset(sector$nom_cientifico, sector$volumen > r1 & sector$volumen <= r2));
+      }
+      dfEspecies <- as.data.frame(table(especies));
+      especieMasComun <- as.character(
+        dfEspecies[order(-dfEspecies$Freq),1][1]
+      );
+      tmpVolumen$nombreComun[j] <- as.character(
+        sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
+      );
+    }
+    sep <- data.frame(
+      rangos = "Total",
+      individuos = sum(as.integer(tmpVolumen$individuos)),
+      nombreComun = "---",
+      stringsAsFactors=FALSE
+    );
+    tmpVolumen <- rbind(tmpVolumen, sep);
+    volumen <- rbind(volumen, tmpVolumen);
+  }
+  return(volumen);
 }
 darValor <- function(dataFrame, opcion){
   switch(opcion,
