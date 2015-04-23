@@ -123,6 +123,7 @@ configurarVaribales <- function(){
   );
   propiedades <<- list(
     informeFisicas = "propiedades_fisicas.xlsx",
+    informeSanitarias = "propiedades_sanitarias.xlsx",
     dominio = "porcentaje",
     fisicas = list(
       "20" = "inclinacion",
@@ -130,6 +131,15 @@ configurarVaribales <- function(){
       "22" = "danoMecanico",
       "23" = "bifurcacionBasal",
       "24" = "afectacionBasal"
+    ),
+    sanitarias = list(
+      "27" = "presenciaInsectos", 
+      "28" = "presenciaHongos", 
+      "29" = "presenciaAgallas", 
+      "32" = "pudricionLocalizada", 
+      "33" = "presenciaEpifitas", 
+      "34" = "presenciaParasitas", 
+      "35" = "presenciaObjetos"
     )
   );
 }

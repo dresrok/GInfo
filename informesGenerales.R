@@ -484,3 +484,17 @@ propiedadesFisicas <- function(comuna){
 
   save.xlsx(propiedades$informeFisicas, propiedadesFisicasComuna, propiedadesFisicasBarrios, propiedadesFisicasCorredores, propiedadesFisicasInstituciones);
 }
+propiedadesSanitarias <- function(comuna){
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  # Inicio Distribución de las propiedades sanitarias
+  propiedadesSanitariasComuna <- getPropiedadesSanitarias(comuna);
+  propiedadesSanitariasBarrios <- getPropiedadesSanitarias(barrios);
+  propiedadesSanitariasCorredores <- getPropiedadesSanitarias(corredores);
+  propiedadesSanitariasInstituciones <- getPropiedadesSanitarias(instituciones);
+  # Fin Distribución de las propiedades sanitarias
+
+  save.xlsx(propiedades$informeSanitarias, propiedadesSanitariasComuna, propiedadesSanitariasBarrios, propiedadesSanitariasCorredores, propiedadesSanitariasInstituciones);
+}

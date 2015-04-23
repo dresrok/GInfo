@@ -175,7 +175,7 @@ contarEspecies <- function(sector, dataFrame, conteo){
     }
   );
 }
-#Nuevo 1
+#Inicio Nuevos
 getFamilias <- function(dataFrame){
   tmpFamilias <- as.data.frame(
     table(dataFrame$familia)
@@ -204,7 +204,6 @@ getFamilias <- function(dataFrame){
   familias <- rbind(familias, filaTotal);
   return(familias);
 }
-#Fin nuevo 1
 getDensidadFollaje <- function(dataFrame){
   tmpDensidadFollaje <- as.data.frame.matrix(
     table(dataFrame$densidad_follaje, dataFrame$habito_crecimiento)
@@ -247,7 +246,6 @@ getEstadoSanitario <- function(dataFrame){
   estadoSanitario$totalIndividuos <- estadoSanitario$arboles + estadoSanitario$arbustos + estadoSanitario$palmas;
   return(estadoSanitario);
 }
-#Nuevo 3
 getEspeciesProcedencia <- function(dataFrame){
   tmpProcedencia <- as.data.frame.matrix(
     table(dataFrame$procedencia, dataFrame$habito_crecimiento)
@@ -277,8 +275,6 @@ getEspeciesProcedencia <- function(dataFrame){
   procedencia$totalEspecies <- procedencia$especiesArboles + procedencia$especiesArbustos + procedencia$especiesPalmas;
   return(procedencia);
 }
-#Fin Nuevo 3
-#Nuevo 4
 getEspeciesHabito <- function(dataFrame){
   tmpHabito <- as.data.frame(
     table(dataFrame$habito_crecimiento)
@@ -307,8 +303,6 @@ getEspeciesHabito <- function(dataFrame){
   habito <- rbind(habito, filaTotal);
   return(habito);
 }
-#Fin nuevo 4
-#Nuevo 2
 getValorEstetico <- function(dataFrame){
   tmpValorEstetico <- as.data.frame.matrix(
     table(dataFrame$valor_estetico, dataFrame$habito_crecimiento)
@@ -323,49 +317,6 @@ getValorEstetico <- function(dataFrame){
   valorEstetico$totalIndividuos <- valorEstetico$arboles + valorEstetico$arbustos + valorEstetico$palmas;
   return(valorEstetico);
 }
-#Fin Nuevo 2
-contarConflictos <- function(dataFrame, conteo, limite){
-  switch(conteo,
-    "1"={          
-      tmpConflictos <- data.frame();
-      for (i in limite$inicio:limite$fin){      
-        tmp <- as.data.frame.list(
-          table(dataFrame[i])
-        );
-        if(!"X2" %in% colnames(tmp)){
-          tmp$X2 <- 0;
-        }
-        tmpConflictos <- rbind(tmpConflictos, tmp)
-      }
-      colnames(tmpConflictos) <- conflictos$encabezado;
-      return(tmpConflictos);
-    },
-    "2"={
-      tmpConflictos <- data.frame(0);
-      str <- character(0);
-      for (i in limite$inicio:limite$fin){      
-        tmp <- as.data.frame.matrix(
-          table(factor(dataFrame$barrio), dataFrame[,i])
-        );
-        if(!"2" %in% colnames(tmp)){
-          tmp$'2' <- 0;
-        }
-        totalConflicto <- tmp$"1" + tmp$"2";
-        tmp$"3" <- round(tmp$"1"/totalConflicto, 4);
-        tmp$"4" <- round(tmp$"2"/totalConflicto, 4);
-        tmp$"5" <- tmp$"1" + tmp$"2";
-        tmp <- tmp[c(1,3,2,4,5)];
-        colnames(tmp) <- conflictos$encabezadoEspecifico[[as.character(i)]]     
-        tmpConflictos <- cbind(tmpConflictos, tmp)
-        if("X0" %in% colnames(tmpConflictos)){
-          tmpConflictos$X0 <- NULL;
-        }
-      }      
-      return(tmpConflictos);
-    }
-  );
-}
-#Nuevo 5
 getAlturas <- function(dataFrame, opcion){
   switch(opcion,
     "1"={
@@ -464,8 +415,6 @@ getAlturas <- function(dataFrame, opcion){
     }
   );    
 }
-#Fin Nuevo 5
-#Nuevo 6
 getDiametros <- function(dataFrame, opcion){
   switch(opcion,
     "1"={
@@ -564,8 +513,6 @@ getDiametros <- function(dataFrame, opcion){
     }
   );
 }
-#Fin Nuevo 6
-#Nuevo 7
 getVolumen <- function(dataFrame){
   maxHabito <- max(dataFrame$habito_crecimiento);
   volumen <- data.frame();
@@ -615,12 +562,11 @@ getVolumen <- function(dataFrame){
   }
   return(volumen);
 }
-#Fin Nuevo 7
-getPropiedadesFisicas <- function(comuna){
+getPropiedadesFisicas <- function(dataFrame){
   propiedadesFisicas <- data.frame(0);
   for (i in 20:24) {
     tmpPropiedadesFisicas <- as.data.frame(
-      table(comuna[[i]]),
+      table(dataFrame[[i]]),
       stringsAsFactors=FALSE
     );    
     for (j in 0:5){
@@ -652,6 +598,87 @@ getPropiedadesFisicas <- function(comuna){
   );
   propiedadesFisicas <- rbind(propiedadesFisicas, filaTotal);
   return(propiedadesFisicas[2:7,]);
+}
+getPropiedadesSanitarias <- function(dataFrame){
+  propiedadesSanitarias <- data.frame(0);
+  for (i in c(27, 28, 29, 32, 33, 34, 35)) {
+    tmpPropiedadesSanitarias <- as.data.frame(
+      table(dataFrame[[i]]),
+      stringsAsFactors=FALSE
+    );    
+    for (j in 0:5){
+      if(!j %in% tmpPropiedadesSanitarias$Var1){
+        fila <- data.frame(
+          Var1 = j,
+          Freq = 0,
+          stringsAsFactors=FALSE
+        );
+        tmpPropiedadesSanitarias <- rbind(tmpPropiedadesSanitarias, fila);
+        tmpPropiedadesSanitarias <- tmpPropiedadesSanitarias[order(tmpPropiedadesSanitarias$Var1),];        
+      }
+    }
+    colnames(tmpPropiedadesSanitarias)[2] <- propiedades$sanitarias[[as.character(i)]];
+    if(i != 27){
+      tmpPropiedadesSanitarias$Var1 <- NULL;
+    }   
+    propiedadesSanitarias <- cbind(propiedadesSanitarias, tmpPropiedadesSanitarias);
+  }
+  propiedadesSanitarias$X0 <- NULL;
+  colnames(propiedadesSanitarias)[1] <- propiedades$dominio;
+  filaTotal <- data.frame(
+    porcentaje = "Total",
+    presenciaInsectos = sum(propiedadesSanitarias$presenciaInsectos),
+    presenciaHongos = sum(propiedadesSanitarias$presenciaHongos),
+    presenciaAgallas = sum(propiedadesSanitarias$presenciaAgallas),
+    pudricionLocalizada = sum(propiedadesSanitarias$pudricionLocalizada),
+    presenciaEpifitas = sum(propiedadesSanitarias$presenciaEpifitas),
+    presenciaParasitas = sum(propiedadesSanitarias$presenciaParasitas),
+    presenciaObjetos = sum(propiedadesSanitarias$presenciaObjetos)
+  );
+  propiedadesSanitarias <- rbind(propiedadesSanitarias, filaTotal);
+  return(propiedadesSanitarias[1:7,]);
+}
+#Fin Nuevos
+contarConflictos <- function(dataFrame, conteo, limite){
+  switch(conteo,
+    "1"={          
+      tmpConflictos <- data.frame();
+      for (i in limite$inicio:limite$fin){      
+        tmp <- as.data.frame.list(
+          table(dataFrame[i])
+        );
+        if(!"X2" %in% colnames(tmp)){
+          tmp$X2 <- 0;
+        }
+        tmpConflictos <- rbind(tmpConflictos, tmp)
+      }
+      colnames(tmpConflictos) <- conflictos$encabezado;
+      return(tmpConflictos);
+    },
+    "2"={
+      tmpConflictos <- data.frame(0);
+      str <- character(0);
+      for (i in limite$inicio:limite$fin){      
+        tmp <- as.data.frame.matrix(
+          table(factor(dataFrame$barrio), dataFrame[,i])
+        );
+        if(!"2" %in% colnames(tmp)){
+          tmp$'2' <- 0;
+        }
+        totalConflicto <- tmp$"1" + tmp$"2";
+        tmp$"3" <- round(tmp$"1"/totalConflicto, 4);
+        tmp$"4" <- round(tmp$"2"/totalConflicto, 4);
+        tmp$"5" <- tmp$"1" + tmp$"2";
+        tmp <- tmp[c(1,3,2,4,5)];
+        colnames(tmp) <- conflictos$encabezadoEspecifico[[as.character(i)]]     
+        tmpConflictos <- cbind(tmpConflictos, tmp)
+        if("X0" %in% colnames(tmpConflictos)){
+          tmpConflictos$X0 <- NULL;
+        }
+      }      
+      return(tmpConflictos);
+    }
+  );
 }
 darValor <- function(dataFrame, opcion){
   switch(opcion,
