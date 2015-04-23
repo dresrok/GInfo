@@ -233,6 +233,20 @@ getEstadoFisico <- function(dataFrame){
   estadoFisico$totalIndividuos <- estadoFisico$arboles + estadoFisico$arbustos + estadoFisico$palmas;
   return(estadoFisico);
 }
+getEstadoSanitario <- function(dataFrame){
+  tmpEstadoSanitario <- as.data.frame.matrix(
+    table(dataFrame$estado_sanitario, dataFrame$habito_crecimiento)
+  );
+  tmpEstadoSanitario$estadoSanitario <- encabezado(estadoSanitario$encabezado, row.names(tmpEstadoSanitario));
+  estadoSanitario <- data.frame(
+    estadoSanitario = tmpEstadoSanitario$estadoSanitario,
+    arboles = tmpEstadoSanitario$"1",
+    arbustos = tmpEstadoSanitario$"2",
+    palmas = tmpEstadoSanitario$"3"
+  );
+  estadoSanitario$totalIndividuos <- estadoSanitario$arboles + estadoSanitario$arbustos + estadoSanitario$palmas;
+  return(estadoSanitario);
+}
 #Nuevo 3
 getEspeciesProcedencia <- function(dataFrame){
   tmpProcedencia <- as.data.frame.matrix(
@@ -602,6 +616,43 @@ getVolumen <- function(dataFrame){
   return(volumen);
 }
 #Fin Nuevo 7
+getPropiedadesFisicas <- function(comuna){
+  propiedadesFisicas <- data.frame(0);
+  for (i in 20:24) {
+    tmpPropiedadesFisicas <- as.data.frame(
+      table(comuna[[i]]),
+      stringsAsFactors=FALSE
+    );    
+    for (j in 0:5){
+      if(!j %in% tmpPropiedadesFisicas$Var1){
+        fila <- data.frame(
+          Var1 = j,
+          Freq = 0,
+          stringsAsFactors=FALSE
+        );
+        tmpPropiedadesFisicas <- rbind(tmpPropiedadesFisicas, fila);
+        tmpPropiedadesFisicas <- tmpPropiedadesFisicas[order(tmpPropiedadesFisicas$Var1),];        
+      }
+    }
+    colnames(tmpPropiedadesFisicas)[2] <- propiedades$fisicas[[as.character(i)]];
+    if(i != 20){
+      tmpPropiedadesFisicas$Var1 <- NULL;
+    }   
+    propiedadesFisicas <- cbind(propiedadesFisicas, tmpPropiedadesFisicas);
+  }
+  propiedadesFisicas$X0 <- NULL;
+  colnames(propiedadesFisicas)[1] <- propiedades$dominio;
+  filaTotal <- data.frame(
+    porcentaje = "Total",
+    inclinacion = sum(propiedadesFisicas$inclinacion),
+    raizDescubierta = sum(propiedadesFisicas$raizDescubierta),
+    danoMecanico = sum(propiedadesFisicas$danoMecanico),
+    bifurcacionBasal = sum(propiedadesFisicas$bifurcacionBasal),
+    afectacionBasal = sum(propiedadesFisicas$afectacionBasal)
+  );
+  propiedadesFisicas <- rbind(propiedadesFisicas, filaTotal);
+  return(propiedadesFisicas[2:7,]);
+}
 darValor <- function(dataFrame, opcion){
   switch(opcion,
     total={

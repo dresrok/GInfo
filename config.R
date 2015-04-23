@@ -121,4 +121,15 @@ configurarVaribales <- function(){
       "44" = c("capSin", "xCapSin", "capCon","xCapCon", "totalCap")
     )
   );
+  propiedades <<- list(
+    informeFisicas = "propiedades_fisicas.xlsx",
+    dominio = "porcentaje",
+    fisicas = list(
+      "20" = "inclinacion",
+      "21" = "raizDescubierta",
+      "22" = "danoMecanico",
+      "23" = "bifurcacionBasal",
+      "24" = "afectacionBasal"
+    )
+  );
 }
