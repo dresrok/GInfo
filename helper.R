@@ -523,6 +523,7 @@ getDiametros <- function(dataFrame, opcion){
   );
 }
 #Fin Nuevo 6
+#Nuevo 7
 getVolumen <- function(dataFrame){
   maxHabito <- max(dataFrame$habito_crecimiento);
   volumen <- data.frame();
@@ -572,6 +573,7 @@ getVolumen <- function(dataFrame){
   }
   return(volumen);
 }
+#Fin Nuevo 7
 darValor <- function(dataFrame, opcion){
   switch(opcion,
     total={
