@@ -55,7 +55,7 @@ configurarVaribales <- function(){
     informeGeneral = "F4_estado_hojas.xlsx",
     informeEspecifico = "F22_estado_hojas.xlsx",
     dominio = "estadoHoja",
-    encabezado = c("Estado Natural", "Deficiencia Nutricional", "No Registra"),
+    encabezado = c("estadoNatural", "deficienciaNutricional", "noRegistra"),
     en = 1,
     dn = 2,
     nr = 3

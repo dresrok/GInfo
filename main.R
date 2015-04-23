@@ -7,24 +7,24 @@ configurarEntorno();
 main <- function(){
   comuna <<- leerArchivo();
 
-  general(comuna);
-  densidadFollajeGeneral(comuna);
-  estadoFisicoGeneral(comuna);
-  estadoSanitarioGeneral(comuna);
-  valorEsteticoGeneral(comuna);
-  procedenciaGeneral(comuna);
-  habitoGeneral(comuna);
-  alturas(comuna);
-  diametros(comuna);
-  volumen(comuna);
-  propiedadesFisicas(comuna);
-  propiedadesSanitarias(comuna);
+  #general(comuna);
+  #densidadFollajeGeneral(comuna);
+  #estadoFisicoGeneral(comuna);
+  #estadoSanitarioGeneral(comuna);
+  #valorEsteticoGeneral(comuna);
+  #procedenciaGeneral(comuna);
+  #habitoGeneral(comuna);
+  #alturas(comuna);
+  #diametros(comuna);
+  #volumen(comuna);
+  #propiedadesFisicas(comuna);
+  #propiedadesSanitarias(comuna);
 
   #densidadFollajeEspecifico(comuna);
   #emplazamientoGeneral(comuna);
   #emplazamientoEspecifico(comuna);
   #estadoFisicoEspecifico(comuna);
-  #estadoHojaGeneral(comuna);
+  estadoHojaGeneral(comuna);
   #estadoHojaEspecifico(comuna);
   #estadoSanitarioEspecifico(comuna);
   #valorEsteticoEspecifico(comuna);

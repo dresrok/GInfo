@@ -232,6 +232,26 @@ getEstadoFisico <- function(dataFrame){
   estadoFisico$totalIndividuos <- estadoFisico$arboles + estadoFisico$arbustos + estadoFisico$palmas;
   return(estadoFisico);
 }
+getEstadoHoja <- function(dataFrame){
+  header <- c("X1", "X2", "X3");
+  tmpClorotica <<- as.data.frame.list(
+    table(dataFrame$hc), row.names = estadoHoja$clorotica
+  );
+  colnames(tmpClorotica) <- estadoHoja$encabezado;
+  clorotica <- tmpClorotica;
+  tmpCaducifolia <<- as.data.frame.list(
+    table(dataFrame$hcf), row.names = estadoHoja$caducifolia
+  );  
+  indice <- which(!s %in% header)
+  columna <- header[indice]
+  tmpCaducifolia[[columna]] <- 0
+  #colnames(tmpCaducifolia) <- estadoHoja$encabezado;
+  #caducifolia <- tmpCaducifolia;
+  #estadoHoja <- rbind(clorotica, caducifolia);
+  #estadoHoja$individuos <- estadoHoja$estadoNatural + estadoHoja$deficienciaNutricional + estadoHoja$noRegistra;
+  #estadoHoja$noRegistra <- NULL
+  #return(estadoHoja);
+}
 getEstadoSanitario <- function(dataFrame){
   tmpEstadoSanitario <- as.data.frame.matrix(
     table(dataFrame$estado_sanitario, dataFrame$habito_crecimiento)
