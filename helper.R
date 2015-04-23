@@ -205,6 +205,34 @@ getFamilias <- function(dataFrame){
   return(familias);
 }
 #Fin nuevo 1
+getDensidadFollaje <- function(dataFrame){
+  tmpDensidadFollaje <- as.data.frame.matrix(
+    table(dataFrame$densidad_follaje, dataFrame$habito_crecimiento)
+  );
+  tmpDensidadFollaje$densidadFollaje <- encabezado(densidad$encabezado, row.names(tmpDensidadFollaje));
+  densidadFollaje <- data.frame(
+    densidadFollaje = tmpDensidadFollaje$densidadFollaje,
+    arboles = tmpDensidadFollaje$"1",
+    arbustos = tmpDensidadFollaje$"2",
+    palmas = tmpDensidadFollaje$"3"
+  );
+  densidadFollaje$totalIndividuos <- densidadFollaje$arboles + densidadFollaje$arbustos + densidadFollaje$palmas;
+  return(densidadFollaje);
+}
+getEstadoFisico <- function(dataFrame){
+  tmpEstadoFisico <- as.data.frame.matrix(
+    table(dataFrame$estado_fisico, dataFrame$habito_crecimiento)
+  );
+  tmpEstadoFisico$estadoFisico <- encabezado(estadoFisico$encabezado, row.names(tmpEstadoFisico));
+  estadoFisico <- data.frame(
+    estadoFisico = tmpEstadoFisico$estadoFisico,
+    arboles = tmpEstadoFisico$"1",
+    arbustos = tmpEstadoFisico$"2",
+    palmas = tmpEstadoFisico$"3"
+  );
+  estadoFisico$totalIndividuos <- estadoFisico$arboles + estadoFisico$arbustos + estadoFisico$palmas;
+  return(estadoFisico);
+}
 #Nuevo 3
 getEspeciesProcedencia <- function(dataFrame){
   tmpProcedencia <- as.data.frame.matrix(

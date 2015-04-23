@@ -8,13 +8,13 @@ main <- function(){
   comuna <<- leerArchivo();
   #alturas(comuna);
   #diametros(comuna);
-  volumen(comuna);
+  #volumen(comuna);
   #general(comuna);
   #densidadFollajeGeneral(comuna);
   #densidadFollajeEspecifico(comuna);
   #emplazamientoGeneral(comuna);
   #emplazamientoEspecifico(comuna);
-  #estadoFisicoGeneral(comuna);
+  estadoFisicoGeneral(comuna);
   #estadoFisicoEspecifico(comuna);
   #estadoHojaGeneral(comuna);
   #estadoHojaEspecifico(comuna);

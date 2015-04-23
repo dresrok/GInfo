@@ -37,71 +37,18 @@ general <- function(comuna){
   save.xlsx(informeComuna$informeGeneral, comunaGeneral, familiasComuna, familiasBarrios, familiasCorredores, familiasInstituciones);
 }
 densidadFollajeGeneral <- function(comuna){
-  tmpFollajeComuna <- as.data.frame(
-    table(comuna$densidad_follaje)
-  );
-  follajeComuna <- data.frame(
-    densidad = encabezado(densidad$encabezado, tmpFollajeComuna$Var1),
-    arboles = tmpFollajeComuna$Freq,
-    xd = round(tmpFollajeComuna$Freq/sum(tmpFollajeComuna$Freq), 4)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpFollajeBarrios <- as.data.frame(
-    table(barrios$densidad_follaje)
-  );
-  follajeBarrios <- data.frame(
-    densidad = encabezado(densidad$encabezado, tmpFollajeBarrios$Var1),
-    arboles = tmpFollajeBarrios$Freq,
-    xd = round(tmpFollajeBarrios$Freq/sum(tmpFollajeBarrios$Freq), 4)
-  );
-  tmpTop <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$densidad_follaje)
-  );
-  top <- data.frame(
-    barrios = rownames(tmpTop),
-    denso = dominio(tmpTop, densidad$dominio, densidad$denso, CHECK),
-    medio = dominio(tmpTop, densidad$dominio, densidad$medio, CHECK),
-    ralo = dominio(tmpTop, densidad$dominio, densidad$ralo, CHECK),
-    stringsAsFactors=FALSE
-  );
-  topBarrios <- data.frame(
-    barriosDenso = head(top[ order(-top$denso), 1], 10),
-    arbolesDenso = head(top[ order(-top$denso), 2], 10),
-    barriosMedio = head(top[ order(-top$medio), 1], 10),
-    arbolesMedio = head(top[ order(-top$medio), 3], 10),
-    barriosRalo = head(top[ order(-top$ralo), 1], 10),
-    arbolesRalo = head(top[ order(-top$ralo), 4], 10),
-    stringsAsFactors=FALSE
-  );
-  topBarrios <- rbind(topBarrios, "---");
-  bottomBarrios <- data.frame(
-    barriosDenso = head(top[ order(top$denso), 1], 5),
-    arbolesDenso = head(top[ order(top$denso), 2], 5),
-    barriosMedio = head(top[ order(top$medio), 1], 5),
-    arbolesMedio = head(top[ order(top$medio), 3], 5),
-    barriosRalo = head(top[ order(top$ralo), 1], 5),
-    arbolesRalo = head(top[ order(top$ralo), 4], 5)
-  );
-  topBarrios <- rbind(topBarrios, bottomBarrios);
-  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpFollajeCorredores <- as.data.frame(
-    table(corredores$densidad_follaje)
-  );
-  follajeCorredores <- data.frame(
-    densidad = encabezado(densidad$encabezado, tmpFollajeCorredores$Var1),
-    arboles = tmpFollajeCorredores$Freq,
-    xd = round(tmpFollajeCorredores$Freq/sum(tmpFollajeCorredores$Freq), 4)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpFollajeInstituciones <- as.data.frame(
-    table(instituciones$densidad_follaje)
-  );
-  follajeInstituciones <- data.frame(
-    densidad = encabezado(densidad$encabezado, tmpFollajeInstituciones$Var1),
-    arboles = tmpFollajeInstituciones$Freq,
-    xd = round(tmpFollajeInstituciones$Freq/sum(tmpFollajeInstituciones$Freq), 4)
-  );
-  save.xlsx(densidad$informeGeneral, follajeComuna, follajeBarrios, topBarrios, follajeCorredores, follajeInstituciones);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  # Inicio Densidad de follaje
+  follajeComuna <- getDensidadFollaje(comuna);
+  follajeBarrios <- getDensidadFollaje(barrios);
+  follajeCorredores <- getDensidadFollaje(corredores);
+  follajeInstituciones <- getDensidadFollaje(instituciones);
+  # Fin Densidad de follaje
+  
+  save.xlsx(densidad$informeGeneral, follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones);
 }
 emplazamientoGeneral <- function(comuna){
   tmpEmplazamientoComuna <- as.data.frame(
@@ -191,71 +138,18 @@ emplazamientoGeneral <- function(comuna){
   save.xlsx(emplazamiento$informeGeneral, emplazamientoComuna, emplazamientoBarrios, topBarrios, emplazamientoCorredores, emplazamientoInstituciones);
 }
 estadoFisicoGeneral <- function(comuna){
-  tmpEstadoFisicoComuna <- as.data.frame(
-    table(comuna$estado_fisico)
-  );
-  estadoFisicoComuna <- data.frame(
-    estadoFisico = encabezado(estadoFisico$encabezado, tmpEstadoFisicoComuna$Var1),
-    arboles = tmpEstadoFisicoComuna$Freq,
-    xef = round(tmpEstadoFisicoComuna$Freq/sum(tmpEstadoFisicoComuna$Freq), 4)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpEstadoFisicoBarrios <- as.data.frame(
-    table(barrios$estado_fisico)
-  );
-  estadoFisicoBarrios <- data.frame(
-    estadoFisico = encabezado(estadoFisico$encabezado, tmpEstadoFisicoBarrios$Var1),
-    arboles = tmpEstadoFisicoBarrios$Freq,
-    xef = round(tmpEstadoFisicoBarrios$Freq/sum(tmpEstadoFisicoBarrios$Freq), 4)
-  );
-  tmpTop <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$estado_fisico)
-  );
-  top <- data.frame(
-    barrios = rownames(tmpTop),
-    malo = dominio(tmpTop, estadoFisico$dominio, estadoFisico$malo, CHECK),    
-    regular = dominio(tmpTop, estadoFisico$dominio, estadoFisico$regular, CHECK),    
-    bueno = dominio(tmpTop, estadoFisico$dominio, estadoFisico$bueno, CHECK),
-    stringsAsFactors=FALSE
-  );
-  topBarrios <- data.frame(
-    barriosMalo = head(top[ order(-top$malo), 1], 10),
-    arbolesMalo = head(top[ order(-top$malo), 2], 10),
-    barriosRegular = head(top[ order(-top$regular), 1], 10),
-    arbolesRegular = head(top[ order(-top$regular), 3], 10),    
-    barriosBueno = head(top[ order(-top$bueno), 1], 10),
-    arbolesBueno = head(top[ order(-top$bueno), 4], 10),
-    stringsAsFactors=FALSE
-  );
-  topBarrios <- rbind(topBarrios, "---");
-  bottomBarrios <- data.frame(
-    barriosMalo = head(top[ order(top$malo), 1], 5),
-    arbolesMalo = head(top[ order(top$malo), 2], 5),
-    barriosRegular = head(top[ order(top$regular), 1], 5),
-    arbolesRegular = head(top[ order(top$regular), 3], 5),
-    barriosBueno = head(top[ order(top$bueno), 1], 5),
-    arbolesBueno = head(top[ order(top$bueno), 4], 5)
-  );
-  topBarrios <- rbind(topBarrios, bottomBarrios);
-  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpEstadoFisicoCorredores <- as.data.frame(
-    table(corredores$estado_fisico)
-  );
-  estadoFisicoCorredores <- data.frame(
-    estadoFisico = encabezado(estadoFisico$encabezado, tmpEstadoFisicoCorredores$Var1),
-    arboles = tmpEstadoFisicoCorredores$Freq,
-    xef = round(tmpEstadoFisicoCorredores$Freq/sum(tmpEstadoFisicoCorredores$Freq), 4)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpEstadoFisicoInstituciones <- as.data.frame(
-    table(instituciones$estado_fisico)
-  );
-  estadoFisicoInstituciones <- data.frame(
-    estadoFisico = encabezado(estadoFisico$encabezado, tmpEstadoFisicoInstituciones$Var1),
-    arboles = tmpEstadoFisicoInstituciones$Freq,
-    xef = round(tmpEstadoFisicoInstituciones$Freq/sum(tmpEstadoFisicoInstituciones$Freq), 4)
-  );
-  save.xlsx(estadoFisico$informeGeneral, estadoFisicoComuna, estadoFisicoBarrios, topBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  # Inicio Estado físico
+  estadoFisicoComuna <- getEstadoFisico(comuna);
+  estadoFisicoBarrios <- getEstadoFisico(barrios);
+  estadoFisicoCorredores <- getEstadoFisico(corredores);
+  estadoFisicoInstituciones <- getEstadoFisico(instituciones);
+  # Fin Estado físico
+
+  save.xlsx(estadoFisico$informeGeneral, estadoFisicoComuna, estadoFisicoBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
 }
 estadoHojaGeneral <- function(comuna){
   tmpCloroticaComuna <- as.data.frame.list(
@@ -626,10 +520,10 @@ volumen <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Distribución del volumen
-  volumenComuna <<- getVolumen(comuna);
-  volumenBarrios <<- getVolumen(barrios);
-  volumenCorredores <<- getVolumen(corredores);
-  volumenInstituciones <<- getVolumen(instituciones);
+  volumenComuna <- getVolumen(comuna);
+  volumenBarrios <- getVolumen(barrios);
+  volumenCorredores <- getVolumen(corredores);
+  volumenInstituciones <- getVolumen(instituciones);
   # Fin Distribución del volumen
 
   save.xlsx("volumen.xlsx", volumenComuna, volumenBarrios, volumenCorredores, volumenInstituciones);
