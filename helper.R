@@ -218,15 +218,19 @@ getDensidadFollaje <- function(dataFrame){
   densidadFollaje$totalIndividuos <- densidadFollaje$arboles + densidadFollaje$arbustos + densidadFollaje$palmas;
   return(densidadFollaje);
 }
+getEmplazamiento <- function(dataFrame){
   tmpEmplazamiento <- as.data.frame.matrix(
     table(dataFrame$emplazamiento, dataFrame$habito_crecimiento)
   );
   tmpEmplazamiento$emplazamiento <- encabezado(emplazamiento$encabezado, row.names(tmpEmplazamiento));
+  emplazamientoIndividuos <- data.frame(
     emplazamiento = tmpEmplazamiento$emplazamiento,
     arboles = tmpEmplazamiento$"1",
     arbustos = tmpEmplazamiento$"2",
     palmas = tmpEmplazamiento$"3"
   );
+  emplazamientoIndividuos$totalIndividuos <- emplazamientoIndividuos$arboles + emplazamientoIndividuos$arbustos + emplazamientoIndividuos$palmas;
+  return(emplazamientoIndividuos);
 }
 getEstadoFisico <- function(dataFrame){
   tmpEstadoFisico <- as.data.frame.matrix(
@@ -695,6 +699,41 @@ getConflictos <- function(dataFrame){
   conflictos$sinConflicto <- NULL;
   conflictos$xsi <- NULL;
   return(conflictos);
+}
+getRiesgos <- function(dataFrame){
+  riesgos <- data.frame(0);
+  for (i in 48:50) {
+    tmpRiesgos <- as.data.frame(
+      table(dataFrame[[i]]),
+      stringsAsFactors=FALSE
+    );    
+    for (j in 0:5){
+      if(!j %in% tmpRiesgos$Var1){
+        fila <- data.frame(
+          Var1 = j,
+          Freq = 0,
+          stringsAsFactors=FALSE
+        );
+        tmpRiesgos <- rbind(tmpRiesgos, fila);
+        tmpRiesgos <- tmpRiesgos[order(tmpRiesgos$Var1),];        
+      }
+    }
+    colnames(tmpRiesgos)[2] <- propiedades$riesgos[[as.character(i)]];
+    if(i != 48){
+      tmpRiesgos$Var1 <- NULL;
+    }   
+    riesgos <- cbind(riesgos, tmpRiesgos);
+  }
+  riesgos$X0 <- NULL;
+  colnames(riesgos)[1] <- propiedades$dominio;
+  filaTotal <- data.frame(
+    porcentaje = "Total",
+    riesgoVolcamiento = sum(riesgos$riesgoVolcamiento),
+    riesgoRamas = sum(riesgos$riesgoRamas),
+    riesgoElementos = sum(riesgos$riesgoElementos)
+  );
+  riesgos <- rbind(riesgos, filaTotal);
+  return(riesgos[2:7,]);
 }
 #Fin Nuevos
 contarConflictos <- function(dataFrame, conteo, limite){

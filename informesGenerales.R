@@ -90,110 +90,7 @@ estadoHojaGeneral <- function(comuna){
   estadoHojaInstituciones <- getEstadoHoja(instituciones);
   # Fin Estado de hoja
 
-  save.xlsx(estadoHoja$informeGeneral, estadoHojaComuna, estadoHojaBarrios, estadoHojaCorredores, estadoHojaInstituciones);
-
-  if(FALSE){
-    barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-
-    tmpCloroticaBarrios <- as.data.frame.list(
-      table(barrios$hc), row.names = estadoHoja$clorotica
-    );
-    colnames(tmpCloroticaBarrios) <- estadoHoja$encabezado;
-    cloroticaBarrios <- tmpCloroticaBarrios;
-    tmpCaducifoliaBarrios <- as.data.frame.list(
-      table(barrios$hcf), row.names = estadoHoja$caducifolia
-    );
-    colnames(tmpCaducifoliaBarrios) <- estadoHoja$encabezado  
-    caducifoliaBarrios <- tmpCaducifoliaBarrios;
-    estadoHojaBarrios <- rbind(cloroticaBarrios, caducifoliaBarrios);
-
-    tmpTopClorotica <- as.data.frame.matrix(
-      table(factor(barrios$barrio), barrios$hc)
-    );
-    topClorotica <- data.frame(
-      barrios = rownames(tmpTopClorotica),
-      en = dominio(tmpTopClorotica, estadoHoja$dominio, estadoHoja$en, CHECK),    
-      dn = dominio(tmpTopClorotica, estadoHoja$dominio, estadoHoja$dn, CHECK),    
-      nr = dominio(tmpTopClorotica, estadoHoja$dominio, estadoHoja$nr, CHECK),
-      stringsAsFactors=FALSE
-    );
-    topCloroticaBarrios <- data.frame(
-      barriosEn = head(topClorotica[ order(-topClorotica$en), 1], 10),
-      arbolesEn = head(topClorotica[ order(-topClorotica$en), 2], 10),
-      barriosDn = head(topClorotica[ order(-topClorotica$dn), 1], 10),
-      arbolesDn = head(topClorotica[ order(-topClorotica$dn), 3], 10),    
-      barriosNr = head(topClorotica[ order(-topClorotica$nr), 1], 10),
-      arbolesNr = head(topClorotica[ order(-topClorotica$nr), 4], 10),
-      stringsAsFactors=FALSE
-    );
-    topCloroticaBarrios <- rbind(topCloroticaBarrios, "---");
-    bottomCloroticaBarrios <- data.frame(
-      barriosEn = head(topClorotica[ order(topClorotica$en), 1], 5),
-      arbolesEn = head(topClorotica[ order(topClorotica$en), 2], 5),
-      barriosDn = head(topClorotica[ order(topClorotica$dn), 1], 5),
-      arbolesDn = head(topClorotica[ order(topClorotica$dn), 3], 5),
-      barriosNr = head(topClorotica[ order(topClorotica$nr), 1], 5),
-      arbolesNr = head(topClorotica[ order(topClorotica$nr), 4], 5)
-    );
-    topCloroticaBarrios <- rbind(topCloroticaBarrios, bottomCloroticaBarrios);
-    
-    tmpTopCaducifolia <- as.data.frame.matrix(
-      table(factor(barrios$barrio), barrios$hcf)
-    );
-    topCaducifolia <- data.frame(
-      barrios = rownames(tmpTopCaducifolia),
-      en = dominio(tmpTopCaducifolia, estadoHoja$dominio, estadoHoja$en, CHECK),    
-      dn = dominio(tmpTopCaducifolia, estadoHoja$dominio, estadoHoja$dn, CHECK),    
-      nr = dominio(tmpTopCaducifolia, estadoHoja$dominio, estadoHoja$nr, CHECK),
-      stringsAsFactors=FALSE
-    );
-    topCaducifoliaBarrios <- data.frame(
-      barriosEn = head(topCaducifolia[ order(-topCaducifolia$en), 1], 10),
-      arbolesEn = head(topCaducifolia[ order(-topCaducifolia$en), 2], 10),
-      barriosDn = head(topCaducifolia[ order(-topCaducifolia$dn), 1], 10),
-      arbolesDn = head(topCaducifolia[ order(-topCaducifolia$dn), 3], 10),    
-      barriosNr = head(topCaducifolia[ order(-topCaducifolia$nr), 1], 10),
-      arbolesNr = head(topCaducifolia[ order(-topCaducifolia$nr), 4], 10),
-      stringsAsFactors=FALSE
-    );
-    topCaducifoliaBarrios <- rbind(topCaducifoliaBarrios, "---");
-    bottomCaducifoliaBarrios <- data.frame(
-      barriosEn = head(topCaducifolia[ order(topCaducifolia$en), 1], 5),
-      arbolesEn = head(topCaducifolia[ order(topCaducifolia$en), 2], 5),
-      barriosDn = head(topCaducifolia[ order(topCaducifolia$dn), 1], 5),
-      arbolesDn = head(topCaducifolia[ order(topCaducifolia$dn), 3], 5),
-      barriosNr = head(topCaducifolia[ order(topCaducifolia$nr), 1], 5),
-      arbolesNr = head(topCaducifolia[ order(topCaducifolia$nr), 4], 5)
-    );
-    topCaducifoliaBarrios <- rbind(topCaducifoliaBarrios, bottomCaducifoliaBarrios);
-    
-    corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));   
-    tmpCloroticaCorredores <- as.data.frame.list(
-      table(corredores$hc), row.names = estadoHoja$clorotica
-    );
-    colnames(tmpCloroticaCorredores) <- estadoHoja$encabezado;
-    cloroticaCorredores <- tmpCloroticaCorredores;
-    tmpCaducifoliaCorredores <- as.data.frame.list(
-      table(corredores$hcf), row.names = estadoHoja$caducifolia
-    );
-    colnames(tmpCaducifoliaCorredores) <- estadoHoja$encabezado;
-    caducifoliaCorredores <- tmpCaducifoliaCorredores;
-    estadoHojaCorredores <- rbind(cloroticaCorredores, caducifoliaCorredores);
-
-    instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-    tmpCloroticaInstituciones <- as.data.frame.list(
-      table(instituciones$hc), row.names = estadoHoja$clorotica
-    );
-    colnames(tmpCloroticaInstituciones) <- estadoHoja$encabezado;
-    cloroticaInstituciones <- tmpCloroticaInstituciones;
-    tmpCaducifoliaInstituciones <- as.data.frame.list(
-      table(instituciones$hcf), row.names = estadoHoja$caducifolia
-    );
-    colnames(tmpCaducifoliaInstituciones) <- estadoHoja$encabezado;
-    caducifoliaInstituciones <- tmpCaducifoliaInstituciones;
-    estadoHojaInstituciones <- rbind(cloroticaInstituciones, caducifoliaInstituciones);
-    save.xlsx(estadoHoja$informeGeneral, estadoHojaComuna, estadoHojaBarrios, topCloroticaBarrios, topCaducifoliaBarrios, estadoHojaCorredores, estadoHojaInstituciones);
-  }  
+  save.xlsx(estadoHoja$informeGeneral, estadoHojaComuna, estadoHojaBarrios, estadoHojaCorredores, estadoHojaInstituciones); 
 }
 estadoSanitarioGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
@@ -274,9 +171,10 @@ procedenciaGeneral <- function(comuna){
   procedenciaComuna <- getEspeciesProcedencia(comuna);
   procedenciaBarrios <- getEspeciesProcedencia(barrios);
   procedenciaCorredores <- getEspeciesProcedencia(corredores);
-  procedenciaInstituciones <- getEspeciesProcedencia(instituciones);
-  save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, procedenciaInstituciones);
+  procedenciaInstituciones <- getEspeciesProcedencia(instituciones);  
   # Fin Procedencia de las especies encontradas
+
+  save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, procedenciaInstituciones);
 }
 habitoGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
@@ -305,53 +203,6 @@ conflictoGeneral <- function(comuna){
   # Fin Distribución porcentual del conflicto
 
   save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
-
-  if(FALSE){
-    tmpConflictosComuna <- contarConflictos(comuna, conteo$general, darValor(comuna, conteo$limite));  
-    totalComuna <- darValor(comuna, conteo$total);
-
-    conflictosComuna <<- data.frame(
-      conflictos = conflictos$nombres,
-      sinConflicto = tmpConflictosComuna$sinConflicto,
-      xsi = round(tmpConflictosComuna$sinConflicto/totalComuna, 4),
-      conConflicto = tmpConflictosComuna$conConflicto,
-      xno = round(tmpConflictosComuna$conConflicto/totalComuna, 4),
-      individuos = tmpConflictosComuna$sinConflicto + tmpConflictosComuna$conConflicto
-    );
-
-    barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-    totalBarrios <- darValor(barrios, conteo$total);
-    tmpConflictosBarrios <- contarConflictos(barrios, conteo$general, darValor(comuna, conteo$limite));
-    conflictosBarrios <- data.frame(
-      conflictos = conflictos$nombres,
-      sinConflicto = tmpConflictosBarrios$sinConflicto,
-      xsi = round(tmpConflictosBarrios$sinConflicto/totalBarrios, 4),
-      conConflicto = tmpConflictosBarrios$conConflicto,
-      xno = round(tmpConflictosBarrios$conConflicto/totalBarrios, 4)
-    );
-
-    corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-    totalCorredores <- darValor(corredores, conteo$total);
-    tmpConflictosCorredores <- contarConflictos(corredores, conteo$general, darValor(comuna, conteo$limite));
-    conflictosCorredores <- data.frame(
-      conflictos = conflictos$nombres,
-      sinConflicto = tmpConflictosCorredores$sinConflicto,
-      xsi = round(tmpConflictosCorredores$sinConflicto/totalCorredores, 4),
-      conConflicto = tmpConflictosCorredores$conConflicto,
-      xno = round(tmpConflictosCorredores$conConflicto/totalCorredores, 4)
-    );
-
-    instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-    totalInstituciones <- darValor(instituciones, conteo$total);
-    tmpConflictosInstituciones <- contarConflictos(instituciones, conteo$general, darValor(comuna, conteo$limite));
-    conflictosInstituciones <- data.frame(
-      conflictos = conflictos$nombres,
-      sinConflicto = tmpConflictosInstituciones$sinConflicto,
-      xsi = round(tmpConflictosInstituciones$sinConflicto/totalInstituciones, 4),
-      conConflicto = tmpConflictosInstituciones$conConflicto,
-      xno = round(tmpConflictosInstituciones$conConflicto/totalInstituciones, 4)
-    );
-  }    
 }
 alturas <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
