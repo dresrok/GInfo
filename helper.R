@@ -233,24 +233,37 @@ getEstadoFisico <- function(dataFrame){
   return(estadoFisico);
 }
 getEstadoHoja <- function(dataFrame){
-  header <- c("X1", "X2", "X3");
-  tmpClorotica <<- as.data.frame.list(
+  tmpClorotica <- as.data.frame.list(
     table(dataFrame$hc), row.names = estadoHoja$clorotica
   );
+  tmpClorotica <- checkEstadoHoja(tmpClorotica);
   colnames(tmpClorotica) <- estadoHoja$encabezado;
   clorotica <- tmpClorotica;
-  tmpCaducifolia <<- as.data.frame.list(
+
+  tmpCaducifolia <- as.data.frame.list(
     table(dataFrame$hcf), row.names = estadoHoja$caducifolia
-  );  
-  indice <- which(!s %in% header)
-  columna <- header[indice]
-  tmpCaducifolia[[columna]] <- 0
-  #colnames(tmpCaducifolia) <- estadoHoja$encabezado;
-  #caducifolia <- tmpCaducifolia;
-  #estadoHoja <- rbind(clorotica, caducifolia);
-  #estadoHoja$individuos <- estadoHoja$estadoNatural + estadoHoja$deficienciaNutricional + estadoHoja$noRegistra;
-  #estadoHoja$noRegistra <- NULL
-  #return(estadoHoja);
+  );
+  tmpCaducifolia <- checkEstadoHoja(tmpCaducifolia);
+  colnames(tmpCaducifolia) <- estadoHoja$encabezado;
+  caducifolia <- tmpCaducifolia;
+
+  estadoHoja <- rbind(clorotica, caducifolia);
+  estadoHoja$individuos <- estadoHoja$estadoNatural + estadoHoja$deficienciaNutricional + estadoHoja$noRegistra;
+  estadoHoja$noRegistra <- NULL
+  return(estadoHoja);
+}
+checkEstadoHoja <- function(dataFrame){
+  encabezado <- c("X1", "X2", "X3");
+  columnas <- colnames(dataFrame);
+  indice <- which(!encabezado %in% columnas);
+  if(length(indice) > 0){
+    for (i in 1:length(indice)){
+      nuevaColumna <- encabezado[indice[i]];
+      dataFrame[[nuevaColumna]] <- 0;
+    }
+  }
+  dataFrame <- dataFrame[,order(names(dataFrame))];
+  return(dataFrame);
 }
 getEstadoSanitario <- function(dataFrame){
   tmpEstadoSanitario <- as.data.frame.matrix(
@@ -657,6 +670,21 @@ getPropiedadesSanitarias <- function(dataFrame){
   );
   propiedadesSanitarias <- rbind(propiedadesSanitarias, filaTotal);
   return(propiedadesSanitarias[1:7,]);
+}
+getConflictos <- function(dataFrame){
+  tmpConflictos <- contarConflictos(dataFrame, conteo$general, darValor(dataFrame, conteo$limite));  
+  total <- darValor(dataFrame, conteo$total);
+  conflictos <- data.frame(
+    conflictos = conflictos$nombres,
+    sinConflicto = tmpConflictos$sinConflicto,
+    xsi = round(tmpConflictos$sinConflicto/total, 4),
+    conConflicto = tmpConflictos$conConflicto,
+    xno = round(tmpConflictos$conConflicto/total, 4),
+    individuos = tmpConflictos$sinConflicto + tmpConflictos$conConflicto
+  );
+  conflictos$sinConflicto <- NULL;
+  conflictos$xsi <- NULL;
+  return(conflictos);
 }
 #Fin Nuevos
 contarConflictos <- function(dataFrame, conteo, limite){

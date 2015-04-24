@@ -10,10 +10,12 @@ main <- function(){
   #general(comuna);
   #densidadFollajeGeneral(comuna);
   #estadoFisicoGeneral(comuna);
+  #estadoHojaGeneral(comuna);
   #estadoSanitarioGeneral(comuna);
   #valorEsteticoGeneral(comuna);
   #procedenciaGeneral(comuna);
   #habitoGeneral(comuna);
+  conflictoGeneral(comuna);
   #alturas(comuna);
   #diametros(comuna);
   #volumen(comuna);
@@ -24,7 +26,7 @@ main <- function(){
   #emplazamientoGeneral(comuna);
   #emplazamientoEspecifico(comuna);
   #estadoFisicoEspecifico(comuna);
-  estadoHojaGeneral(comuna);
+  
   #estadoHojaEspecifico(comuna);
   #estadoSanitarioEspecifico(comuna);
   #valorEsteticoEspecifico(comuna);
