@@ -51,91 +51,18 @@ densidadFollajeGeneral <- function(comuna){
   save.xlsx(densidad$informeGeneral, follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones);
 }
 emplazamientoGeneral <- function(comuna){
-  tmpEmplazamientoComuna <- as.data.frame(
-    table(comuna$emplazamiento)
-  );
-  emplazamientoComuna <- data.frame(
-    emplazamiento = encabezado(emplazamiento$encabezado, tmpEmplazamientoComuna$Var1),
-    arboles = tmpEmplazamientoComuna$Freq,
-    xe = round(tmpEmplazamientoComuna$Freq/sum(tmpEmplazamientoComuna$Freq), 4)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpEmplazamientoBarrios <- as.data.frame(
-    table(barrios$emplazamiento)
-  );
-  emplazamientoBarrios <- data.frame(
-    emplazamiento = encabezado(emplazamiento$encabezado, tmpEmplazamientoBarrios$Var1),
-    arboles = tmpEmplazamientoBarrios$Freq,
-    xe = round(tmpEmplazamientoBarrios$Freq/sum(tmpEmplazamientoBarrios$Freq), 4)
-  );
-  tmpTop <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$emplazamiento)
-  );
-  top <- data.frame(
-    barrios = rownames(tmpTop),
-    parque = dominio(tmpTop, emplazamiento$dominio, emplazamiento$pr, CHECK),
-    glorieta = dominio(tmpTop, emplazamiento$dominio, emplazamiento$gl, CHECK),
-    anden = dominio(tmpTop, emplazamiento$dominio, emplazamiento$an, CHECK),
-    alcorque = dominio(tmpTop, emplazamiento$dominio, emplazamiento$al, CHECK),
-    separador = dominio(tmpTop, emplazamiento$dominio, emplazamiento$sp, CHECK),
-    antejardin = dominio(tmpTop, emplazamiento$dominio, emplazamiento$ant, CHECK),
-    zonablanda = dominio(tmpTop, emplazamiento$dominio, emplazamiento$zb, CHECK),
-    stringsAsFactors=FALSE
-  );
-  topBarrios <- data.frame(
-    barriosParque = head(top[ order(-top$parque), 1], 10),
-    arbolesParque = head(top[ order(-top$parque), 2], 10),
-    barriosGlorieta = head(top[ order(-top$glorieta), 1], 10),
-    arbolesGlorieta = head(top[ order(-top$glorieta), 3], 10),
-    barriosAnden = head(top[ order(-top$anden), 1], 10),
-    arbolesAnden = head(top[ order(-top$anden), 4], 10),
-    barriosAlcorque = head(top[ order(-top$alcorque), 1], 10),
-    arbolesAlcorque = head(top[ order(-top$alcorque), 5], 10),
-    barriosSeparador = head(top[ order(-top$separador), 1], 10),
-    arbolesSeparador = head(top[ order(-top$separador), 6], 10),
-    barriosAntejardin = head(top[ order(-top$antejardin), 1], 10),
-    arbolesAntejardin = head(top[ order(-top$antejardin), 7], 10),
-    barriosZonaBlanda = head(top[ order(-top$zonablanda), 1], 10),
-    arbolesZonaBlanda = head(top[ order(-top$zonablanda), 8], 10),
-    stringsAsFactors=FALSE
-  );
-  topBarrios <- rbind(topBarrios, "---");
-  bottomBarrios <- data.frame(
-    barriosParque = head(top[ order(top$parque), 1], 5),
-    arbolesParque = head(top[ order(top$parque), 2], 5),
-    barriosGlorieta = head(top[ order(top$glorieta), 1], 5),
-    arbolesGlorieta = head(top[ order(top$glorieta), 3], 5),
-    barriosAnden = head(top[ order(top$anden), 1], 5),
-    arbolesAnden = head(top[ order(top$anden), 4], 5),
-    barriosAlcorque = head(top[ order(top$alcorque), 1], 5),
-    arbolesAlcorque = head(top[ order(top$alcorque), 5], 5),
-    barriosSeparador = head(top[ order(top$separador), 1], 5),
-    arbolesSeparador = head(top[ order(top$separador), 6], 5),
-    barriosAntejardin = head(top[ order(top$separador), 1], 5),
-    arbolesAntejardin = head(top[ order(top$antejardin), 7], 5),
-    barriosZonaBlanda = head(top[ order(top$antejardin), 1], 5),
-    arbolesZonaBlanda = head(top[ order(top$antejardin), 8], 5)
-  );
-  topBarrios <- rbind(topBarrios, bottomBarrios);
-  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpEmplazamientoCorredores <- as.data.frame(
-    table(corredores$emplazamiento)
-  );
-  emplazamientoCorredores <- data.frame(
-    emplazamiento = encabezado(emplazamiento$encabezado, tmpEmplazamientoCorredores$Var1),
-    arboles = tmpEmplazamientoCorredores$Freq,
-    xe = round(tmpEmplazamientoCorredores$Freq/sum(tmpEmplazamientoCorredores$Freq), 4)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpEmplazamientoInstituciones <- as.data.frame(
-    table(instituciones$emplazamiento)
-  );
-  emplazamientoInstituciones <- data.frame(
-    emplazamiento = encabezado(emplazamiento$encabezado, tmpEmplazamientoInstituciones$Var1),
-    arboles = tmpEmplazamientoInstituciones$Freq,
-    xe = round(tmpEmplazamientoInstituciones$Freq/sum(tmpEmplazamientoInstituciones$Freq), 4)
-  );
-  save.xlsx(emplazamiento$informeGeneral, emplazamientoComuna, emplazamientoBarrios, topBarrios, emplazamientoCorredores, emplazamientoInstituciones);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  # Inicio Emplazamiento de los individuos
+  emplazamientoComuna <- getEmplazamiento(comuna);
+  emplazamientoBarrios <- getEmplazamiento(barrios);
+  emplazamientoCorredores <- getEmplazamiento(corredores);
+  emplazamientoInstituciones <- getEmplazamiento(instituciones);
+  # Fin Emplazamiento de los individuos
+
+  save.xlsx(emplazamiento$informeGeneral, emplazamientoComuna, emplazamientoBarrios, emplazamientoCorredores, emplazamientoInstituciones);
 }
 estadoFisicoGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
@@ -515,4 +442,18 @@ propiedadesSanitarias <- function(comuna){
   # Fin Distribución de las propiedades sanitarias
 
   save.xlsx(propiedades$informeSanitarias, propiedadesSanitariasComuna, propiedadesSanitariasBarrios, propiedadesSanitariasCorredores, propiedadesSanitariasInstituciones);
+}
+riesgos <- function(comuna){
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  # Inicio Distribución de los riesgos
+  riesgosComuna <- getRiesgos(comuna);
+  riesgosBarrios <- getRiesgos(barrios);
+  riesgosCorredores <- getRiesgos(corredores);
+  riesgosInstituciones <- getRiesgos(comuna);
+  # Fin Distribución de los riesgos
+
+  save.xlsx(propiedades$informeRiesgos, riesgosComuna, riesgosBarrios, riesgosCorredores, riesgosInstituciones);
 }

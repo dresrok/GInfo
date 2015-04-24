@@ -218,6 +218,16 @@ getDensidadFollaje <- function(dataFrame){
   densidadFollaje$totalIndividuos <- densidadFollaje$arboles + densidadFollaje$arbustos + densidadFollaje$palmas;
   return(densidadFollaje);
 }
+  tmpEmplazamiento <- as.data.frame.matrix(
+    table(dataFrame$emplazamiento, dataFrame$habito_crecimiento)
+  );
+  tmpEmplazamiento$emplazamiento <- encabezado(emplazamiento$encabezado, row.names(tmpEmplazamiento));
+    emplazamiento = tmpEmplazamiento$emplazamiento,
+    arboles = tmpEmplazamiento$"1",
+    arbustos = tmpEmplazamiento$"2",
+    palmas = tmpEmplazamiento$"3"
+  );
+}
 getEstadoFisico <- function(dataFrame){
   tmpEstadoFisico <- as.data.frame.matrix(
     table(dataFrame$estado_fisico, dataFrame$habito_crecimiento)
