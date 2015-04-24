@@ -34,7 +34,9 @@ general <- function(comuna){
   familiasInstituciones <- getFamilias(instituciones);
   # Fin Familias más abundantes registradas
 
-  save.xlsx(informeComuna$informeGeneral, comunaGeneral, familiasComuna, familiasBarrios, familiasCorredores, familiasInstituciones);
+  especiesMasAbundantesBarrio <- getMasAbundante(barrios);
+
+  save.xlsx(informeComuna$informeGeneral, comunaGeneral, familiasComuna, familiasBarrios, especiesMasAbundantesBarrio, familiasCorredores, familiasInstituciones);
 }
 densidadFollajeGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
@@ -213,7 +215,7 @@ alturas <- function(comuna){
   alturaTotalComuna <- getAlturas(comuna, "1");
   alturaTotalBarrios <- getAlturas(barrios, "1");
   alturaTotalCorredores <- getAlturas(corredores, "1");
-  alturaTotalInstituciones <- getAlturas(corredores, "1");
+  alturaTotalInstituciones <- getAlturas(instituciones, "1");
   # Fin Distribución de altura total
 
   # Inicio Distribución de altura de fuste
@@ -223,7 +225,7 @@ alturas <- function(comuna){
   alturaFusteInstituciones <- getAlturas(instituciones, "2");
   # Fin Distribución de altura de fuste
 
-  save.xlsx("alturas.xlsx", alturaTotalComuna, alturaFusteComuna, 
+  save.xlsx(dasometria$alturas, alturaTotalComuna, alturaFusteComuna, 
     alturaTotalBarrios, alturaFusteBarrios, 
     alturaTotalCorredores, alturaFusteCorredores, 
     alturaTotalInstituciones, alturaFusteInstituciones);
@@ -247,7 +249,7 @@ diametros <- function(comuna){
   diametroCopaInstituciones <- getDiametros(instituciones, "2");
   # Fin Distribución del diámetro de copa
 
-  save.xlsx("diametros.xlsx", diametroNormalComuna, diametroCopaComuna, 
+  save.xlsx(dasometria$diametros, diametroNormalComuna, diametroCopaComuna, 
     diametroNormalBarrios, diametroCopaBarrios, 
     diametroNormalCorredores, diametroCopaCorredores,
     diametroNormalInstituciones, diametroCopaInstituciones);
@@ -264,7 +266,7 @@ volumen <- function(comuna){
   volumenInstituciones <- getVolumen(instituciones);
   # Fin Distribución del volumen
 
-  save.xlsx("volumen.xlsx", volumenComuna, volumenBarrios, volumenCorredores, volumenInstituciones);
+  save.xlsx(dasometria$volumen, volumenComuna, volumenBarrios, volumenCorredores, volumenInstituciones);
 }
 propiedadesFisicas <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
@@ -303,7 +305,7 @@ riesgos <- function(comuna){
   riesgosComuna <- getRiesgos(comuna);
   riesgosBarrios <- getRiesgos(barrios);
   riesgosCorredores <- getRiesgos(corredores);
-  riesgosInstituciones <- getRiesgos(comuna);
+  riesgosInstituciones <- getRiesgos(instituciones);
   # Fin Distribución de los riesgos
 
   save.xlsx(propiedades$informeRiesgos, riesgosComuna, riesgosBarrios, riesgosCorredores, riesgosInstituciones);

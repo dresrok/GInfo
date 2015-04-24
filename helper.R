@@ -1,5 +1,5 @@
 leerArchivo <- function(){  
-  comuna <- read.xls("data/comuna11.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
+  comuna <- read.xls("data/comuna4.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
   return(comuna);
 }
 dominio <- function(dataFrame, dominio, indice, operacion = NULL){
@@ -204,6 +204,30 @@ getFamilias <- function(dataFrame){
   familias <- rbind(familias, filaTotal);
   return(familias);
 }
+getMasAbundante <- function(dataFrame){
+  topBarrio <- as.data.frame(
+    unique(sort(dataFrame$barrio)),
+    stringsAsFactors=FALSE
+  );
+  colnames(topBarrio) <- "Var1";
+  especiesBarrio <- as.data.frame(
+    table(dataFrame$nom_cientifico),
+    row.names = NULL,
+    stringsAsFactors=FALSE
+  );
+  especiesMasAbundantes <- especiesBarrio[order(-especiesBarrio$Freq),];
+  especiesMasAbundantes <- especiesMasAbundantes[1:15,];
+
+  for (i in 1:nrow(especiesMasAbundantes)){
+    for (j in 1:nrow(topBarrio)){
+      numIndividuos <- subset(dataFrame, barrio == topBarrio$Var1[j] & nom_cientifico == especiesMasAbundantes$Var1[i])
+      topBarrio[j,i+1] = nrow(numIndividuos);
+    }
+  }
+  encabezado <- c(especies$encabezado, especiesMasAbundantes$Var1);
+  colnames(topBarrio) <- encabezado;
+  return(topBarrio);
+}
 getDensidadFollaje <- function(dataFrame){
   tmpDensidadFollaje <- as.data.frame.matrix(
     table(dataFrame$densidad_follaje, dataFrame$habito_crecimiento)
@@ -274,7 +298,7 @@ checkEstadoHoja <- function(dataFrame){
     for (i in 1:length(indice)){
       nuevaColumna <- encabezado[indice[i]];
       dataFrame[[nuevaColumna]] <- 0;
-    }
+    }    
   }
   dataFrame <- dataFrame[,order(names(dataFrame))];
   return(dataFrame);
@@ -683,7 +707,7 @@ getPropiedadesSanitarias <- function(dataFrame){
     presenciaObjetos = sum(propiedadesSanitarias$presenciaObjetos)
   );
   propiedadesSanitarias <- rbind(propiedadesSanitarias, filaTotal);
-  return(propiedadesSanitarias[1:7,]);
+  return(propiedadesSanitarias[2:7,]);
 }
 getConflictos <- function(dataFrame){
   tmpConflictos <- contarConflictos(dataFrame, conteo$general, darValor(dataFrame, conteo$limite));  

@@ -17,6 +17,7 @@ configurarVaribales <- function(){
   informeComuna <<- list(
     informeGeneral = "F18_general_comuna.xlsx",
     encabezado = c("Barrios", "Instituciones", "Corredor Vial")
+
   );
   densidad <<- list(
     informeGeneral = "F1_densidad_follaje.xlsx",
@@ -82,7 +83,8 @@ configurarVaribales <- function(){
     ina = 5
   );
   especies <<- list(      
-    informeEspecifico = "F28_especies.xlsx"
+    informeEspecifico = "F28_especies.xlsx",
+    encabezado = "Barrios"
   );
   procedencia <<- list(
     informeGeneral = "F11_procedencia.xlsx",
@@ -121,10 +123,15 @@ configurarVaribales <- function(){
       "44" = c("capSin", "xCapSin", "capCon","xCapCon", "totalCap")
     )
   );
+  dasometria <<- list(
+    alturas = "F14_alturas.xlsx",
+    diametros = "F15_diametros.xlsx",
+    volumen = "F16_volumen.xlsx"
+  );
   propiedades <<- list(
-    informeFisicas = "propiedades_fisicas.xlsx",
-    informeSanitarias = "propiedades_sanitarias.xlsx",
-    informeRiesgos = "riesgos.xlsx",
+    informeFisicas = "F7_propiedades_fisicas.xlsx",
+    informeSanitarias = "F8_propiedades_sanitarias.xlsx",
+    informeRiesgos = "F9_riesgos.xlsx",
     dominio = "porcentaje",
     fisicas = list(
       "20" = "inclinacion",
