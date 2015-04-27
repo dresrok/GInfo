@@ -298,9 +298,9 @@ checkEstadoHoja <- function(dataFrame){
     for (i in 1:length(indice)){
       nuevaColumna <- encabezado[indice[i]];
       dataFrame[[nuevaColumna]] <- 0;
-    }    
-  }
-  dataFrame <- dataFrame[,order(names(dataFrame))];
+    }
+    dataFrame <- dataFrame[,order(names(dataFrame))];
+  }  
   return(dataFrame);
 }
 getEstadoSanitario <- function(dataFrame){
@@ -421,12 +421,17 @@ getAlturas <- function(dataFrame, opcion){
             especies <- factor(subset(sector$nom_cientifico, sector$altura_total > r1 & sector$altura_total <= r2));
           }
           dfEspecies <- as.data.frame(table(especies));
-          especieMasComun <- as.character(
-            dfEspecies[order(-dfEspecies$Freq),1][1]
-          );
-          tmpAlturaTotal$nombreComun[j] <- as.character(
-            sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
-          );
+          if(nrow(dfEspecies) > 0 ) {
+            especieMasComun <- as.character(
+              dfEspecies[order(-dfEspecies$Freq),1][1]
+            );
+            tmpAlturaTotal$nombreComun[j] <- as.character(
+              sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
+            );
+          } else {
+            tmpAlturaTotal$nombreComun[j] <- "Ninguno";
+          }
+            
         }
         sep <- data.frame(
           rangos = "Total",
