@@ -14,10 +14,11 @@ configurarVaribales <- function(){
     total = "total",
     limite = "limite"
   );
-  informeComuna <<- list(
-    informeGeneral = "F18_general_comuna.xlsx",
-    encabezado = c("Barrios", "Instituciones", "Corredor Vial")
-
+  informe <<- list(
+    comuna = "F18_general_comuna.xlsx",
+    encabezado = c("Barrios", "Instituciones", "Corredor Vial"),
+    general = "general",
+    especifico = "especifico"
   );
   densidad <<- list(
     informeGeneral = "F1_densidad_follaje.xlsx",

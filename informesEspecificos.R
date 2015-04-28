@@ -1,55 +1,16 @@
 densidadFollajeEspecifico <- function(comuna){
-  tmpFollajeComuna <- as.data.frame.matrix(
-    table(comuna$barrio, comuna$densidad_follaje)
-  );
-  follajeComuna <- data.frame(
-    barrio = rownames(tmpFollajeComuna),
-    denso = dominio(tmpFollajeComuna, densidad$dominio, densidad$denso, CHECK),
-    xd = dominio(tmpFollajeComuna, densidad$dominio, densidad$denso, SUM),
-    medio = dominio(tmpFollajeComuna, densidad$dominio, densidad$medio, CHECK),
-    xm = dominio(tmpFollajeComuna, densidad$dominio, densidad$medio, SUM),
-    ralo = dominio(tmpFollajeComuna, densidad$dominio, densidad$ralo, CHECK),
-    xr = dominio(tmpFollajeComuna, densidad$dominio, densidad$ralo, SUM)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpFollajeBarrios <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$densidad_follaje)
-  );
-  follajeBarrios <- data.frame(
-    barrio = rownames(tmpFollajeBarrios),
-    denso = dominio(tmpFollajeBarrios, densidad$dominio, densidad$denso, CHECK),
-    xd = dominio(tmpFollajeBarrios, densidad$dominio, densidad$denso, SUM),
-    medio = dominio(tmpFollajeBarrios, densidad$dominio, densidad$medio, CHECK),
-    xm = dominio(tmpFollajeBarrios, densidad$dominio, densidad$medio, SUM),
-    ralo = dominio(tmpFollajeBarrios, densidad$dominio, densidad$ralo, CHECK),
-    xr = dominio(tmpFollajeBarrios, densidad$dominio, densidad$ralo, SUM)
-  );  
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpFollajeCorredores <- as.data.frame.matrix(
-    table(factor(corredores$barrio), corredores$densidad_follaje)
-  );
-  follajeCorredores <- data.frame(
-    barrio = rownames(tmpFollajeCorredores),
-    denso = dominio(tmpFollajeCorredores, densidad$dominio, densidad$denso, CHECK),
-    xd = dominio(tmpFollajeCorredores, densidad$dominio, densidad$denso, SUM),
-    medio = dominio(tmpFollajeCorredores, densidad$dominio, densidad$medio, CHECK),
-    xm = dominio(tmpFollajeCorredores, densidad$dominio, densidad$medio, SUM),
-    ralo = dominio(tmpFollajeCorredores, densidad$dominio, densidad$ralo, CHECK),
-    xr = dominio(tmpFollajeCorredores, densidad$dominio, densidad$ralo, SUM)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpFollajeInstituciones <- as.data.frame.matrix(
-    table(factor(instituciones$institucion), instituciones$densidad_follaje)
-  );
-  follajeInstituciones <- data.frame(
-    barrio = rownames(tmpFollajeInstituciones),
-    denso = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$denso, CHECK),
-    xd = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$denso, SUM),
-    medio = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$medio, CHECK),
-    xm = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$medio, SUM),
-    ralo = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$ralo, CHECK),
-    xr = dominio(tmpFollajeInstituciones, densidad$dominio, densidad$ralo, SUM)
-  );
+  instituciones$barrio <- NULL;
+
+  # Inicio Densidad de follaje especifico
+  follajeComuna <- getDensidadFollaje(comuna, informe$especifico);
+  follajeBarrios <- getDensidadFollaje(barrios, informe$especifico);
+  follajeCorredores <- getDensidadFollaje(corredores, informe$especifico);
+  follajeInstituciones <- getDensidadFollaje(instituciones, informe$especifico);
+  # Fin Densidad de follaje especifico
+
   save.xlsx(densidad$informeEspecifico, follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones);
 }
 emplazamientoEspecifico <- function(comuna){
@@ -139,57 +100,16 @@ emplazamientoEspecifico <- function(comuna){
   save.xlsx(emplazamiento$informeEspecifico, emplazamientoComuna, emplazamientoBarrios, emplazamientoCorredores, emplazamientoInstituciones);
 }
 estadoFisicoEspecifico <- function(comuna){
-  tmpEstadoFisicoComuna <- as.data.frame.matrix(
-    table(comuna$barrio, comuna$estado_fisico)
-  );
-  estadoFisicoComuna <- data.frame(
-    barrio = rownames(tmpEstadoFisicoComuna),
-    malo = dominio(tmpEstadoFisicoComuna, estadoFisico$dominio, estadoFisico$malo, CHECK),
-    xm = dominio(tmpEstadoFisicoComuna, estadoFisico$dominio, estadoFisico$malo, SUM),
-    regular = dominio(tmpEstadoFisicoComuna, estadoFisico$dominio, estadoFisico$regular, CHECK),
-    xr = dominio(tmpEstadoFisicoComuna, estadoFisico$dominio, estadoFisico$regular, SUM),
-    bueno = dominio(tmpEstadoFisicoComuna, estadoFisico$dominio, estadoFisico$bueno, CHECK),
-    xb = dominio(tmpEstadoFisicoComuna, estadoFisico$dominio, estadoFisico$bueno, SUM)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpEstadoFisicoBarrios <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$estado_fisico)
-  );
-  estadoFisicoBarrios <- data.frame(
-    barrio = rownames(tmpEstadoFisicoBarrios),
-    malo = dominio(tmpEstadoFisicoBarrios, estadoFisico$dominio, estadoFisico$malo, CHECK),
-    xm = dominio(tmpEstadoFisicoBarrios, estadoFisico$dominio, estadoFisico$malo, SUM),
-    regular = dominio(tmpEstadoFisicoBarrios, estadoFisico$dominio, estadoFisico$regular, CHECK),
-    xr = dominio(tmpEstadoFisicoBarrios, estadoFisico$dominio, estadoFisico$regular, SUM),
-    bueno = dominio(tmpEstadoFisicoBarrios, estadoFisico$dominio, estadoFisico$bueno, CHECK),
-    xb = dominio(tmpEstadoFisicoBarrios, estadoFisico$dominio, estadoFisico$bueno, SUM)
-  );  
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpEstadoFisicoCorredores <- as.data.frame.matrix(
-    table(factor(corredores$barrio), corredores$estado_fisico)
-  );
-  estadoFisicoCorredores <- data.frame(
-    barrio = rownames(tmpEstadoFisicoCorredores),
-    malo = dominio(tmpEstadoFisicoCorredores, estadoFisico$dominio, estadoFisico$malo, CHECK),
-    xm = dominio(tmpEstadoFisicoCorredores, estadoFisico$dominio, estadoFisico$malo, SUM),
-    regular = dominio(tmpEstadoFisicoCorredores, estadoFisico$dominio, estadoFisico$regular, CHECK),
-    xr = dominio(tmpEstadoFisicoCorredores, estadoFisico$dominio, estadoFisico$regular, SUM),
-    bueno = dominio(tmpEstadoFisicoCorredores, estadoFisico$dominio, estadoFisico$bueno, CHECK),
-    xb = dominio(tmpEstadoFisicoCorredores, estadoFisico$dominio, estadoFisico$bueno, SUM)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpEstadoFisicoInstituciones <- as.data.frame.matrix(
-    table(factor(instituciones$institucion), instituciones$estado_fisico)
-  );
-  estadoFisicoInstituciones <- data.frame(
-    barrio = rownames(tmpEstadoFisicoInstituciones),
-    malo = dominio(tmpEstadoFisicoInstituciones, estadoFisico$dominio, estadoFisico$malo, CHECK),
-    xm = dominio(tmpEstadoFisicoInstituciones, estadoFisico$dominio, estadoFisico$malo, SUM),
-    regular = dominio(tmpEstadoFisicoInstituciones, estadoFisico$dominio, estadoFisico$regular, CHECK),
-    xr = dominio(tmpEstadoFisicoInstituciones, estadoFisico$dominio, estadoFisico$regular, SUM),
-    bueno = dominio(tmpEstadoFisicoInstituciones, estadoFisico$dominio, estadoFisico$bueno, CHECK),
-    xb = dominio(tmpEstadoFisicoInstituciones, estadoFisico$dominio, estadoFisico$bueno, SUM)
-  );
+  instituciones$barrio <- NULL;
+
+  estadoFisicoComuna <- getEstadoFisico(comuna, informe$especifico);
+  estadoFisicoBarrios <- getEstadoFisico(barrios, informe$especifico);
+  estadoFisicoCorredores <- getEstadoFisico(corredores, informe$especifico);
+  estadoFisicoInstituciones <- getEstadoFisico(instituciones, informe$especifico);
+
   save.xlsx(estadoFisico$informeEspecifico, estadoFisicoComuna, estadoFisicoBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
 }
 estadoHojaEspecifico <- function(comuna){
@@ -300,136 +220,32 @@ estadoHojaEspecifico <- function(comuna){
   save.xlsx(estadoHoja$informeEspecifico, estadoHojaComuna, estadoHojaBarrios, estadoHojaCorredores, estadoHojaInstituciones);
 }
 estadoSanitarioEspecifico <- function(comuna){
-  tmpEstadoSanitarioComuna <- as.data.frame.matrix(
-    table(comuna$barrio, comuna$estado_sanitario)
-  );
-  estadoSanitarioComuna <- data.frame(
-    barrio = rownames(tmpEstadoSanitarioComuna),
-    muerto = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
-    xm = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$muerto, SUM),
-    critico = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
-    xc = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$critico, SUM),
-    enfermo = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
-    xe = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$enfermo, SUM),
-    sano = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
-    xs = dominio(tmpEstadoSanitarioComuna, estadoSanitario$dominio, estadoSanitario$sano, SUM)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpEstadoSanitarioBarrios <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$estado_sanitario)
-  );
-  estadoSanitarioBarrios <- data.frame(
-    barrio = rownames(tmpEstadoSanitarioBarrios),
-    muerto = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
-    xm = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$muerto, SUM),
-    critico = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
-    xc = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$critico, SUM),
-    enfermo = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
-    xe = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$enfermo, SUM),
-    sano = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
-    xs = dominio(tmpEstadoSanitarioBarrios, estadoSanitario$dominio, estadoSanitario$sano, SUM)
-  );  
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpEstadoSanitarioCorredores <- as.data.frame.matrix(
-    table(factor(corredores$barrio), corredores$estado_sanitario)
-  );
-  estadoSanitarioCorredores <- data.frame(
-    barrio = rownames(tmpEstadoSanitarioCorredores),
-    muerto = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
-    xm = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$muerto, SUM),
-    critico = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
-    xc = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$critico, SUM),
-    enfermo = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
-    xe = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$enfermo, SUM),
-    sano = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
-    xs = dominio(tmpEstadoSanitarioCorredores, estadoSanitario$dominio, estadoSanitario$sano, SUM)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpEstadoSanitarioInstituciones <- as.data.frame.matrix(
-    table(factor(instituciones$institucion), instituciones$estado_sanitario)
-  );
-  estadoSanitarioInstituciones <- data.frame(
-    barrio = rownames(tmpEstadoSanitarioInstituciones),
-    muerto = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),
-    xm = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$muerto, SUM),
-    critico = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$critico, CHECK),
-    xc = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$critico, SUM),
-    enfermo = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),
-    xe = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$enfermo, SUM),
-    sano = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$sano, CHECK),
-    xs = dominio(tmpEstadoSanitarioInstituciones, estadoSanitario$dominio, estadoSanitario$sano, SUM)
-  );
+  instituciones$barrio <- NULL;
+
+  estadoSanitarioComuna <- getEstadoSanitario(comuna, informe$especifico);
+  estadoSanitarioBarrios <- getEstadoSanitario(barrios, informe$especifico);
+  estadoSanitarioCorredores <- getEstadoSanitario(corredores, informe$especifico);
+  estadoSanitarioInstituciones <- getEstadoSanitario(instituciones, informe$especifico);
+  
   save.xlsx(estadoSanitario$informeEspecifico, estadoSanitarioComuna, estadoSanitarioBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
 }
 valorEsteticoEspecifico <- function(comuna){
-  tmpValorEsteticoComuna <- as.data.frame.matrix(
-    table(comuna$barrio, comuna$valor_estetico)
-  );
-  valorEsteticoComuna <- data.frame(
-    barrio = rownames(tmpValorEsteticoComuna),
-    emblematico = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$emb, CHECK),
-    xemb = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$emb, SUM),
-    esencial = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ese, CHECK),
-    xese = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ese, SUM),
-    deseable = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$des, CHECK),
-    xdes = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$des, SUM),
-    indiferente = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ind, CHECK),
-    xind = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ind, SUM),
-    inaceptable = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ina, CHECK),
-    xina = dominio(tmpValorEsteticoComuna, valorEstetico$dominio, valorEstetico$ina, SUM)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpValorEstetiBarrios <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$valor_estetico)
-  );
-  valorEsteticoBarrios <- data.frame(
-    barrio = rownames(tmpValorEstetiBarrios),
-    emblematico = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$emb, CHECK),
-    xemb = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$emb, SUM),
-    esencial = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ese, CHECK),
-    xese = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ese, SUM),
-    deseable = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$des, CHECK),
-    xdes = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$des, SUM),
-    indiferente = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ind, CHECK),
-    xind = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ind, SUM),
-    inaceptable = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ina, CHECK),
-    xina = dominio(tmpValorEstetiBarrios, valorEstetico$dominio, valorEstetico$ina, SUM)
-  );
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpValorEsteticoCorredores <- as.data.frame.matrix(
-    table(factor(corredores$barrio), corredores$valor_estetico)
-  );
-  valorEsteticoCorredores <- data.frame(
-    barrio = rownames(tmpValorEsteticoCorredores),
-    emblematico = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$emb, CHECK),
-    xemb = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$emb, SUM),
-    esencial = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ese, CHECK),
-    xese = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ese, SUM),
-    deseable = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$des, CHECK),
-    xdes = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$des, SUM),
-    indiferente = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ind, CHECK),
-    xind = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ind, SUM),
-    inaceptable = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ina, CHECK),
-    xina = dominio(tmpValorEsteticoCorredores, valorEstetico$dominio, valorEstetico$ina, SUM)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpValorEsteticoInstituciones <- as.data.frame.matrix(
-    table(factor(instituciones$institucion), instituciones$valor_estetico)
-  );
-  valorEsteticoInstituciones <- data.frame(
-    barrio = rownames(tmpValorEsteticoInstituciones),
-    emblematico = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$emb, CHECK),
-    xemb = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$emb, SUM),
-    esencial = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ese, CHECK),
-    xese = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ese, SUM),
-    deseable = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$des, CHECK),
-    xdes = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$des, SUM),
-    indiferente = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ind, CHECK),
-    xind = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ind, SUM),
-    inaceptable = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ina, CHECK),
-    xina = dominio(tmpValorEsteticoInstituciones, valorEstetico$dominio, valorEstetico$ina, SUM)
-  );
-  save.xlsx(valorEstetico$informeEspecifico, valorEsteticoComuna, valorEsteticoBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);
+  instituciones$barrio <- NULL;
+
+  # Inicio Valor estético especifico
+  valorEsteticoComuna <- getValorEstetico(comuna, informe$especifico);
+  valorEsteticoBarrios <- getValorEstetico(barrios, informe$especifico);
+  valorEsteticoCorredores <- getValorEstetico(corredores, informe$especifico);
+  valorEsteticoInstituciones <- getValorEstetico(instituciones, informe$especifico);
+  # Fin Valor estético especifico
+
+  save.xlsx(valorEstetico$informeEspecifico, valorEsteticoComuna, valorEsteticoBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);    
 }
 especiesEspecifico <- function(comuna){
   tmpEspeciesComuna <- as.data.frame(

@@ -13,7 +13,7 @@ general <- function(comuna){
     totalIndividuosCorredores
   );
   comunaGeneral <- data.frame(
-    ubicacion = informeComuna$encabezado,
+    ubicacion = informe$encabezado,
     individuos = totales,
     xi = round(totales/sum(totales), 4),
     stringsAsFactors=FALSE
@@ -36,7 +36,7 @@ general <- function(comuna){
 
   especiesMasAbundantesBarrio <- getMasAbundante(barrios);
 
-  save.xlsx(informeComuna$informeGeneral, comunaGeneral, familiasComuna, familiasBarrios, especiesMasAbundantesBarrio, familiasCorredores, familiasInstituciones);
+  save.xlsx(informe$comuna, comunaGeneral, familiasComuna, familiasBarrios, especiesMasAbundantesBarrio, familiasCorredores, familiasInstituciones);
 }
 densidadFollajeGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
@@ -44,10 +44,10 @@ densidadFollajeGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Densidad de follaje
-  follajeComuna <- getDensidadFollaje(comuna);
-  follajeBarrios <- getDensidadFollaje(barrios);
-  follajeCorredores <- getDensidadFollaje(corredores);
-  follajeInstituciones <- getDensidadFollaje(instituciones);
+  follajeComuna <- getDensidadFollaje(comuna, informe$general);
+  follajeBarrios <- getDensidadFollaje(barrios, informe$general);
+  follajeCorredores <- getDensidadFollaje(corredores, informe$general);
+  follajeInstituciones <- getDensidadFollaje(instituciones, informe$general);
   # Fin Densidad de follaje
   
   save.xlsx(densidad$informeGeneral, follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones);
@@ -72,10 +72,10 @@ estadoFisicoGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Estado físico
-  estadoFisicoComuna <- getEstadoFisico(comuna);
-  estadoFisicoBarrios <- getEstadoFisico(barrios);
-  estadoFisicoCorredores <- getEstadoFisico(corredores);
-  estadoFisicoInstituciones <- getEstadoFisico(instituciones);
+  estadoFisicoComuna <- getEstadoFisico(comuna, informe$general);
+  estadoFisicoBarrios <- getEstadoFisico(barrios, informe$general);
+  estadoFisicoCorredores <- getEstadoFisico(corredores, informe$general);
+  estadoFisicoInstituciones <- getEstadoFisico(instituciones, informe$general);
   # Fin Estado físico
 
   save.xlsx(estadoFisico$informeGeneral, estadoFisicoComuna, estadoFisicoBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
@@ -100,10 +100,10 @@ estadoSanitarioGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Estado sanitario
-  estadoSanitarioComuna <- getEstadoSanitario(comuna);
-  estadoSanitarioBarrios <- getEstadoSanitario(barrios);
-  estadoSanitarioCorredores <- getEstadoSanitario(corredores);
-  estadoSanitarioInstituciones <- getEstadoSanitario(instituciones);
+  estadoSanitarioComuna <- getEstadoSanitario(comuna, informe$general);
+  estadoSanitarioBarrios <- getEstadoSanitario(barrios, informe$general);
+  estadoSanitarioCorredores <- getEstadoSanitario(corredores, informe$general);
+  estadoSanitarioInstituciones <- getEstadoSanitario(instituciones, informe$general);
   # Fin Estado sanitario 
 
   save.xlsx(estadoSanitario$informeGeneral, estadoSanitarioComuna, estadoSanitarioBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
@@ -114,10 +114,10 @@ valorEsteticoGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Valor estético de los individuos
-  valorEsteticoComuna <- getValorEstetico(comuna);
-  valorEsteticoBarrios <- getValorEstetico(barrios);
-  valorEsteticoCorredores <- getValorEstetico(corredores);
-  valorEsteticoInstituciones <- getValorEstetico(instituciones);
+  valorEsteticoComuna <- getValorEstetico(comuna, informe$general);
+  valorEsteticoBarrios <- getValorEstetico(barrios, informe$general);
+  valorEsteticoCorredores <- getValorEstetico(corredores, informe$general);
+  valorEsteticoInstituciones <- getValorEstetico(instituciones, informe$general);
   # Fin Valor estético de los individuos
 
   save.xlsx(valorEstetico$informeGeneral, valorEsteticoComuna, valorEsteticoBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);
