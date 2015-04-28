@@ -194,12 +194,20 @@ getFamilias <- function(dataFrame){
     familias$xe[i] = round(familias$especies[i]/totalEspecies, 4);
   }
   familias <- familias[c(1,4,5,2,3)];
+  subTotal <- data.frame(
+    familia = "Subtotal",
+    especies = sum(familias$especies),
+    xe = sum(familias$xe),
+    individuos = sum(familias$individuos),
+    xi = sum(familias$xi)
+  );
+  familias <- rbind(familias, subTotal);
   filaTotal <- data.frame(
     familia = "Total",
     especies = totalEspecies,
-    xe = 100,
+    xe = 1,
     individuos = nrow(dataFrame),
-    xi = 100
+    xi = 1
   );
   familias <- rbind(familias, filaTotal);
   return(familias);
@@ -242,6 +250,14 @@ getDensidadFollaje <- function(dataFrame, informe){
         palmas = tmpDensidadFollaje$"3"
       );
       densidadFollaje$totalIndividuos <- densidadFollaje$arboles + densidadFollaje$arbustos + densidadFollaje$palmas;
+      filaTotal <- data.frame(
+        densidadFollaje = "Total",
+        arboles = sum(densidadFollaje$arboles),
+        arbustos = sum(densidadFollaje$arbustos),
+        palmas = sum(densidadFollaje$palmas),
+        totalIndividuos = sum(densidadFollaje$totalIndividuos)
+      );
+      densidadFollaje <- rbind(densidadFollaje, filaTotal);
       return(densidadFollaje);
     },
     especifico={
@@ -293,6 +309,14 @@ getEmplazamiento <- function(dataFrame, informe){
         palmas = tmpEmplazamiento$"3"
       );
       emplazamientoIndividuos$totalIndividuos <- emplazamientoIndividuos$arboles + emplazamientoIndividuos$arbustos + emplazamientoIndividuos$palmas;
+      filaTotal <- data.frame(
+        emplazamiento = "Total",
+        arboles = sum(emplazamientoIndividuos$arboles),
+        arbustos = sum(emplazamientoIndividuos$arbustos),
+        palmas = sum(emplazamientoIndividuos$palmas),
+        totalIndividuos = sum(emplazamientoIndividuos$totalIndividuos)
+      );
+      emplazamientoIndividuos <- rbind(emplazamientoIndividuos, filaTotal);
       return(emplazamientoIndividuos);
     },
     especifico={
@@ -305,7 +329,7 @@ getEmplazamiento <- function(dataFrame, informe){
           table(factor(dataFrame$institucion), dataFrame$emplazamiento)
         );
       }
-      emplazamientoSector <- data.frame(
+      emplazamientoIndividuos <- data.frame(
         barrio = rownames(tmpEmplazamiento),
         parque = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$pr, CHECK),        
         glorieta = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$gl, CHECK),        
@@ -315,7 +339,18 @@ getEmplazamiento <- function(dataFrame, informe){
         antejardin = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$ant, CHECK),        
         zonablanda = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$zb, CHECK)       
       );
-      return(emplazamientoSector);
+      filaTotal <- data.frame(
+        barrio = "Total",
+        parque = sum(emplazamientoIndividuos$parque),
+        glorieta = sum(emplazamientoIndividuos$glorieta),
+        anden = sum(emplazamientoIndividuos$anden),
+        alcorque = sum(emplazamientoIndividuos$alcorque),
+        separador = sum(emplazamientoIndividuos$separador),
+        antejardin = sum(emplazamientoIndividuos$antejardin),
+        zonablanda = sum(emplazamientoIndividuos$zonablanda)
+      );
+      emplazamientoIndividuos <- rbind(emplazamientoIndividuos, filaTotal);
+      return(emplazamientoIndividuos);
     }
   );   
 }
@@ -333,6 +368,14 @@ getEstadoFisico <- function(dataFrame, informe){
         palmas = tmpEstadoFisico$"3"
       );
       estadoFisico$totalIndividuos <- estadoFisico$arboles + estadoFisico$arbustos + estadoFisico$palmas;
+      filaTotal <- data.frame(
+        estadoFisico = "Total",
+        arboles = sum(estadoFisico$arboles),
+        arbustos = sum(estadoFisico$arbustos),
+        palmas = sum(estadoFisico$palmas),
+        totalIndividuos = sum(estadoFisico$totalIndividuos)
+      );
+      estadoFisico <- rbind(estadoFisico, filaTotal);
       return(estadoFisico);
     },
     especifico={
@@ -389,7 +432,7 @@ getEstadoHoja <- function(dataFrame, informe){
 
       estadoHoja <- rbind(clorotica, caducifolia);
       estadoHoja$individuos <- estadoHoja$estadoNatural + estadoHoja$deficienciaNutricional + estadoHoja$noRegistra;
-      estadoHoja$noRegistra <- NULL
+      estadoHoja$noRegistra <- NULL;
       return(estadoHoja);
     },
     especifico={
@@ -398,14 +441,14 @@ getEstadoHoja <- function(dataFrame, informe){
           table(factor(dataFrame$barrio), dataFrame$hc)
         );
         tmpCaducifolia <- as.data.frame.matrix(
-          table(factor(dataFrame$barrio), dataFrame$hc)
+          table(factor(dataFrame$barrio), dataFrame$hcf)
         );
       } else {
         tmpClorotica <- as.data.frame.matrix(
           table(factor(dataFrame$institucion), dataFrame$hc)
         );
         tmpCaducifolia <- as.data.frame.matrix(
-          table(factor(dataFrame$institucion), dataFrame$hc)
+          table(factor(dataFrame$institucion), dataFrame$hcf)
         );
       }
       clorotica <- data.frame(
@@ -420,6 +463,16 @@ getEstadoHoja <- function(dataFrame, informe){
         noRegistraHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$nr, CHECK)
       );
       estadoHoja <- cbind(clorotica, caducifolia);
+      filaTotal <- data.frame(
+        barrio = "Total",
+        estadoNaturalHC = sum(estadoHoja$estadoNaturalHC),
+        deficienciaNutricionalHC = sum(estadoHoja$deficienciaNutricionalHC),
+        noRegistraHC = sum(estadoHoja$noRegistraHC),
+        estadoNaturalHCF = sum(estadoHoja$estadoNaturalHCF),
+        deficienciaNutricionalHCF = sum(estadoHoja$deficienciaNutricionalHCF),
+        noRegistraHCF = sum(estadoHoja$noRegistraHCF)
+      );
+      estadoHoja <- rbind(estadoHoja, filaTotal);
       return(estadoHoja);
     }
   );  
@@ -451,6 +504,14 @@ getEstadoSanitario <- function(dataFrame, informe){
         palmas = tmpEstadoSanitario$"3"
       );
       estadoSanitario$totalIndividuos <- estadoSanitario$arboles + estadoSanitario$arbustos + estadoSanitario$palmas;
+      filaTotal <- data.frame(
+        estadoSanitario = "Total",
+        arboles = sum(estadoSanitario$arboles),
+        arbustos = sum(estadoSanitario$arbustos),
+        palmas = sum(estadoSanitario$palmas),
+        totalIndividuos = sum(estadoSanitario$totalIndividuos)
+      );
+      estadoSanitario <- rbind(estadoSanitario, filaTotal);
       return(estadoSanitario);
     },
     especifico={
@@ -517,6 +578,18 @@ getEspeciesProcedencia <- function(dataFrame){
   procedencia <- procedencia[c(1,2,5,3,6,4,7)];
   procedencia$totalIndividuos <- procedencia$arboles + procedencia$arbustos + procedencia$palmas;
   procedencia$totalEspecies <- procedencia$especiesArboles + procedencia$especiesArbustos + procedencia$especiesPalmas;
+  filaTotal <- data.frame(
+    procedencia = "Total",
+    arboles = sum(procedencia$arboles),
+    especiesArboles = sum(procedencia$especiesArboles),
+    arbustos = sum(procedencia$arbustos),
+    especiesArbustos = sum(procedencia$especiesArbustos),
+    palmas = sum(procedencia$palmas),
+    especiesPalmas = sum(procedencia$especiesPalmas),
+    totalIndividuos = sum(procedencia$totalIndividuos),
+    totalEspecies = sum(procedencia$totalEspecies)
+  );
+  procedencia <- rbind(procedencia, filaTotal);
   return(procedencia);
 }
 getEspeciesHabito <- function(dataFrame){
@@ -561,6 +634,14 @@ getValorEstetico <- function(dataFrame, informe){
         palmas = tmpValorEstetico$"3"
       );
       valorEstetico$totalIndividuos <- valorEstetico$arboles + valorEstetico$arbustos + valorEstetico$palmas;
+      filaTotal <- data.frame(
+        valorEstetico = "Total",
+        arboles = sum(valorEstetico$arboles),
+        arbustos = sum(valorEstetico$arbustos),
+        palmas = sum(valorEstetico$palmas),
+        totalIndividuos = sum(valorEstetico$totalIndividuos)
+      );
+      valorEstetico <- rbind(valorEstetico, filaTotal);
       return(valorEstetico);
     },
     especifico={
