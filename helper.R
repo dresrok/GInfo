@@ -279,19 +279,45 @@ getDensidadFollaje <- function(dataFrame, informe){
     }
   );
 }
-getEmplazamiento <- function(dataFrame){
-  tmpEmplazamiento <- as.data.frame.matrix(
-    table(dataFrame$emplazamiento, dataFrame$habito_crecimiento)
-  );
-  tmpEmplazamiento$emplazamiento <- encabezado(emplazamiento$encabezado, row.names(tmpEmplazamiento));
-  emplazamientoIndividuos <- data.frame(
-    emplazamiento = tmpEmplazamiento$emplazamiento,
-    arboles = tmpEmplazamiento$"1",
-    arbustos = tmpEmplazamiento$"2",
-    palmas = tmpEmplazamiento$"3"
-  );
-  emplazamientoIndividuos$totalIndividuos <- emplazamientoIndividuos$arboles + emplazamientoIndividuos$arbustos + emplazamientoIndividuos$palmas;
-  return(emplazamientoIndividuos);
+getEmplazamiento <- function(dataFrame, informe){
+  switch(informe,
+    general={
+      tmpEmplazamiento <- as.data.frame.matrix(
+        table(dataFrame$emplazamiento, dataFrame$habito_crecimiento)
+      );
+      tmpEmplazamiento$emplazamiento <- encabezado(emplazamiento$encabezado, row.names(tmpEmplazamiento));
+      emplazamientoIndividuos <- data.frame(
+        emplazamiento = tmpEmplazamiento$emplazamiento,
+        arboles = tmpEmplazamiento$"1",
+        arbustos = tmpEmplazamiento$"2",
+        palmas = tmpEmplazamiento$"3"
+      );
+      emplazamientoIndividuos$totalIndividuos <- emplazamientoIndividuos$arboles + emplazamientoIndividuos$arbustos + emplazamientoIndividuos$palmas;
+      return(emplazamientoIndividuos);
+    },
+    especifico={
+      if("barrio" %in% colnames(dataFrame)){
+        tmpEmplazamiento <- as.data.frame.matrix(
+          table(factor(dataFrame$barrio), dataFrame$emplazamiento)
+        );
+      } else {
+        tmpEmplazamiento <- as.data.frame.matrix(
+          table(factor(dataFrame$institucion), dataFrame$emplazamiento)
+        );
+      }
+      emplazamientoSector <- data.frame(
+        barrio = rownames(tmpEmplazamiento),
+        parque = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$pr, CHECK),        
+        glorieta = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$gl, CHECK),        
+        anden = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$an, CHECK),        
+        alcorque = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$al, CHECK),        
+        separador = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$sp, CHECK),        
+        antejardin = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$ant, CHECK),        
+        zonablanda = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$zb, CHECK)       
+      );
+      return(emplazamientoSector);
+    }
+  );   
 }
 getEstadoFisico <- function(dataFrame, informe){
   switch(informe,
@@ -344,25 +370,59 @@ getEstadoFisico <- function(dataFrame, informe){
     }
   );
 }
-getEstadoHoja <- function(dataFrame){
-  tmpClorotica <- as.data.frame.list(
-    table(dataFrame$hc), row.names = estadoHoja$clorotica
-  );
-  tmpClorotica <- checkEstadoHoja(tmpClorotica);
-  colnames(tmpClorotica) <- estadoHoja$encabezado;
-  clorotica <- tmpClorotica;
+getEstadoHoja <- function(dataFrame, informe){
+  switch(informe,
+    general={
+      tmpClorotica <- as.data.frame.list(
+        table(dataFrame$hc), row.names = estadoHoja$clorotica
+      );
+      tmpClorotica <- checkEstadoHoja(tmpClorotica);
+      colnames(tmpClorotica) <- estadoHoja$encabezado;
+      clorotica <- tmpClorotica;
 
-  tmpCaducifolia <- as.data.frame.list(
-    table(dataFrame$hcf), row.names = estadoHoja$caducifolia
-  );
-  tmpCaducifolia <- checkEstadoHoja(tmpCaducifolia);
-  colnames(tmpCaducifolia) <- estadoHoja$encabezado;
-  caducifolia <- tmpCaducifolia;
+      tmpCaducifolia <- as.data.frame.list(
+        table(dataFrame$hcf), row.names = estadoHoja$caducifolia
+      );
+      tmpCaducifolia <- checkEstadoHoja(tmpCaducifolia);
+      colnames(tmpCaducifolia) <- estadoHoja$encabezado;
+      caducifolia <- tmpCaducifolia;
 
-  estadoHoja <- rbind(clorotica, caducifolia);
-  estadoHoja$individuos <- estadoHoja$estadoNatural + estadoHoja$deficienciaNutricional + estadoHoja$noRegistra;
-  estadoHoja$noRegistra <- NULL
-  return(estadoHoja);
+      estadoHoja <- rbind(clorotica, caducifolia);
+      estadoHoja$individuos <- estadoHoja$estadoNatural + estadoHoja$deficienciaNutricional + estadoHoja$noRegistra;
+      estadoHoja$noRegistra <- NULL
+      return(estadoHoja);
+    },
+    especifico={
+      if("barrio" %in% colnames(dataFrame)){
+        tmpClorotica <- as.data.frame.matrix(
+          table(factor(dataFrame$barrio), dataFrame$hc)
+        );
+        tmpCaducifolia <- as.data.frame.matrix(
+          table(factor(dataFrame$barrio), dataFrame$hc)
+        );
+      } else {
+        tmpClorotica <- as.data.frame.matrix(
+          table(factor(dataFrame$institucion), dataFrame$hc)
+        );
+        tmpCaducifolia <- as.data.frame.matrix(
+          table(factor(dataFrame$institucion), dataFrame$hc)
+        );
+      }
+      clorotica <- data.frame(
+        barrio = rownames(tmpClorotica),
+        estadoNaturalHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$en, CHECK),
+        deficienciaNutricionalHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$dn, CHECK),
+        noRegistraHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$nr, CHECK)
+      ); 
+      caducifolia <- data.frame(        
+        estadoNaturalHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$en, CHECK),
+        deficienciaNutricionalHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$dn, CHECK),
+        noRegistraHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$nr, CHECK)
+      );
+      estadoHoja <- cbind(clorotica, caducifolia);
+      return(estadoHoja);
+    }
+  );  
 }
 checkEstadoHoja <- function(dataFrame){
   encabezado <- c("X1", "X2", "X3");

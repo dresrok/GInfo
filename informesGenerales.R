@@ -58,10 +58,10 @@ emplazamientoGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Emplazamiento de los individuos
-  emplazamientoComuna <- getEmplazamiento(comuna);
-  emplazamientoBarrios <- getEmplazamiento(barrios);
-  emplazamientoCorredores <- getEmplazamiento(corredores);
-  emplazamientoInstituciones <- getEmplazamiento(instituciones);
+  emplazamientoComuna <- getEmplazamiento(comuna, informe$general);
+  emplazamientoBarrios <- getEmplazamiento(barrios, informe$general);
+  emplazamientoCorredores <- getEmplazamiento(corredores, informe$general);
+  emplazamientoInstituciones <- getEmplazamiento(instituciones, informe$general);
   # Fin Emplazamiento de los individuos
 
   save.xlsx(emplazamiento$informeGeneral, emplazamientoComuna, emplazamientoBarrios, emplazamientoCorredores, emplazamientoInstituciones);
@@ -86,10 +86,10 @@ estadoHojaGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Estado de hoja
-  estadoHojaComuna <- getEstadoHoja(comuna);
-  estadoHojaBarrios <- getEstadoHoja(barrios);
-  estadoHojaCorredores <- getEstadoHoja(corredores);
-  estadoHojaInstituciones <- getEstadoHoja(instituciones);
+  estadoHojaComuna <- getEstadoHoja(comuna, informe$general);
+  estadoHojaBarrios <- getEstadoHoja(barrios, informe$general);
+  estadoHojaCorredores <- getEstadoHoja(corredores, informe$general);
+  estadoHojaInstituciones <- getEstadoHoja(instituciones, informe$general);
   # Fin Estado de hoja
 
   save.xlsx(estadoHoja$informeGeneral, estadoHojaComuna, estadoHojaBarrios, estadoHojaCorredores, estadoHojaInstituciones); 

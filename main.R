@@ -25,9 +25,9 @@ main <- function(){
 
 
   densidadFollajeEspecifico(comuna);
-  #emplazamientoEspecifico(comuna);
+  emplazamientoEspecifico(comuna);
   estadoFisicoEspecifico(comuna);
-  #estadoHojaEspecifico(comuna);
+  estadoHojaEspecifico(comuna);
   estadoSanitarioEspecifico(comuna);
   valorEsteticoEspecifico(comuna);
   #especiesEspecifico(comuna);

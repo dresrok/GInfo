@@ -14,89 +14,16 @@ densidadFollajeEspecifico <- function(comuna){
   save.xlsx(densidad$informeEspecifico, follajeComuna, follajeBarrios, follajeCorredores, follajeInstituciones);
 }
 emplazamientoEspecifico <- function(comuna){
-  tmpEmplazamientoComuna <- as.data.frame.matrix(
-    table(comuna$barrio, comuna$emplazamiento)
-  );
-  emplazamientoComuna <- data.frame(
-    barrio = rownames(tmpEmplazamientoComuna),
-    parque = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$pr, CHECK),
-    xpr = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$pr, SUM),
-    glorieta = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$gl, CHECK),
-    xgl = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$gl, SUM),
-    anden = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$an, CHECK),
-    xan = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$an, SUM),
-    alcorque = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$al, CHECK),
-    xal = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$al, SUM),
-    separador = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$sp, CHECK),
-    xsp = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$sp, SUM),
-    antejardin = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$ant, CHECK),
-    xant = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$ant, SUM),
-    zonablanda = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$zb, CHECK),
-    xzb = dominio(tmpEmplazamientoComuna, emplazamiento$dominio, emplazamiento$zb, SUM)
-  );
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpEmplazamientoBarrios <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$emplazamiento)
-  );
-  emplazamientoBarrios <- data.frame(
-    barrio = rownames(tmpEmplazamientoBarrios),
-    parque = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$pr, CHECK),
-    xpr = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$pr, SUM),
-    glorieta = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$gl, CHECK),
-    xgl = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$gl, SUM),
-    anden = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$an, CHECK),
-    xan = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$an, SUM),
-    alcorque = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$al, CHECK),
-    xal = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$al, SUM),
-    separador = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$sp, CHECK),
-    xsp = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$sp, SUM),
-    antejardin = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$ant, CHECK),
-    xant = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$ant, SUM),
-    zonablanda = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$zb, CHECK),
-    xzb = dominio(tmpEmplazamientoBarrios, emplazamiento$dominio, emplazamiento$zb, SUM)
-  );
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpEmplazamientoCorredores <- as.data.frame.matrix(
-    table(factor(corredores$barrio), corredores$emplazamiento)
-  );
-  emplazamientoCorredores <- data.frame(
-    barrio = rownames(tmpEmplazamientoCorredores),
-    parque = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$pr, CHECK),
-    xpr = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$pr, SUM),
-    glorieta = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$gl, CHECK),
-    xgl = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$gl, SUM),
-    anden = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$an, CHECK),
-    xan = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$an, SUM),
-    alcorque = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$al, CHECK),
-    xal = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$al, SUM),
-    separador = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$sp, CHECK),
-    xsp = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$sp, SUM),
-    antejardin = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$ant, CHECK),
-    xant = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$ant, SUM),
-    zonablanda = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$zb, CHECK),
-    xzb = dominio(tmpEmplazamientoCorredores, emplazamiento$dominio, emplazamiento$zb, SUM)
-  );
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpEmplazamientoInstituciones <- as.data.frame.matrix(
-    table(factor(instituciones$institucion), instituciones$emplazamiento)
-  );
-  emplazamientoInstituciones <- data.frame(
-    barrio = rownames(tmpEmplazamientoInstituciones),
-    parque = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$pr, CHECK),
-    xpr = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$pr, SUM),
-    glorieta = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$gl, CHECK),
-    xgl = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$gl, SUM),
-    anden = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$an, CHECK),
-    xan = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$an, SUM),
-    alcorque = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$al, CHECK),
-    xal = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$al, SUM),
-    separador = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$sp, CHECK),
-    xsp = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$sp, SUM),
-    antejardin = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$ant, CHECK),
-    xant = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$ant, SUM),
-    zonablanda = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$zb, CHECK),
-    xzb = dominio(tmpEmplazamientoInstituciones, emplazamiento$dominio, emplazamiento$zb, SUM)
-  );
+  instituciones$barrio <- NULL;
+
+  emplazamientoComuna <- getEmplazamiento(comuna, informe$especifico);
+  emplazamientoBarrios <- getEmplazamiento(barrios, informe$especifico);
+  emplazamientoCorredores <- getEmplazamiento(corredores, informe$especifico);
+  emplazamientoInstituciones <- getEmplazamiento(instituciones, informe$especifico);
+
   save.xlsx(emplazamiento$informeEspecifico, emplazamientoComuna, emplazamientoBarrios, emplazamientoCorredores, emplazamientoInstituciones);
 }
 estadoFisicoEspecifico <- function(comuna){
@@ -113,110 +40,16 @@ estadoFisicoEspecifico <- function(comuna){
   save.xlsx(estadoFisico$informeEspecifico, estadoFisicoComuna, estadoFisicoBarrios, estadoFisicoCorredores, estadoFisicoInstituciones);
 }
 estadoHojaEspecifico <- function(comuna){
-  tmpCloroticaComuna <- as.data.frame.matrix(
-    table(comuna$barrio, comuna$hc)
-  );
-  cloroticaComuna <- data.frame(
-    barrio = rownames(tmpCloroticaComuna),
-    enHC = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$en, CHECK),
-    xenHC = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$en, SUM),
-    dnHC = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$dn, CHECK),
-    xdnHC = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$dn, SUM),
-    nrHC = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$nr, CHECK),
-    xnrHC = dominio(tmpCloroticaComuna, estadoHoja$dominio, estadoHoja$nr, SUM)
-  );
-  tmpCaducifoliaComuna <- as.data.frame.matrix(
-    table(comuna$barrio, comuna$hcf)
-  );
-  caducifoliaComuna <- data.frame(
-    barrio = rownames(tmpCaducifoliaComuna),
-    enHCF = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$en, CHECK),
-    xenHCF = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$en, SUM),
-    dnHCF = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$dn, CHECK),
-    xdnHCF = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$dn, SUM),
-    nrHCF = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$nr, CHECK),
-    xnrHCF = dominio(tmpCaducifoliaComuna, estadoHoja$dominio, estadoHoja$nr, SUM)
-  );
-  estadoHojaComuna <- cbind(cloroticaComuna, caducifoliaComuna);
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  tmpCloroticaBarrios <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$hc)
-  );
-  cloroticaBarrios <- data.frame(
-    barrio = rownames(tmpCloroticaBarrios),
-    enHC = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$en, CHECK),
-    xenHC = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$en, SUM),
-    dnHC = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$dn, CHECK),
-    xdnHC = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$dn, SUM),
-    nrHC = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$nr, CHECK),
-    xnrHC = dominio(tmpCloroticaBarrios, estadoHoja$dominio, estadoHoja$nr, SUM)
-  );
-  tmpCaducifoliaBarrios <- as.data.frame.matrix(
-    table(factor(barrios$barrio), barrios$hcf)
-  );
-  caducifoliaBarrios <- data.frame(
-    barrio = rownames(tmpCaducifoliaBarrios),
-    enHCF = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$en, CHECK),
-    xenHCF = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$en, SUM),
-    dnHCF = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$dn, CHECK),
-    xdnHCF = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$dn, SUM),
-    nrHCF = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$nr, CHECK),
-    xnrHCF = dominio(tmpCaducifoliaBarrios, estadoHoja$dominio, estadoHoja$nr, SUM)
-  );
-  estadoHojaBarrios <- cbind(cloroticaBarrios, caducifoliaBarrios);
-
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  tmpCloroticaCorredores <- as.data.frame.matrix(
-    table(factor(corredores$barrio), corredores$hc)
-  );
-  cloroticaCorredores <- data.frame(
-    barrio = rownames(tmpCloroticaCorredores),
-    enHC = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$en, CHECK),
-    xenHC = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$en, SUM),
-    dnHC = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$dn, CHECK),
-    xdnHC = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$dn, SUM),
-    nrHC = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$nr, CHECK),
-    xnrHC = dominio(tmpCloroticaCorredores, estadoHoja$dominio, estadoHoja$nr, SUM)
-  );
-  tmpCaducifoliaCorredores <- as.data.frame.matrix(
-    table(factor(corredores$barrio), corredores$hcf)
-  );
-  caducifoliaCorredores <- data.frame(
-    barrio = rownames(tmpCaducifoliaCorredores),
-    enHCF = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$en, CHECK),
-    xenHCF = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$en, SUM),
-    dnHCF = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$dn, CHECK),
-    xdnHCF = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$dn, SUM),
-    nrHCF = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$nr, CHECK),
-    xnrHCF = dominio(tmpCaducifoliaCorredores, estadoHoja$dominio, estadoHoja$nr, SUM)
-  );
-  estadoHojaCorredores <- cbind(cloroticaCorredores, caducifoliaCorredores);
   instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  tmpCloroticaInstituciones <- as.data.frame.matrix(
-    table(factor(instituciones$institucion), instituciones$hc)
-  );
-  cloroticaInstituciones <- data.frame(
-    barrio = rownames(tmpCloroticaInstituciones),
-    enHC = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$en, CHECK),
-    xenHC = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$en, SUM),
-    dnHC = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$dn, CHECK),
-    xdnHC = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$dn, SUM),
-    nrHC = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$nr, CHECK),
-    xnrHC = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$nr, SUM)
-  );
-  tmpCaducifoliaInstituciones <- as.data.frame.matrix(
-    table(factor(instituciones$institucion), instituciones$hcf)
-  );
-  caducifoliaInstituciones <- data.frame(
-    barrio = rownames(tmpCloroticaInstituciones),
-    enHCF = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$en, CHECK),
-    xenHCF = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$en, SUM),
-    dnHCF = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$dn, CHECK),
-    xdnHCF = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$dn, SUM),
-    nrHCF = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$nr, CHECK),
-    xnrHCF = dominio(tmpCloroticaInstituciones, estadoHoja$dominio, estadoHoja$nr, SUM)
-  );
-  estadoHojaInstituciones <- cbind(cloroticaInstituciones, caducifoliaInstituciones);
+  instituciones$barrio <- NULL;
+
+  estadoHojaComuna <- getEstadoHoja(comuna, informe$especifico);
+  estadoHojaBarrios <- getEstadoHoja(barrios, informe$especifico);
+  estadoHojaCorredores <- getEstadoHoja(corredores, informe$especifico);
+  estadoHojaInstituciones <- getEstadoHoja(instituciones, informe$especifico);
+
   save.xlsx(estadoHoja$informeEspecifico, estadoHojaComuna, estadoHojaBarrios, estadoHojaCorredores, estadoHojaInstituciones);
 }
 estadoSanitarioEspecifico <- function(comuna){
@@ -229,7 +62,7 @@ estadoSanitarioEspecifico <- function(comuna){
   estadoSanitarioBarrios <- getEstadoSanitario(barrios, informe$especifico);
   estadoSanitarioCorredores <- getEstadoSanitario(corredores, informe$especifico);
   estadoSanitarioInstituciones <- getEstadoSanitario(instituciones, informe$especifico);
-  
+
   save.xlsx(estadoSanitario$informeEspecifico, estadoSanitarioComuna, estadoSanitarioBarrios, estadoSanitarioCorredores, estadoSanitarioInstituciones);
 }
 valorEsteticoEspecifico <- function(comuna){
