@@ -198,13 +198,13 @@ conflictoGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Distribución porcentual del conflicto
-  conflictosComuna <- getConflictos(comuna);
-  conflictosBarrios <- getConflictos(barrios);
-  conflictosCorredores <- getConflictos(corredores);
-  conflictosInstituciones <- getConflictos(instituciones);
+  conflictosComuna <<- getConflictos(comuna);
+  conflictosBarrios <<- getConflictos(barrios);
+  conflictosCorredores <<- getConflictos(corredores);
+  conflictosInstituciones <<- getConflictos(instituciones);
   # Fin Distribución porcentual del conflicto
 
-  save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
+  #save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
 }
 alturas <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));

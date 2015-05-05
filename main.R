@@ -33,7 +33,7 @@ main <- function(){
   #especiesEspecifico(comuna);
   #procedenciaEspecifico(comuna);
   #tipoPlantaEspecifico(comuna);
-  #conflictoEspecifico(comuna);
+  conflictoEspecifico(comuna);
 
   
 }

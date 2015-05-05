@@ -1,5 +1,5 @@
 leerArchivo <- function(){  
-  comuna <- read.xls("data/comuna4.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
+  comuna <- read.xls("data/correccion_final_c4.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
   return(comuna);
 }
 dominio <- function(dataFrame, dominio, indice, operacion = NULL){
@@ -839,12 +839,12 @@ getDiametros <- function(dataFrame, opcion){
     },
     "2"={
       diametroCopa <- data.frame();  
-      inferior <- min(dataFrame$diametro_normal);
-      superior <- max(dataFrame$diametro_normal);
+      inferior <- min(dataFrame$diametro_copa);
+      superior <- max(dataFrame$diametro_copa);
       sturges <- (1 + 3.322) * log10(nrow(dataFrame));
       clase <- (superior-inferior)/sturges
       rangos <- cut(
-        dataFrame$diametro_normal, 
+        dataFrame$diametro_copa, 
         breaks = seq(inferior, superior+clase, by = clase), 
         include.lowest = TRUE
       );
@@ -860,9 +860,9 @@ getDiametros <- function(dataFrame, opcion){
         r1 <- as.double(listaRango[[1]][1]);
         r2 <- as.double(listaRango[[1]][2]);
         if(i == 1){
-          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_normal >= r1 & dataFrame$diametro_normal <= r2));
+          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_copa >= r1 & dataFrame$diametro_copa <= r2));
         } else {
-          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_normal > r1 & dataFrame$diametro_normal <= r2));
+          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_copa > r1 & dataFrame$diametro_copa <= r2));
         }
         dfEspecies <- as.data.frame(table(especies));
         especieMasComun <- as.character(
@@ -1020,8 +1020,8 @@ getConflictos <- function(dataFrame){
     xno = round(tmpConflictos$conConflicto/total, 4),
     individuos = tmpConflictos$sinConflicto + tmpConflictos$conConflicto
   );
-  conflictos$sinConflicto <- NULL;
-  conflictos$xsi <- NULL;
+  #conflictos$sinConflicto <- NULL;
+  #conflictos$xsi <- NULL;
   return(conflictos);
 }
 getRiesgos <- function(dataFrame){
