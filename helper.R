@@ -723,6 +723,7 @@ getAlturas <- function(dataFrame, opcion){
             tmpAlturaTotal$nombreComun[j] <- as.character(
               sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
             );
+            #tmpAlturaTotal$nombreComun[j] = especieMasComun;
           } else {
             tmpAlturaTotal$nombreComun[j] <- "Ninguno";
           }
@@ -773,6 +774,7 @@ getAlturas <- function(dataFrame, opcion){
         tmpAlturaFuste$nombreComun[i] <- as.character(
           dataFrame$nom_comun[ dataFrame$nom_cientifico == especieMasComun ][1]
         );
+        #tmpAlturaFuste$nombreComun[i] = especieMasComun;
       }
       sep <- data.frame(
         rangos = "Total",
@@ -825,6 +827,7 @@ getDiametros <- function(dataFrame, opcion){
           tmpDiametroNormal$nombreComun[j] <- as.character(
             sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
           );
+          #tmpDiametroNormal$nombreComun[j] = especieMasComun;
         }
         sep <- data.frame(
           rangos = "Total",
@@ -871,6 +874,7 @@ getDiametros <- function(dataFrame, opcion){
         tmpDiametroCopa$nombreComun[i] <- as.character(
           dataFrame$nom_comun[ dataFrame$nom_cientifico == especieMasComun ][1]
         );
+        #tmpDiametroCopa$nombreComun[i] = especieMasComun;
       }
       sep <- data.frame(
         rangos = "Total",
@@ -921,6 +925,7 @@ getVolumen <- function(dataFrame){
       tmpVolumen$nombreComun[j] <- as.character(
         sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
       );
+      #tmpVolumen$nombreComun[j] = especieMasComun;
     }
     sep <- data.frame(
       rangos = "Total",

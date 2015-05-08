@@ -1,7 +1,7 @@
-source.with.encoding('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/config.R', encoding='UTF-8')
-source('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/helper.R');
-source('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/informesGenerales.R');
-source('C:/Users/Labsig/Documents/GitHub/ReportesLabSIG/informesEspecificos.R');
+source.with.encoding('~/GitHub/ReportesLabSIG/config.R', encoding='UTF-8')
+source('~/GitHub/ReportesLabSIG/helper.R');
+source('~/GitHub/ReportesLabSIG/informesGenerales.R');
+source('~/GitHub/ReportesLabSIG/informesEspecificos.R');
 
 configurarEntorno();
 main <- function(){
@@ -33,7 +33,7 @@ main <- function(){
   #especiesEspecifico(comuna);
   #procedenciaEspecifico(comuna);
   #tipoPlantaEspecifico(comuna);
-  conflictoEspecifico(comuna);
+  #conflictoEspecifico(comuna);
 
   
 }
