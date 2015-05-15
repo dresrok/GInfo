@@ -15,13 +15,13 @@ general <- function(comuna){
   comunaGeneral <- data.frame(
     ubicacion = informe$encabezado,
     individuos = totales,
-    xi = round(totales/sum(totales), 4),
+    xi = round((totales/sum(totales))*100, 2),
     stringsAsFactors=FALSE
   );
   filaTotalComuna <- data.frame(
     ubicacion = "Total individuos",
     individuos = sum(comunaGeneral$individuos),
-    xi = sum(comunaGeneral$xi),
+    xi = round(sum(comunaGeneral$xi)),
     stringsAsFactors=FALSE
   );
   comunaGeneral <- rbind(comunaGeneral, filaTotalComuna);
@@ -198,13 +198,13 @@ conflictoGeneral <- function(comuna){
   corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
 
   # Inicio Distribución porcentual del conflicto
-  conflictosComuna <<- getConflictos(comuna);
-  conflictosBarrios <<- getConflictos(barrios);
-  conflictosCorredores <<- getConflictos(corredores);
-  conflictosInstituciones <<- getConflictos(instituciones);
+  conflictosComuna <- getConflictos(comuna);
+  conflictosBarrios <- getConflictos(barrios);
+  conflictosCorredores <- getConflictos(corredores);
+  conflictosInstituciones <- getConflictos(instituciones);
   # Fin Distribución porcentual del conflicto
 
-  #save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
+  save.xlsx(conflictos$informeGeneral, conflictosComuna, conflictosBarrios, conflictosCorredores, conflictosInstituciones);
 }
 alturas <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));

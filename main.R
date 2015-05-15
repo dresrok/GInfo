@@ -23,13 +23,13 @@ main <- function(){
   propiedadesSanitarias(comuna);
   riesgos(comuna);
 
-
   densidadFollajeEspecifico(comuna);
   emplazamientoEspecifico(comuna);
   estadoFisicoEspecifico(comuna);
   estadoHojaEspecifico(comuna);
   estadoSanitarioEspecifico(comuna);
   valorEsteticoEspecifico(comuna);
+
   #especiesEspecifico(comuna);
   #procedenciaEspecifico(comuna);
   #tipoPlantaEspecifico(comuna);
