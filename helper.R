@@ -1,5 +1,5 @@
 leerArchivo <- function(){  
-  comuna <- read.xls("data/correccion_final_c4.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
+  comuna <- read.xls("data/comuna3.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
   return(comuna);
 }
 dominio <- function(dataFrame, dominio, indice, operacion = NULL){
@@ -878,7 +878,7 @@ getDiametros <- function(dataFrame, opcion){
           tmpDiametroNormal$nombreComun[j] <- as.character(
             sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
           );
-          #tmpDiametroNormal$nombreComun[j] = especieMasComun;
+          tmpDiametroNormal$nombreComun[j] = especieMasComun;
         }
         sep <- data.frame(
           rango = "Total Individuos",

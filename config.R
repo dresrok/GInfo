@@ -1,7 +1,29 @@
+comprobarDependencias <- function(){
+  paquetes = character(0);
+  if( !"gdata" %in% rownames(installed.packages()) ){
+    paquetes[1] = "gdata";
+  }
+
+  if( !"xlsx" %in% rownames(installed.packages()) ){
+    paquetes[2] = "xlsx";
+  }
+  return(paquetes);
+}
+instalarPaquetes <- function(paquetes){
+  switch(paquetes,
+    "gdata"={
+      install.packages("gdata");
+    },
+    "xlsx"={
+      install.packages("rJava");
+      install.packages("xlsxjars");
+      install.packages("xlsx");
+    }
+}
 configurarEntorno <- function(){
   suppressMessages(require(gdata));
-  Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_45');
-  require(xlsx, quietly = TRUE);  
+  #Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_45');
+  suppressMessages(require(xlsx, quietly = TRUE));  
   configurarVaribales();
 }
 configurarVaribales <- function(){
