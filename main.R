@@ -1,4 +1,4 @@
-source.with.encoding('~/GitHub/ReportesLabSIG/config.R', encoding='UTF-8')
+source('~/GitHub/ReportesLabSIG/config.R', encoding = 'UTF-8')
 source('~/GitHub/ReportesLabSIG/helper.R');
 source('~/GitHub/ReportesLabSIG/informesGenerales.R');
 source('~/GitHub/ReportesLabSIG/informesEspecificos.R');

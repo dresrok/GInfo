@@ -34,9 +34,15 @@ general <- function(comuna){
   familiasInstituciones <- getFamilias(instituciones);
   # Fin Familias más abundantes registradas
 
+  especiesMasAbundantesComuna <- getMasAbundante(comuna);
   especiesMasAbundantesBarrio <- getMasAbundante(barrios);
+  especiesMasAbundantesCorredor <- getMasAbundante(corredores);
+  instituciones$barrio <- NULL;
+  especiesMasAbundantesInstitucion <- getMasAbundante(instituciones);
 
-  save.xlsx(informe$comuna, comunaGeneral, familiasComuna, familiasBarrios, especiesMasAbundantesBarrio, familiasCorredores, familiasInstituciones);
+  save.xlsx(informe$comuna, comunaGeneral, familiasComuna, familiasBarrios, 
+    especiesMasAbundantesComuna, especiesMasAbundantesBarrio, especiesMasAbundantesCorredor, 
+    especiesMasAbundantesInstitucion, familiasCorredores, familiasInstituciones);
 }
 densidadFollajeGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));

@@ -1,5 +1,5 @@
 leerArchivo <- function(){  
-  comuna <- read.xls("data/correccion_final_c4.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
+  comuna <- read.xls("data/comuna1.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
   return(comuna);
 }
 dominio <- function(dataFrame, dominio, indice, operacion = NULL){
@@ -213,11 +213,19 @@ getFamilias <- function(dataFrame){
   return(familias);
 }
 getMasAbundante <- function(dataFrame){
-  topBarrio <- as.data.frame(
-    unique(sort(dataFrame$barrio)),
-    stringsAsFactors=FALSE
-  );
-  colnames(topBarrio) <- "Var1";
+  if("barrio" %in% colnames(dataFrame)){
+    topSector <- as.data.frame(
+      unique(sort(dataFrame$barrio)),
+      stringsAsFactors=FALSE
+    );
+  } else {
+    topSector <- as.data.frame(
+      unique(sort(dataFrame$institucion)),
+      stringsAsFactors=FALSE
+    );
+  }
+    
+  colnames(topSector) <- "Var1";
   especiesBarrio <- as.data.frame(
     table(dataFrame$nom_cientifico),
     row.names = NULL,
@@ -227,14 +235,19 @@ getMasAbundante <- function(dataFrame){
   especiesMasAbundantes <- especiesMasAbundantes[1:15,];
 
   for (i in 1:nrow(especiesMasAbundantes)){
-    for (j in 1:nrow(topBarrio)){
-      numIndividuos <- subset(dataFrame, barrio == topBarrio$Var1[j] & nom_cientifico == especiesMasAbundantes$Var1[i])
-      topBarrio[j,i+1] = nrow(numIndividuos);
+    for (j in 1:nrow(topSector)){
+      if("barrio" %in% colnames(dataFrame)){
+        numIndividuos <- subset(dataFrame, barrio == topSector$Var1[j] & nom_cientifico == especiesMasAbundantes$Var1[i])
+      } else {
+        numIndividuos <- subset(dataFrame, institucion == topSector$Var1[j] & nom_cientifico == especiesMasAbundantes$Var1[i])
+      }
+
+      topSector[j,i+1] = nrow(numIndividuos);
     }
   }
   encabezado <- c(especies$encabezado, especiesMasAbundantes$Var1);
-  colnames(topBarrio) <- encabezado;
-  return(topBarrio);
+  colnames(topSector) <- encabezado;
+  return(topSector);
 }
 getDensidadFollaje <- function(dataFrame, informe){
   switch(informe,
