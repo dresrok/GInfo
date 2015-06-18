@@ -15,7 +15,9 @@ configurarVaribales <- function(){
     limite = "limite"
   );
   informe <<- list(
+    familia = "F17_familias.xlsx",
     comuna = "F18_general_comuna.xlsx",
+    familiaEncabezado = c("Comuna", "Barrios", "Corredores", "Instituciones"),
     encabezado = c("Barrios", "Instituciones", "Corredor Vial"),
     general = "general",
     especifico = "especifico"

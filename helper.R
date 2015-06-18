@@ -176,41 +176,56 @@ contarEspecies <- function(sector, dataFrame, conteo){
   );
 }
 #Inicio Nuevos
-getFamilias <- function(dataFrame){
-  tmpFamilias <- as.data.frame(
-    table(dataFrame$familia)
-  );
-  tmpFamilias <- tmpFamilias[order(-tmpFamilias$Freq),];
-  familias <- data.frame(
-    familia = tmpFamilias$Var1[1:10],
-    individuos = tmpFamilias$Freq[1:10],
-    xi = round((tmpFamilias$Freq[1:10]/sum(tmpFamilias$Freq))*100, 2)
-  );
-  totalEspecies <- length(unique(dataFrame$nom_cientifico));
-  for (i in 1:length(familias$familia)){
-    especies <- unique(dataFrame$nom_cientifico[ dataFrame$familia == familias$familia[i] ]);
-    numeroEspecies <- length(especies);
-    familias$especies[i] <- numeroEspecies;
-    familias$xe[i] = round((familias$especies[i]/totalEspecies)*100, 2);
-  }
-  familias <- familias[c(1,4,5,2,3)];
-  subTotal <- data.frame(
-    familia = "Subtotal",
-    especies = sum(familias$especies),
-    xe = sum(familias$xe),
-    individuos = sum(familias$individuos),
-    xi = sum(familias$xi)
-  );
-  familias <- rbind(familias, subTotal);
-  filaTotal <- data.frame(
-    familia = "Total",
-    especies = totalEspecies,
-    xe = 100,
-    individuos = nrow(dataFrame),
-    xi = 100
-  );
-  familias <- rbind(familias, filaTotal);
-  return(familias);
+getFamilias <- function(dataFrame, opcion){
+  switch(opcion,
+    "1"={
+      tmpFamilias <- as.data.frame(
+        table(dataFrame$familia)
+      );
+      tmpFamilias <- tmpFamilias[order(-tmpFamilias$Freq),];
+      familias <- data.frame(
+        familia = tmpFamilias$Var1[1:10],
+        individuos = tmpFamilias$Freq[1:10],
+        xi = round((tmpFamilias$Freq[1:10]/sum(tmpFamilias$Freq))*100, 2)
+      );
+      totalEspecies <- length(unique(dataFrame$nom_cientifico));
+      for (i in 1:length(familias$familia)){
+        especies <- unique(dataFrame$nom_cientifico[ dataFrame$familia == familias$familia[i] ]);
+        numeroEspecies <- length(especies);
+        familias$especies[i] <- numeroEspecies;
+        familias$xe[i] = round((familias$especies[i]/totalEspecies)*100, 2);
+      }
+      familias <- familias[c(1,4,5,2,3)];
+      subTotal <- data.frame(
+        familia = "Subtotal",
+        especies = sum(familias$especies),
+        xe = sum(familias$xe),
+        individuos = sum(familias$individuos),
+        xi = sum(familias$xi)
+      );
+      familias <- rbind(familias, subTotal);
+      filaTotal <- data.frame(
+        familia = "Total",
+        especies = totalEspecies,
+        xe = 100,
+        individuos = nrow(dataFrame),
+        xi = 100
+      );
+      familias <- rbind(familias, filaTotal);
+      return(familias);
+    },
+    "2"={
+      familias <- as.data.frame(
+        sort(
+          unique(
+            trim(factor(dataFrame$familia)))
+          ),
+        stringsAsFactors=FALSE
+      );
+      colnames(familias) <- c("Familia")
+      return(familias);
+    }
+  )
 }
 getMasAbundante <- function(dataFrame){
   if("barrio" %in% colnames(dataFrame)){

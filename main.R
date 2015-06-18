@@ -6,6 +6,7 @@ source('~/GitHub/ReportesLabSIG/informesEspecificos.R');
 configurarEntorno();
 main <- function(){
   comuna <<- leerArchivo();
+  familiasGeneral(comuna);
   general(comuna);
   densidadFollajeGeneral(comuna);
   emplazamientoGeneral(comuna);

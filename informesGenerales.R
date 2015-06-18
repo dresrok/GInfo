@@ -28,10 +28,10 @@ general <- function(comuna){
   # Fin Distribución de los arboles por ubicación
 
   # Inicio Familias más abundantes registradas 
-  familiasComuna <- getFamilias(comuna);
-  familiasBarrios <- getFamilias(barrios);
-  familiasCorredores <- getFamilias(corredores);
-  familiasInstituciones <- getFamilias(instituciones);
+  familiasComuna <- getFamilias(comuna, "1");
+  familiasBarrios <- getFamilias(barrios, "1");
+  familiasCorredores <- getFamilias(corredores, "1");
+  familiasInstituciones <- getFamilias(instituciones, "1");
   # Fin Familias más abundantes registradas
 
   especiesMasAbundantesComuna <- getMasAbundante(comuna);
@@ -43,6 +43,33 @@ general <- function(comuna){
   save.xlsx(informe$comuna, comunaGeneral, familiasComuna, familiasBarrios, 
     especiesMasAbundantesComuna, especiesMasAbundantesBarrio, especiesMasAbundantesCorredor, 
     especiesMasAbundantesInstitucion, familiasCorredores, familiasInstituciones);
+}
+familiasGeneral <- function(comuna){
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+
+  totalFamiliasComuna <- length(unique(trim(factor(comuna$familia))));
+  totalFamiliasBarrio <- length(unique(trim(factor(barrios$familia))));
+  totalFamiliasCorredores <- length(unique(trim(factor(corredores$familia))));
+  totalFamiliasInstituciones <- length(unique(factor(instituciones$familia)));
+  totales <- c(
+    totalFamiliasComuna,
+    totalFamiliasBarrio,
+    totalFamiliasCorredores,
+    totalFamiliasInstituciones
+  );
+  familiasComunaGeneral <- data.frame(
+    ubicacion = informe$familiaEncabezado,
+    familias = totales,    
+    stringsAsFactors=FALSE
+  );
+  familiasComuna <- getFamilias(comuna, "2")
+  familiasBarrios <- getFamilias(barrios, "2")
+  familiasCorredores <- getFamilias(corredores, "2")
+  familiasInstituciones <- getFamilias(instituciones, "2")
+  save.xlsx(informe$familia, familiasComunaGeneral, familiasComuna,
+          familiasBarrios, familiasCorredores, familiasInstituciones);
 }
 densidadFollajeGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
