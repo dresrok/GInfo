@@ -1,5 +1,5 @@
 leerArchivo <- function(){  
-  comuna <- read.xls("data/comuna1.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
+  comuna <- read.xls("data/comuna2.xls", perl = 'C:\\Perl64\\bin\\perl.exe');
   return(comuna);
 }
 dominio <- function(dataFrame, dominio, indice, operacion = NULL){
