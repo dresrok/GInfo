@@ -1,14 +1,14 @@
 guiGenerarInformes <- function(){
-	ventanaGenerarInformes <- tktoplevel(parent=ventanaMenuPrincipal, bg="white", width=420, height=480)
+	ventanaGenerarInformes <- tktoplevel(parent=ventanaMenuPrincipal, bg="white", width=420, height=490)
 	tkwm.title(ventanaGenerarInformes, "Generar informes")
-	tkwm.maxsize(ventanaGenerarInformes, 480, 480)
-	tkwm.minsize(ventanaGenerarInformes, 480, 480)
+	tkwm.maxsize(ventanaGenerarInformes, 480, 490)
+	tkwm.minsize(ventanaGenerarInformes, 480, 490)
 
 	estiloLbl <- tkfont.create(size=10, weight="bold")
 
 	lblCargarArchivo <- tklabel(ventanaGenerarInformes, width="18", bg="white", text="Seleccione el archivo:", font=estiloLbl)
 	btnCargarArchivo <<- tkbutton(ventanaGenerarInformes, width="16", text="Cargar", command=cargarArchivo)
-	estadoCarga <<- tclVar("Estado: Archivo no cargado")
+	estadoCarga <<- tclVar("  Archivo no cargado")
 	lblEstadoCarga <- tklabel(ventanaGenerarInformes, bg="white", text=tclvalue(estadoCarga), font=estiloLbl)
 	tkconfigure(lblEstadoCarga, textvariable = estadoCarga)
 	lblNombreArchivo <- tklabel(ventanaGenerarInformes, width="18", bg="white", text="Nombre del archivo:", font=estiloLbl)
@@ -75,9 +75,9 @@ guiGenerarInformes <- function(){
 
 	blank <- tklabel(ventanaGenerarInformes,bg="white", text="    ")
 	btnGenerarReportes <<- tkbutton(ventanaGenerarInformes, width="16", text="Generar", state="disabled", command=generarInformes)
+	btnCerrar <<- tkbutton(ventanaGenerarInformes, width="16", text="Cerrar", command=function() tkdestroy(ventanaGenerarInformes))
 
-	tkgrid(lblCargarArchivo, btnCargarArchivo, sticky="w")
-	tkgrid(lblEstadoCarga, sticky="w")
+	tkgrid(lblCargarArchivo, btnCargarArchivo, lblEstadoCarga, sticky="w")	
 	tkgrid(lblNombreArchivo, txtNombreArchivo, sticky="w")
 	tkgrid(tklabel(ventanaGenerarInformes,bg="white", text="    "))
 	tkgrid(tklabel(ventanaGenerarInformes,bg="white", text="Elija que informes\n desea generar:", font=estiloLbl), sticky="w")
@@ -95,7 +95,7 @@ guiGenerarInformes <- function(){
 	tkgrid(lblCheckBoxF12, checkBoxF12, lblCheckBoxF24, checkBoxF24, sticky="w")
 	tkgrid(lblCheckBoxF13, checkBoxF13, sticky="w")
 	tkgrid(tklabel(ventanaGenerarInformes,bg="white", text="    "))
-	tkgrid(blank, blank, blank, btnGenerarReportes, sticky="e")
+	tkgrid(blank, blank, btnGenerarReportes, btnCerrar, sticky="e")
 
 	tkfocus(ventanaGenerarInformes)
 }

@@ -1,10 +1,10 @@
 require(tcltk)
 
 guiMenuPrincipal <- function(){
-	ventanaMenuPrincipal <<- tktoplevel(bg="white", width=500, height=450)
+	ventanaMenuPrincipal <<- tktoplevel(bg="white", width=500, height=500)
 	tkwm.title(ventanaMenuPrincipal, "GInfo")
-	tkwm.maxsize(ventanaMenuPrincipal, 500, 450)
-	tkwm.minsize(ventanaMenuPrincipal, 500, 450)
+	tkwm.maxsize(ventanaMenuPrincipal, 500, 500)
+	tkwm.minsize(ventanaMenuPrincipal, 500, 500)
 	barraMenu <- tkmenu(ventanaMenuPrincipal)
 	tkconfigure(ventanaMenuPrincipal, menu=barraMenu)
 	menuArchivo <- tkmenu(barraMenu, tearoff=FALSE)

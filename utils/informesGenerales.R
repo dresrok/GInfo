@@ -59,7 +59,7 @@ familiasGeneral <- function(comuna){
     totalFamiliasCorredores,
     totalFamiliasInstituciones
   );
-  familiasComunaGeneral <<- data.frame(
+  familiasComunaGeneral <- data.frame(
     ubicacion = informe$familiaEncabezado,
     familias = totales,    
     stringsAsFactors=FALSE
