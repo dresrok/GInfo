@@ -81,31 +81,85 @@ valorEsteticoEspecifico <- function(comuna){
   save.xlsx(valorEstetico$informeEspecifico, valorEsteticoComuna, valorEsteticoBarrios, valorEsteticoCorredores, valorEsteticoInstituciones);    
 }
 especiesEspecifico <- function(comuna){
+  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
+  barrios$nom_cientifico <- factor(barrios$nom_cientifico);
+  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
+  corredores$nom_cientifico <- factor(corredores$nom_cientifico);
+  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
+  instituciones$nom_cientifico <- factor(instituciones$nom_cientifico);
+  instituciones$barrio <- NULL;
+
   tmpEspeciesComuna <- as.data.frame(
-    table(comuna$nom_cientifico), stringsAsFactors=FALSE
+    table(trimws(comuna$nom_cientifico, which = "both")), stringsAsFactors=FALSE
   );
   especiesComunas <- data.frame(
     nombreCientifico = as.character(tmpEspeciesComuna$Var1),
     abundancia = tmpEspeciesComuna$Freq,
-    x = round(tmpEspeciesComuna$Freq/sum(tmpEspeciesComuna$Freq), 4),
+    x = round((tmpEspeciesComuna$Freq/sum(tmpEspeciesComuna$Freq))*100, 2),
     stringsAsFactors=FALSE
   );
   especiesComunas <- contarEspecies(especiesComunas, comuna, conteo$general);
 
-  barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
-  nombresBarrios <- as.character(factor(unique(barrios$barrio)));
-  encabezadoBarrio <- contarEspecies(sort(nombresBarrios), barrios, conteo$especifico);
+  tmpEspeciesBarrio <- as.data.frame(
+    table(factor(trimws(barrios$nom_cientifico, which = "both"))), stringsAsFactors=FALSE
+  );
 
-  corredores <- subset(comuna, grepl("^corredor", tolower(barrio)));
-  nombresCorredores <- as.character(factor(unique(corredores$barrio)));
-  encabezadoCorredor <- contarEspecies(sort(nombresCorredores), corredores, conteo$especifico);
+  especiesBarrios <- data.frame(
+    nombreCientifico = as.character(tmpEspeciesBarrio$Var1),
+    abundancia = tmpEspeciesBarrio$Freq,
+    x = round((tmpEspeciesBarrio$Freq/sum(tmpEspeciesBarrio$Freq))*100, 2),
+    stringsAsFactors=FALSE
+  );
 
-  instituciones <- subset(comuna, !grepl("^ninguno|estadio", tolower(institucion)));
-  instituciones$barrio <- NULL;
-  nombresInstituciones <- as.character(factor(unique(instituciones$institucion)));
-  encabezadoInstitucion <- contarEspecies(sort(nombresInstituciones), instituciones, conteo$especifico);
+  especiesBarrios <- contarEspecies(especiesBarrios, barrios, conteo$general);
 
-  save.xlsx(especies$informeEspecifico, especiesComunas, encabezadoBarrio, encabezadoCorredor, encabezadoInstitucion);
+  if(nrow(corredores) > 0){
+    tmpEspeciesCorredor <- as.data.frame(
+      table(factor(trimws(corredores$nom_cientifico, which = "both"))), stringsAsFactors=FALSE
+    );
+
+    especiesCorredores <- data.frame(
+      nombreCientifico = as.character(tmpEspeciesCorredor$Var1),
+      abundancia = tmpEspeciesCorredor$Freq,
+      x = round((tmpEspeciesCorredor$Freq/sum(tmpEspeciesCorredor$Freq))*100, 2),
+      stringsAsFactors=FALSE
+    );
+
+    especiesCorredores <- contarEspecies(especiesCorredores, corredores, conteo$general);
+  } else {
+    especiesCorredores <- "No existen registros";
+  }
+    
+  if(nrow(instituciones) > 0){
+    tmpEspeciesInstitucion <- as.data.frame(
+      table(factor(trimws(instituciones$nom_cientifico, which = "both"))), stringsAsFactors=FALSE
+    );
+
+    especiesInstituciones <- data.frame(
+      nombreCientifico = as.character(tmpEspeciesInstitucion$Var1),
+      abundancia = tmpEspeciesInstitucion$Freq,
+      x = round((tmpEspeciesInstitucion$Freq/sum(tmpEspeciesInstitucion$Freq))*100, 2),
+      stringsAsFactors=FALSE
+    );
+
+    especiesInstituciones <- contarEspecies(especiesInstituciones, instituciones, conteo$general);
+  } else {
+    especiesInstituciones <- "No existen registros";
+  }
+    
+
+  if(FALSE){
+    nombresBarrios <- as.character(factor(unique(barrios$barrio)));
+    encabezadoBarrio <- contarEspecies(sort(nombresBarrios), barrios, conteo$especifico);
+    
+    nombresCorredores <- as.character(factor(unique(corredores$barrio)));
+    encabezadoCorredor <- contarEspecies(sort(nombresCorredores), corredores, conteo$especifico);
+    
+    nombresInstituciones <- as.character(factor(unique(instituciones$institucion)));
+    encabezadoInstitucion <- contarEspecies(sort(nombresInstituciones), instituciones, conteo$especifico);
+  }
+  
+  save.xlsx(especies$informeEspecifico, especiesComunas, especiesBarrios, especiesCorredores, especiesInstituciones);
 }
 procedenciaEspecifico <- function(comuna){
   tmpProcedenciaComuna <- as.data.frame.matrix(

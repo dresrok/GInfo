@@ -114,7 +114,7 @@ configurarVaribales <- function(){
     ina = 5
   );
   especies <<- list(      
-    informeEspecifico = "F28_especies.xlsx",
+    informeEspecifico = "F10_especies.xlsx",
     encabezado = "Barrios"
   );
   procedencia <<- list(

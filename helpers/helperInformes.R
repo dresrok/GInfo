@@ -121,10 +121,10 @@ contarEspecies <- function(sector, dataFrame, conteo){
     "1"={
       for (i in 1:length(sector$nombreCientifico)){
         sector$familia[i] <- as.character(
-          dataFrame$familia[ which( dataFrame$nom_cientifico == sector$nombreCientifico[i] )[1] ]
+          dataFrame$familia[ which( trimws(dataFrame$nom_cientifico, which = "both") == sector$nombreCientifico[i] )[1] ]
         );
         sector$nombreComun[i] <- as.character(
-          dataFrame$nom_comun[ which( dataFrame$nom_cientifico == sector$nombreCientifico[i] )[1] ]
+          dataFrame$nom_comun[ which( trimws(dataFrame$nom_cientifico, which = "both") == sector$nombreCientifico[i] )[1] ]
         );
       }      
       return(sector[c(4,1,5,2,3)]);
@@ -181,7 +181,7 @@ getFamilias <- function(dataFrame, opcion){
     "1"={
       if(nrow(dataFrame) > 0){
         tmpFamilias <- as.data.frame(
-          table(dataFrame$familia)
+          table(trim(dataFrame$familia))
         );
         tmpFamilias <- tmpFamilias[order(-tmpFamilias$Freq),];
         familias <- data.frame(
@@ -191,7 +191,7 @@ getFamilias <- function(dataFrame, opcion){
         );
         totalEspecies <- length(unique(dataFrame$nom_cientifico));
         for (i in 1:length(familias$familia)){
-          especies <- unique(dataFrame$nom_cientifico[ dataFrame$familia == familias$familia[i] ]);
+          especies <- unique(dataFrame$nom_cientifico[ trim(dataFrame$familia) == familias$familia[i] ]);
           numeroEspecies <- length(especies);
           familias$especies[i] <- numeroEspecies;
           familias$xe[i] = round((familias$especies[i]/totalEspecies)*100, 2);

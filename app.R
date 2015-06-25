@@ -10,11 +10,6 @@ source('~/GitHub/GInfo/views/guiAcercaDe.R', encoding = 'UTF-8');
 app <- function(){
   configurarEntorno();
   guiMenuPrincipal();
-
-  #especiesEspecifico(comuna);
-  #procedenciaEspecifico(comuna);
-  #tipoPlantaEspecifico(comuna);
-  #conflictoEspecifico(comuna);
 }
 
-app();
+app()

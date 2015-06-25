@@ -72,7 +72,7 @@ generarInformes <- function(){
 		contador <- contador+1
 	}
 	if(tclvalue(valoresCheckBox$cb10) == "1"){
-		print("especies")
+		especiesEspecifico(comuna)
 		contador <- contador+1
 	}
 	if(tclvalue(valoresCheckBox$cb11) == "1"){
