@@ -205,11 +205,11 @@ procedenciaGeneral <- function(comuna){
   # Inicio Procedencia de las especies encontradas
   procedenciaComuna <- getEspeciesProcedencia(comuna);
   procedenciaBarrios <- getEspeciesProcedencia(barrios);
-  #procedenciaCorredores <- getEspeciesProcedencia(corredores);
+  procedenciaCorredores <- getEspeciesProcedencia(corredores);
   procedenciaInstituciones <- getEspeciesProcedencia(instituciones);  
   # Fin Procedencia de las especies encontradas
 
-  save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaInstituciones);
+  save.xlsx(procedencia$informeGeneral, procedenciaComuna, procedenciaBarrios, procedenciaCorredores, procedenciaInstituciones);
 }
 habitoGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));
@@ -219,11 +219,11 @@ habitoGeneral <- function(comuna){
   # Inicio Hábito de crecimiento de las especies
   habitoComuna <- getEspeciesHabito(comuna);  
   habitoBarrios <- getEspeciesHabito(barrios);
-  #habitoCorredores <- getEspeciesHabito(corredores);
+  habitoCorredores <- getEspeciesHabito(corredores);
   habitoInstituciones <- getEspeciesHabito(instituciones);
   # Fin Hábito de crecimiento de las especies
 
-  save.xlsx(habito$informeGeneral, habitoComuna, habitoBarrios, habitoInstituciones);
+  save.xlsx(habito$informeGeneral, habitoComuna, habitoBarrios, habitoCorredores, habitoInstituciones);
 }
 conflictoGeneral <- function(comuna){
   barrios <- subset(comuna, !grepl("^corredor", tolower(barrio)));

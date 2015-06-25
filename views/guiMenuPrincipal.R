@@ -1,5 +1,3 @@
-require(tcltk)
-
 guiMenuPrincipal <- function(){
 	ventanaMenuPrincipal <<- tktoplevel(bg="white", width=500, height=500)
 	tkwm.title(ventanaMenuPrincipal, "GInfo")

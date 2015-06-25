@@ -179,352 +179,407 @@ contarEspecies <- function(sector, dataFrame, conteo){
 getFamilias <- function(dataFrame, opcion){
   switch(opcion,
     "1"={
-      tmpFamilias <- as.data.frame(
-        table(dataFrame$familia)
-      );
-      tmpFamilias <- tmpFamilias[order(-tmpFamilias$Freq),];
-      familias <- data.frame(
-        familia = tmpFamilias$Var1[1:10],
-        individuos = tmpFamilias$Freq[1:10],
-        xi = round((tmpFamilias$Freq[1:10]/sum(tmpFamilias$Freq))*100, 2)
-      );
-      totalEspecies <- length(unique(dataFrame$nom_cientifico));
-      for (i in 1:length(familias$familia)){
-        especies <- unique(dataFrame$nom_cientifico[ dataFrame$familia == familias$familia[i] ]);
-        numeroEspecies <- length(especies);
-        familias$especies[i] <- numeroEspecies;
-        familias$xe[i] = round((familias$especies[i]/totalEspecies)*100, 2);
-      }
-      familias <- familias[c(1,4,5,2,3)];
-      subTotal <- data.frame(
-        familia = "Subtotal",
-        especies = sum(familias$especies),
-        xe = sum(familias$xe),
-        individuos = sum(familias$individuos),
-        xi = sum(familias$xi)
-      );
-      familias <- rbind(familias, subTotal);
-      filaTotal <- data.frame(
-        familia = "Total",
-        especies = totalEspecies,
-        xe = 100,
-        individuos = nrow(dataFrame),
-        xi = 100
-      );
-      familias <- rbind(familias, filaTotal);
-      return(familias);
+      if(nrow(dataFrame) > 0){
+        tmpFamilias <- as.data.frame(
+          table(dataFrame$familia)
+        );
+        tmpFamilias <- tmpFamilias[order(-tmpFamilias$Freq),];
+        familias <- data.frame(
+          familia = tmpFamilias$Var1[1:10],
+          individuos = tmpFamilias$Freq[1:10],
+          xi = round((tmpFamilias$Freq[1:10]/sum(tmpFamilias$Freq))*100, 2)
+        );
+        totalEspecies <- length(unique(dataFrame$nom_cientifico));
+        for (i in 1:length(familias$familia)){
+          especies <- unique(dataFrame$nom_cientifico[ dataFrame$familia == familias$familia[i] ]);
+          numeroEspecies <- length(especies);
+          familias$especies[i] <- numeroEspecies;
+          familias$xe[i] = round((familias$especies[i]/totalEspecies)*100, 2);
+        }
+        familias <- familias[c(1,4,5,2,3)];
+        subTotal <- data.frame(
+          familia = "Subtotal",
+          especies = sum(familias$especies),
+          xe = sum(familias$xe),
+          individuos = sum(familias$individuos),
+          xi = sum(familias$xi)
+        );
+        familias <- rbind(familias, subTotal);
+        filaTotal <- data.frame(
+          familia = "Total",
+          especies = totalEspecies,
+          xe = 100,
+          individuos = nrow(dataFrame),
+          xi = 100
+        );
+        familias <- rbind(familias, filaTotal);
+        return(familias);
+      } else {
+        familias <- "No existen registros";
+        return(familias);
+      }  
     },
     "2"={
-      familias <- as.data.frame(
-        sort(
-          unique(
-            trim(factor(dataFrame$familia)))
-          ),
-        stringsAsFactors=FALSE
-      );
-      colnames(familias) <- c("Familia")
-      return(familias);
+      if(nrow(dataFrame) > 0){
+        familias <- as.data.frame(
+          sort(
+            unique(
+              trim(factor(dataFrame$familia)))
+            ),
+          stringsAsFactors=FALSE
+        );
+        colnames(familias) <- c("Familia")
+        return(familias);
+      } else {
+        familias <- "No existen registros";
+        return(familias);
+      } 
     }
   )
 }
 getMasAbundante <- function(dataFrame){
-  if("barrio" %in% colnames(dataFrame)){
-    topSector <- as.data.frame(
-      unique(sort(dataFrame$barrio)),
-      stringsAsFactors=FALSE
-    );
-  } else {
-    topSector <- as.data.frame(
-      unique(sort(dataFrame$institucion)),
-      stringsAsFactors=FALSE
-    );
-  }
-    
-  colnames(topSector) <- "Var1";
-  especiesBarrio <- as.data.frame(
-    table(dataFrame$nom_cientifico),
-    row.names = NULL,
-    stringsAsFactors=FALSE
-  );
-  especiesMasAbundantes <- especiesBarrio[order(-especiesBarrio$Freq),];
-  especiesMasAbundantes <- especiesMasAbundantes[1:15,];
-
-  for (i in 1:nrow(especiesMasAbundantes)){
-    for (j in 1:nrow(topSector)){
-      if("barrio" %in% colnames(dataFrame)){
-        numIndividuos <- subset(dataFrame, barrio == topSector$Var1[j] & nom_cientifico == especiesMasAbundantes$Var1[i])
-      } else {
-        numIndividuos <- subset(dataFrame, institucion == topSector$Var1[j] & nom_cientifico == especiesMasAbundantes$Var1[i])
-      }
-
-      topSector[j,i+1] = nrow(numIndividuos);
+  if(nrow(dataFrame) > 0){
+    if("barrio" %in% colnames(dataFrame)){
+      topSector <- as.data.frame(
+        unique(sort(dataFrame$barrio)),
+        stringsAsFactors=FALSE
+      );
+    } else {
+      topSector <- as.data.frame(
+        unique(sort(dataFrame$institucion)),
+        stringsAsFactors=FALSE
+      );
     }
-  }
-  encabezado <- c(especies$encabezado, especiesMasAbundantes$Var1);
-  colnames(topSector) <- encabezado;
-  return(topSector);
+      
+    colnames(topSector) <- "Var1";
+    especiesBarrio <- as.data.frame(
+      table(dataFrame$nom_cientifico),
+      row.names = NULL,
+      stringsAsFactors=FALSE
+    );
+    especiesMasAbundantes <- especiesBarrio[order(-especiesBarrio$Freq),];
+    especiesMasAbundantes <- especiesMasAbundantes[1:15,];
+
+    for (i in 1:nrow(especiesMasAbundantes)){
+      for (j in 1:nrow(topSector)){
+        if("barrio" %in% colnames(dataFrame)){
+          numIndividuos <- subset(dataFrame, barrio == topSector$Var1[j] & nom_cientifico == especiesMasAbundantes$Var1[i])
+        } else {
+          numIndividuos <- subset(dataFrame, institucion == topSector$Var1[j] & nom_cientifico == especiesMasAbundantes$Var1[i])
+        }
+
+        topSector[j,i+1] = nrow(numIndividuos);
+      }
+    }
+    encabezado <- c(especies$encabezado, especiesMasAbundantes$Var1);
+    colnames(topSector) <- encabezado;
+    return(topSector);
+  } else {
+    topSector <- "No existen registros";
+    return(topSector);
+  } 
 }
 getDensidadFollaje <- function(dataFrame, informe){
   switch(informe,
     general={
-      tmpDensidadFollaje <- as.data.frame.matrix(
-        table(dataFrame$densidad_follaje, dataFrame$habito_crecimiento)
-      );
-      tmpDensidadFollaje$densidadFollaje <- encabezado(densidad$encabezado, row.names(tmpDensidadFollaje));
-      densidadFollaje <- data.frame(
-        densidadFollaje = tmpDensidadFollaje$densidadFollaje,
-        arboles = tmpDensidadFollaje$"1",
-        xArboles = round((tmpDensidadFollaje$"1"/sum(tmpDensidadFollaje$"1"))*100, 2),
-        arbustos = tmpDensidadFollaje$"2",
-        xArbustos = round((tmpDensidadFollaje$"2"/sum(tmpDensidadFollaje$"2"))*100, 2),
-        palmas = tmpDensidadFollaje$"3",
-        xPalmas = round((tmpDensidadFollaje$"3"/sum(tmpDensidadFollaje$"3"))*100, 2)
-      );
-      densidadFollaje$totalIndividuos <- densidadFollaje$arboles + densidadFollaje$arbustos + densidadFollaje$palmas;
-      densidadFollaje$xIndividuos <- round((densidadFollaje$totalIndividuos/sum(densidadFollaje$totalIndividuos))*100, 2);
-      filaTotal <- data.frame(
-        densidadFollaje = "Total",
-        arboles = sum(densidadFollaje$arboles),
-        xArboles = round(sum(densidadFollaje$xArboles)),
-        arbustos = sum(densidadFollaje$arbustos),
-        xArbustos = round(sum(densidadFollaje$xArbustos)),
-        palmas = sum(densidadFollaje$palmas),
-        xPalmas = round(sum(densidadFollaje$xPalmas)),
-        totalIndividuos = sum(densidadFollaje$totalIndividuos),
-        xIndividuos = round(sum(densidadFollaje$xIndividuos))
-      );
-      densidadFollaje <- rbind(densidadFollaje, filaTotal);
-      return(densidadFollaje);
+      if(nrow(dataFrame) > 0){
+        tmpDensidadFollaje <- as.data.frame.matrix(
+          table(dataFrame$densidad_follaje, dataFrame$habito_crecimiento)
+        );
+        tmpDensidadFollaje$densidadFollaje <- encabezado(densidad$encabezado, row.names(tmpDensidadFollaje));
+        densidadFollaje <- data.frame(
+          densidadFollaje = tmpDensidadFollaje$densidadFollaje,
+          arboles = tmpDensidadFollaje$"1",
+          xArboles = round((tmpDensidadFollaje$"1"/sum(tmpDensidadFollaje$"1"))*100, 2),
+          arbustos = tmpDensidadFollaje$"2",
+          xArbustos = round((tmpDensidadFollaje$"2"/sum(tmpDensidadFollaje$"2"))*100, 2),
+          palmas = tmpDensidadFollaje$"3",
+          xPalmas = round((tmpDensidadFollaje$"3"/sum(tmpDensidadFollaje$"3"))*100, 2)
+        );
+        densidadFollaje$totalIndividuos <- densidadFollaje$arboles + densidadFollaje$arbustos + densidadFollaje$palmas;
+        densidadFollaje$xIndividuos <- round((densidadFollaje$totalIndividuos/sum(densidadFollaje$totalIndividuos))*100, 2);
+        filaTotal <- data.frame(
+          densidadFollaje = "Total",
+          arboles = sum(densidadFollaje$arboles),
+          xArboles = round(sum(densidadFollaje$xArboles)),
+          arbustos = sum(densidadFollaje$arbustos),
+          xArbustos = round(sum(densidadFollaje$xArbustos)),
+          palmas = sum(densidadFollaje$palmas),
+          xPalmas = round(sum(densidadFollaje$xPalmas)),
+          totalIndividuos = sum(densidadFollaje$totalIndividuos),
+          xIndividuos = round(sum(densidadFollaje$xIndividuos))
+        );
+        densidadFollaje <- rbind(densidadFollaje, filaTotal);
+        return(densidadFollaje);
+      } else {
+        densidadFollaje <- "No existen registros";
+        return(densidadFollaje);
+      } 
     },
     especifico={
-      maxHabito <- max(dataFrame$habito_crecimiento);
-      follaje <- data.frame();
-      for (i in 1:maxHabito){
-        sector <- subset(dataFrame, habito_crecimiento == i);
-        if("barrio" %in% colnames(dataFrame)){
-          tmpFollajeSector <- as.data.frame.matrix(
-            table(factor(sector$barrio), sector$densidad_follaje),
-            stringsAsFactors=FALSE
+      if(nrow(dataFrame) > 0){
+        maxHabito <- max(dataFrame$habito_crecimiento);
+        follaje <- data.frame();
+        for (i in 1:maxHabito){
+          sector <- subset(dataFrame, habito_crecimiento == i);
+          if("barrio" %in% colnames(dataFrame)){
+            tmpFollajeSector <- as.data.frame.matrix(
+              table(factor(sector$barrio), sector$densidad_follaje),
+              stringsAsFactors=FALSE
+            );
+          } else {
+            tmpFollajeSector <- as.data.frame.matrix(
+              table(factor(sector$institucion), sector$densidad_follaje),
+              stringsAsFactors=FALSE
+            );
+          }
+          follajeSector <- data.frame(
+            barrio = rownames(tmpFollajeSector),
+            denso = dominio(tmpFollajeSector, densidad$dominio, densidad$denso, CHECK),
+            medio = dominio(tmpFollajeSector, densidad$dominio, densidad$medio, CHECK),
+            ralo = dominio(tmpFollajeSector, densidad$dominio, densidad$ralo, CHECK)
           );
-        } else {
-          tmpFollajeSector <- as.data.frame.matrix(
-            table(factor(sector$institucion), sector$densidad_follaje),
-            stringsAsFactors=FALSE
+          sep <- data.frame(
+            barrio = "Total Individuos",
+            denso = sum(follajeSector$denso),
+            medio = sum(follajeSector$medio),
+            ralo = sum(follajeSector$ralo)
           );
-        }
-        follajeSector <- data.frame(
-          barrio = rownames(tmpFollajeSector),
-          denso = dominio(tmpFollajeSector, densidad$dominio, densidad$denso, CHECK),
-          medio = dominio(tmpFollajeSector, densidad$dominio, densidad$medio, CHECK),
-          ralo = dominio(tmpFollajeSector, densidad$dominio, densidad$ralo, CHECK)
-        );
-        sep <- data.frame(
-          barrio = "Total Individuos",
-          denso = sum(follajeSector$denso),
-          medio = sum(follajeSector$medio),
-          ralo = sum(follajeSector$ralo)
-        );
-        follajeSector <- rbind(follajeSector, sep);
-        follaje <- rbind(follaje, follajeSector);
-      }    
-      return(follaje);
+          follajeSector <- rbind(follajeSector, sep);
+          follaje <- rbind(follaje, follajeSector);
+        }    
+        return(follaje);
+      } else {
+        follaje <- "No existen registros";
+        return(follaje);
+      } 
     }
   );
 }
 getEmplazamiento <- function(dataFrame, informe){
   switch(informe,
     general={
-      tmpEmplazamiento <- as.data.frame.matrix(
-        table(dataFrame$emplazamiento, dataFrame$habito_crecimiento)
-      );
-      tmpEmplazamiento$emplazamiento <- encabezado(emplazamiento$encabezado, row.names(tmpEmplazamiento));
-      emplazamientoIndividuos <- data.frame(
-        emplazamiento = tmpEmplazamiento$emplazamiento,
-        arboles = tmpEmplazamiento$"1",
-        xArboles = round((tmpEmplazamiento$"1"/sum(tmpEmplazamiento$"1"))*100, 2),
-        arbustos = tmpEmplazamiento$"2",
-        xArbustos = round((tmpEmplazamiento$"2"/sum(tmpEmplazamiento$"2"))*100, 2),
-        palmas = tmpEmplazamiento$"3",
-        xPalmas = round((tmpEmplazamiento$"3"/sum(tmpEmplazamiento$"3"))*100, 2)
-      );
-      emplazamientoIndividuos$totalIndividuos <- emplazamientoIndividuos$arboles + emplazamientoIndividuos$arbustos + emplazamientoIndividuos$palmas;
-      emplazamientoIndividuos$xIndividuos <- round((emplazamientoIndividuos$totalIndividuos/sum(emplazamientoIndividuos$totalIndividuos))*100, 2);
-      filaTotal <- data.frame(
-        emplazamiento = "Total",
-        arboles = sum(emplazamientoIndividuos$arboles),
-        xArboles = round(sum(emplazamientoIndividuos$xArboles)),
-        arbustos = sum(emplazamientoIndividuos$arbustos),
-        xArbustos = round(sum(emplazamientoIndividuos$xArbustos)),
-        palmas = sum(emplazamientoIndividuos$palmas),
-        xPalmas = round(sum(emplazamientoIndividuos$xPalmas)),
-        totalIndividuos = sum(emplazamientoIndividuos$totalIndividuos),
-        xIndividuos = round(sum(emplazamientoIndividuos$xIndividuos))
-      );
-      emplazamientoIndividuos <- rbind(emplazamientoIndividuos, filaTotal);
-      return(emplazamientoIndividuos);
+      if(nrow(dataFrame) > 0){
+        tmpEmplazamiento <- as.data.frame.matrix(
+          table(dataFrame$emplazamiento, dataFrame$habito_crecimiento)
+        );
+        tmpEmplazamiento$emplazamiento <- encabezado(emplazamiento$encabezado, row.names(tmpEmplazamiento));
+        emplazamientoIndividuos <- data.frame(
+          emplazamiento = tmpEmplazamiento$emplazamiento,
+          arboles = tmpEmplazamiento$"1",
+          xArboles = round((tmpEmplazamiento$"1"/sum(tmpEmplazamiento$"1"))*100, 2),
+          arbustos = tmpEmplazamiento$"2",
+          xArbustos = round((tmpEmplazamiento$"2"/sum(tmpEmplazamiento$"2"))*100, 2),
+          palmas = tmpEmplazamiento$"3",
+          xPalmas = round((tmpEmplazamiento$"3"/sum(tmpEmplazamiento$"3"))*100, 2)
+        );
+        emplazamientoIndividuos$totalIndividuos <- emplazamientoIndividuos$arboles + emplazamientoIndividuos$arbustos + emplazamientoIndividuos$palmas;
+        emplazamientoIndividuos$xIndividuos <- round((emplazamientoIndividuos$totalIndividuos/sum(emplazamientoIndividuos$totalIndividuos))*100, 2);
+        filaTotal <- data.frame(
+          emplazamiento = "Total",
+          arboles = sum(emplazamientoIndividuos$arboles),
+          xArboles = round(sum(emplazamientoIndividuos$xArboles)),
+          arbustos = sum(emplazamientoIndividuos$arbustos),
+          xArbustos = round(sum(emplazamientoIndividuos$xArbustos)),
+          palmas = sum(emplazamientoIndividuos$palmas),
+          xPalmas = round(sum(emplazamientoIndividuos$xPalmas)),
+          totalIndividuos = sum(emplazamientoIndividuos$totalIndividuos),
+          xIndividuos = round(sum(emplazamientoIndividuos$xIndividuos))
+        );
+        emplazamientoIndividuos <- rbind(emplazamientoIndividuos, filaTotal);
+        return(emplazamientoIndividuos);
+      } else {
+        emplazamientoIndividuos <- "No existen registros";
+        return(emplazamientoIndividuos)
+      } 
     },
     especifico={
-      if("barrio" %in% colnames(dataFrame)){
-        tmpEmplazamiento <- as.data.frame.matrix(
-          table(factor(dataFrame$barrio), dataFrame$emplazamiento)
+      if(nrow(dataFrame) > 0){
+        if("barrio" %in% colnames(dataFrame)){
+          tmpEmplazamiento <- as.data.frame.matrix(
+            table(factor(dataFrame$barrio), dataFrame$emplazamiento)
+          );
+        } else {
+          tmpEmplazamiento <- as.data.frame.matrix(
+            table(factor(dataFrame$institucion), dataFrame$emplazamiento)
+          );
+        }
+        emplazamientoIndividuos <- data.frame(
+          barrio = rownames(tmpEmplazamiento),
+          parque = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$pr, CHECK),        
+          glorieta = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$gl, CHECK),        
+          anden = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$an, CHECK),        
+          alcorque = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$al, CHECK),        
+          separador = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$sp, CHECK),        
+          antejardin = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$ant, CHECK),        
+          zonablanda = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$zb, CHECK)       
         );
+        filaTotal <- data.frame(
+          barrio = "Total Individuos",
+          parque = sum(emplazamientoIndividuos$parque),
+          glorieta = sum(emplazamientoIndividuos$glorieta),
+          anden = sum(emplazamientoIndividuos$anden),
+          alcorque = sum(emplazamientoIndividuos$alcorque),
+          separador = sum(emplazamientoIndividuos$separador),
+          antejardin = sum(emplazamientoIndividuos$antejardin),
+          zonablanda = sum(emplazamientoIndividuos$zonablanda)
+        );
+        emplazamientoIndividuos <- rbind(emplazamientoIndividuos, filaTotal);
+        return(emplazamientoIndividuos);
       } else {
-        tmpEmplazamiento <- as.data.frame.matrix(
-          table(factor(dataFrame$institucion), dataFrame$emplazamiento)
-        );
+        emplazamientoIndividuos <- "No existen registros";
+        return(emplazamientoIndividuos);
       }
-      emplazamientoIndividuos <- data.frame(
-        barrio = rownames(tmpEmplazamiento),
-        parque = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$pr, CHECK),        
-        glorieta = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$gl, CHECK),        
-        anden = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$an, CHECK),        
-        alcorque = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$al, CHECK),        
-        separador = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$sp, CHECK),        
-        antejardin = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$ant, CHECK),        
-        zonablanda = dominio(tmpEmplazamiento, emplazamiento$dominio, emplazamiento$zb, CHECK)       
-      );
-      filaTotal <- data.frame(
-        barrio = "Total Individuos",
-        parque = sum(emplazamientoIndividuos$parque),
-        glorieta = sum(emplazamientoIndividuos$glorieta),
-        anden = sum(emplazamientoIndividuos$anden),
-        alcorque = sum(emplazamientoIndividuos$alcorque),
-        separador = sum(emplazamientoIndividuos$separador),
-        antejardin = sum(emplazamientoIndividuos$antejardin),
-        zonablanda = sum(emplazamientoIndividuos$zonablanda)
-      );
-      emplazamientoIndividuos <- rbind(emplazamientoIndividuos, filaTotal);
-      return(emplazamientoIndividuos);
     }
   );   
 }
 getEstadoFisico <- function(dataFrame, informe){
   switch(informe,
     general={
-      tmpEstadoFisico <- as.data.frame.matrix(
-        table(dataFrame$estado_fisico, dataFrame$habito_crecimiento)
-      );
-      tmpEstadoFisico$estadoFisico <- encabezado(estadoFisico$encabezado, row.names(tmpEstadoFisico));
-      estadoFisico <- data.frame(
-        estadoFisico = tmpEstadoFisico$estadoFisico,
-        arboles = tmpEstadoFisico$"1",
-        xArboles = round((tmpEstadoFisico$"1"/sum(tmpEstadoFisico$"1"))*100, 2),
-        arbustos = tmpEstadoFisico$"2",
-        xArbustos = round((tmpEstadoFisico$"2"/sum(tmpEstadoFisico$"2"))*100, 2),
-        palmas = tmpEstadoFisico$"3",
-        xPalmas = round((tmpEstadoFisico$"3"/sum(tmpEstadoFisico$"3"))*100, 2)
-      );
-      estadoFisico$totalIndividuos <- estadoFisico$arboles + estadoFisico$arbustos + estadoFisico$palmas;
-      estadoFisico$xIndividuos <- round((estadoFisico$totalIndividuos/sum(estadoFisico$totalIndividuos))*100, 2);
-      filaTotal <- data.frame(
-        estadoFisico = "Total",
-        arboles = sum(estadoFisico$arboles),
-        xArboles = round(sum(estadoFisico$xArboles)),
-        arbustos = sum(estadoFisico$arbustos),
-        xArbustos = round(sum(estadoFisico$xArbustos)),
-        palmas = sum(estadoFisico$palmas),
-        xPalmas = round(sum(estadoFisico$xPalmas)),
-        totalIndividuos = sum(estadoFisico$totalIndividuos),
-        xIndividuos = round(sum(estadoFisico$xIndividuos))
-      );
-      estadoFisico <- rbind(estadoFisico, filaTotal);
-      return(estadoFisico);
+      if(nrow(dataFrame) > 0){
+        tmpEstadoFisico <- as.data.frame.matrix(
+          table(dataFrame$estado_fisico, dataFrame$habito_crecimiento)
+        );
+        tmpEstadoFisico$estadoFisico <- encabezado(estadoFisico$encabezado, row.names(tmpEstadoFisico));
+        estadoFisico <- data.frame(
+          estadoFisico = tmpEstadoFisico$estadoFisico,
+          arboles = tmpEstadoFisico$"1",
+          xArboles = round((tmpEstadoFisico$"1"/sum(tmpEstadoFisico$"1"))*100, 2),
+          arbustos = tmpEstadoFisico$"2",
+          xArbustos = round((tmpEstadoFisico$"2"/sum(tmpEstadoFisico$"2"))*100, 2),
+          palmas = tmpEstadoFisico$"3",
+          xPalmas = round((tmpEstadoFisico$"3"/sum(tmpEstadoFisico$"3"))*100, 2)
+        );
+        estadoFisico$totalIndividuos <- estadoFisico$arboles + estadoFisico$arbustos + estadoFisico$palmas;
+        estadoFisico$xIndividuos <- round((estadoFisico$totalIndividuos/sum(estadoFisico$totalIndividuos))*100, 2);
+        filaTotal <- data.frame(
+          estadoFisico = "Total",
+          arboles = sum(estadoFisico$arboles),
+          xArboles = round(sum(estadoFisico$xArboles)),
+          arbustos = sum(estadoFisico$arbustos),
+          xArbustos = round(sum(estadoFisico$xArbustos)),
+          palmas = sum(estadoFisico$palmas),
+          xPalmas = round(sum(estadoFisico$xPalmas)),
+          totalIndividuos = sum(estadoFisico$totalIndividuos),
+          xIndividuos = round(sum(estadoFisico$xIndividuos))
+        );
+        estadoFisico <- rbind(estadoFisico, filaTotal);
+        return(estadoFisico);
+      } else {
+        estadoFisico <- "No existen registros";
+        return(estadoFisico);
+      }  
     },
     especifico={
-      maxHabito <- max(dataFrame$habito_crecimiento);
-      estFisico <- data.frame();
-      for (i in 1:maxHabito){
-        sector <- subset(dataFrame, habito_crecimiento == i);
-        if("barrio" %in% colnames(dataFrame)){
-          tmpEstadoFisicoSector <- as.data.frame.matrix(
-            table(factor(sector$barrio), sector$estado_fisico),
-            stringsAsFactors=FALSE
+      if(nrow(dataFrame) > 0){
+        maxHabito <- max(dataFrame$habito_crecimiento);
+        estFisico <- data.frame();
+        for (i in 1:maxHabito){
+          sector <- subset(dataFrame, habito_crecimiento == i);
+          if("barrio" %in% colnames(dataFrame)){
+            tmpEstadoFisicoSector <- as.data.frame.matrix(
+              table(factor(sector$barrio), sector$estado_fisico),
+              stringsAsFactors=FALSE
+            );
+          } else {
+            tmpEstadoFisicoSector <- as.data.frame.matrix(
+              table(factor(sector$institucion), sector$estado_fisico),
+              stringsAsFactors=FALSE
+            );
+          }
+          estadoFisicoSector <- data.frame(
+            barrio = rownames(tmpEstadoFisicoSector),
+            malo = dominio(tmpEstadoFisicoSector, estadoFisico$dominio, estadoFisico$malo, CHECK),
+            regular = dominio(tmpEstadoFisicoSector, estadoFisico$dominio, estadoFisico$regular, CHECK),
+            bueno = dominio(tmpEstadoFisicoSector, estadoFisico$dominio, estadoFisico$bueno, CHECK)
           );
-        } else {
-          tmpEstadoFisicoSector <- as.data.frame.matrix(
-            table(factor(sector$institucion), sector$estado_fisico),
-            stringsAsFactors=FALSE
+          sep <- data.frame(
+            barrio = "Total Individuos",
+            malo = sum(estadoFisicoSector$malo),
+            regular = sum(estadoFisicoSector$regular),
+            bueno = sum(estadoFisicoSector$bueno)
           );
-        }
-        estadoFisicoSector <- data.frame(
-          barrio = rownames(tmpEstadoFisicoSector),
-          malo = dominio(tmpEstadoFisicoSector, estadoFisico$dominio, estadoFisico$malo, CHECK),
-          regular = dominio(tmpEstadoFisicoSector, estadoFisico$dominio, estadoFisico$regular, CHECK),
-          bueno = dominio(tmpEstadoFisicoSector, estadoFisico$dominio, estadoFisico$bueno, CHECK)
-        );
-        sep <- data.frame(
-          barrio = "Total Individuos",
-          malo = sum(estadoFisicoSector$malo),
-          regular = sum(estadoFisicoSector$regular),
-          bueno = sum(estadoFisicoSector$bueno)
-        );
-        estadoFisicoSector <- rbind(estadoFisicoSector, sep);
-        estFisico <- rbind(estFisico, estadoFisicoSector);
-      }    
-      return(estFisico);
+          estadoFisicoSector <- rbind(estadoFisicoSector, sep);
+          estFisico <- rbind(estFisico, estadoFisicoSector);
+        }    
+        return(estFisico);
+      } else {
+        estFisico <- "No existen registros";
+        return(estFisico)
+      } 
     }
   );
 }
 getEstadoHoja <- function(dataFrame, informe){
   switch(informe,
     general={
-      tmpClorotica <- as.data.frame.list(
-        table(dataFrame$hc), row.names = estadoHoja$clorotica
-      );
-      tmpClorotica <- checkEstadoHoja(tmpClorotica);
-      colnames(tmpClorotica) <- estadoHoja$encabezado;
-      clorotica <- tmpClorotica;
+      if(nrow(dataFrame) > 0){
+        tmpClorotica <- as.data.frame.list(
+          table(dataFrame$hc), row.names = estadoHoja$clorotica
+        );
+        tmpClorotica <- checkEstadoHoja(tmpClorotica);
+        colnames(tmpClorotica) <- estadoHoja$encabezado;
+        clorotica <- tmpClorotica;
 
-      tmpCaducifolia <- as.data.frame.list(
-        table(dataFrame$hcf), row.names = estadoHoja$caducifolia
-      );
-      tmpCaducifolia <- checkEstadoHoja(tmpCaducifolia);
-      colnames(tmpCaducifolia) <- estadoHoja$encabezado;
-      caducifolia <- tmpCaducifolia;
+        tmpCaducifolia <- as.data.frame.list(
+          table(dataFrame$hcf), row.names = estadoHoja$caducifolia
+        );
+        tmpCaducifolia <- checkEstadoHoja(tmpCaducifolia);
+        colnames(tmpCaducifolia) <- estadoHoja$encabezado;
+        caducifolia <- tmpCaducifolia;
 
-      estadoHoja <- rbind(clorotica, caducifolia);
-      estadoHoja$individuos <- estadoHoja$estadoNatural + estadoHoja$deficienciaNutricional + estadoHoja$noRegistra;
-      return(estadoHoja);
+        estadoHoja <- rbind(clorotica, caducifolia);
+        estadoHoja$individuos <- estadoHoja$estadoNatural + estadoHoja$deficienciaNutricional + estadoHoja$noRegistra;
+        return(estadoHoja);
+      } else {
+        estadoHoja <- "No existen registros";
+        return(estadoHoja);
+      }
     },
     especifico={
-      if("barrio" %in% colnames(dataFrame)){
-        tmpClorotica <- as.data.frame.matrix(
-          table(factor(dataFrame$barrio), dataFrame$hc)
+      if(nrow(dataFrame) > 0){
+        if("barrio" %in% colnames(dataFrame)){
+          tmpClorotica <- as.data.frame.matrix(
+            table(factor(dataFrame$barrio), dataFrame$hc)
+          );
+          tmpCaducifolia <- as.data.frame.matrix(
+            table(factor(dataFrame$barrio), dataFrame$hcf)
+          );
+        } else {
+          tmpClorotica <- as.data.frame.matrix(
+            table(factor(dataFrame$institucion), dataFrame$hc)
+          );
+          tmpCaducifolia <- as.data.frame.matrix(
+            table(factor(dataFrame$institucion), dataFrame$hcf)
+          );
+        }
+        clorotica <- data.frame(
+          barrio = rownames(tmpClorotica),
+          estadoNaturalHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$en, CHECK),
+          deficienciaNutricionalHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$dn, CHECK),
+          noRegistraHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$nr, CHECK)
+        ); 
+        caducifolia <- data.frame(        
+          estadoNaturalHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$en, CHECK),
+          deficienciaNutricionalHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$dn, CHECK),
+          noRegistraHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$nr, CHECK)
         );
-        tmpCaducifolia <- as.data.frame.matrix(
-          table(factor(dataFrame$barrio), dataFrame$hcf)
+        estadoHoja <- cbind(clorotica, caducifolia);
+        filaTotal <- data.frame(
+          barrio = "Total Individuos",
+          estadoNaturalHC = sum(estadoHoja$estadoNaturalHC),
+          deficienciaNutricionalHC = sum(estadoHoja$deficienciaNutricionalHC),
+          noRegistraHC = sum(estadoHoja$noRegistraHC),
+          estadoNaturalHCF = sum(estadoHoja$estadoNaturalHCF),
+          deficienciaNutricionalHCF = sum(estadoHoja$deficienciaNutricionalHCF),
+          noRegistraHCF = sum(estadoHoja$noRegistraHCF)
         );
+        estadoHoja <- rbind(estadoHoja, filaTotal);
+        return(estadoHoja);
       } else {
-        tmpClorotica <- as.data.frame.matrix(
-          table(factor(dataFrame$institucion), dataFrame$hc)
-        );
-        tmpCaducifolia <- as.data.frame.matrix(
-          table(factor(dataFrame$institucion), dataFrame$hcf)
-        );
+        estadoHoja <- "No existen registros";
+        return(estadoHoja);
       }
-      clorotica <- data.frame(
-        barrio = rownames(tmpClorotica),
-        estadoNaturalHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$en, CHECK),
-        deficienciaNutricionalHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$dn, CHECK),
-        noRegistraHC = dominio(tmpClorotica, estadoHoja$dominio, estadoHoja$nr, CHECK)
-      ); 
-      caducifolia <- data.frame(        
-        estadoNaturalHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$en, CHECK),
-        deficienciaNutricionalHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$dn, CHECK),
-        noRegistraHCF = dominio(tmpCaducifolia, estadoHoja$dominio, estadoHoja$nr, CHECK)
-      );
-      estadoHoja <- cbind(clorotica, caducifolia);
-      filaTotal <- data.frame(
-        barrio = "Total Individuos",
-        estadoNaturalHC = sum(estadoHoja$estadoNaturalHC),
-        deficienciaNutricionalHC = sum(estadoHoja$deficienciaNutricionalHC),
-        noRegistraHC = sum(estadoHoja$noRegistraHC),
-        estadoNaturalHCF = sum(estadoHoja$estadoNaturalHCF),
-        deficienciaNutricionalHCF = sum(estadoHoja$deficienciaNutricionalHCF),
-        noRegistraHCF = sum(estadoHoja$noRegistraHCF)
-      );
-      estadoHoja <- rbind(estadoHoja, filaTotal);
-      return(estadoHoja);
     }
   );  
 }
@@ -544,478 +599,532 @@ checkEstadoHoja <- function(dataFrame){
 getEstadoSanitario <- function(dataFrame, informe){
   switch(informe,
     general={
-      tmpEstadoSanitario <- as.data.frame.matrix(
-        table(dataFrame$estado_sanitario, dataFrame$habito_crecimiento)
-      );
-      tmpEstadoSanitario$estadoSanitario <- encabezado(estadoSanitario$encabezado, row.names(tmpEstadoSanitario));
-      estadoSanitario <- data.frame(
-        estadoSanitario = tmpEstadoSanitario$estadoSanitario,
-        arboles = tmpEstadoSanitario$"1",
-        xArboles = round((tmpEstadoSanitario$"1"/sum(tmpEstadoSanitario$"1"))*100, 2),
-        arbustos = tmpEstadoSanitario$"2",
-        xArbustos = round((tmpEstadoSanitario$"2"/sum(tmpEstadoSanitario$"2"))*100, 2),
-        palmas = tmpEstadoSanitario$"3",
-        xPalmas = round((tmpEstadoSanitario$"3"/sum(tmpEstadoSanitario$"3"))*100, 2)
-      );
-      estadoSanitario$totalIndividuos <- estadoSanitario$arboles + estadoSanitario$arbustos + estadoSanitario$palmas;
-      estadoSanitario$xIndividuos <- round((estadoSanitario$totalIndividuos/sum(estadoSanitario$totalIndividuos))*100, 2);
-      filaTotal <- data.frame(
-        estadoSanitario = "Total",
-        arboles = sum(estadoSanitario$arboles),
-        xArboles = round(sum(estadoSanitario$xArboles)),
-        arbustos = sum(estadoSanitario$arbustos),
-        xArbustos = round(sum(estadoSanitario$xArbustos)),
-        palmas = sum(estadoSanitario$palmas),
-        xPalmas = round(sum(estadoSanitario$xPalmas)),
-        totalIndividuos = sum(estadoSanitario$totalIndividuos),
-        xIndividuos = round(sum(estadoSanitario$xIndividuos))
-      );
-      estadoSanitario <- rbind(estadoSanitario, filaTotal);
-      return(estadoSanitario);
+      if(nrow(dataFrame) > 0){
+        tmpEstadoSanitario <- as.data.frame.matrix(
+          table(dataFrame$estado_sanitario, dataFrame$habito_crecimiento)
+        );
+        tmpEstadoSanitario$estadoSanitario <- encabezado(estadoSanitario$encabezado, row.names(tmpEstadoSanitario));
+        estadoSanitario <- data.frame(
+          estadoSanitario = tmpEstadoSanitario$estadoSanitario,
+          arboles = tmpEstadoSanitario$"1",
+          xArboles = round((tmpEstadoSanitario$"1"/sum(tmpEstadoSanitario$"1"))*100, 2),
+          arbustos = tmpEstadoSanitario$"2",
+          xArbustos = round((tmpEstadoSanitario$"2"/sum(tmpEstadoSanitario$"2"))*100, 2),
+          palmas = tmpEstadoSanitario$"3",
+          xPalmas = round((tmpEstadoSanitario$"3"/sum(tmpEstadoSanitario$"3"))*100, 2)
+        );
+        estadoSanitario$totalIndividuos <- estadoSanitario$arboles + estadoSanitario$arbustos + estadoSanitario$palmas;
+        estadoSanitario$xIndividuos <- round((estadoSanitario$totalIndividuos/sum(estadoSanitario$totalIndividuos))*100, 2);
+        filaTotal <- data.frame(
+          estadoSanitario = "Total",
+          arboles = sum(estadoSanitario$arboles),
+          xArboles = round(sum(estadoSanitario$xArboles)),
+          arbustos = sum(estadoSanitario$arbustos),
+          xArbustos = round(sum(estadoSanitario$xArbustos)),
+          palmas = sum(estadoSanitario$palmas),
+          xPalmas = round(sum(estadoSanitario$xPalmas)),
+          totalIndividuos = sum(estadoSanitario$totalIndividuos),
+          xIndividuos = round(sum(estadoSanitario$xIndividuos))
+        );
+        estadoSanitario <- rbind(estadoSanitario, filaTotal);
+        return(estadoSanitario);
+      } else {
+        estadoSanitario <- "No existen registros";
+        return(estadoSanitario)
+      } 
     },
     especifico={
-      maxHabito <- max(dataFrame$habito_crecimiento);
-      estSanitario <- data.frame();
-      for (i in 1:maxHabito){
-        sector <- subset(dataFrame, habito_crecimiento == i);
-        if("barrio" %in% colnames(dataFrame)){
-          tmpEstadoSanitarioSector <- as.data.frame.matrix(
-            table(factor(sector$barrio), sector$estado_sanitario),
-            stringsAsFactors=FALSE
+      if(nrow(dataFrame) > 0){
+        maxHabito <- max(dataFrame$habito_crecimiento);
+        estSanitario <- data.frame();
+        for (i in 1:maxHabito){
+          sector <- subset(dataFrame, habito_crecimiento == i);
+          if("barrio" %in% colnames(dataFrame)){
+            tmpEstadoSanitarioSector <- as.data.frame.matrix(
+              table(factor(sector$barrio), sector$estado_sanitario),
+              stringsAsFactors=FALSE
+            );
+          } else {
+            tmpEstadoSanitarioSector <- as.data.frame.matrix(
+              table(factor(sector$institucion), sector$estado_sanitario),
+              stringsAsFactors=FALSE
+            );
+          }
+          estadoSanitarioSector <- data.frame(
+            barrio = rownames(tmpEstadoSanitarioSector),
+            muerto = dominio(tmpEstadoSanitarioSector, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),          
+            critico = dominio(tmpEstadoSanitarioSector, estadoSanitario$dominio, estadoSanitario$critico, CHECK),          
+            enfermo = dominio(tmpEstadoSanitarioSector, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),          
+            sano = dominio(tmpEstadoSanitarioSector, estadoSanitario$dominio, estadoSanitario$sano, CHECK)        
           );
-        } else {
-          tmpEstadoSanitarioSector <- as.data.frame.matrix(
-            table(factor(sector$institucion), sector$estado_sanitario),
-            stringsAsFactors=FALSE
+          sep <- data.frame(
+            barrio = "Total Individuos",
+            muerto = sum(estadoSanitarioSector$muerto),
+            critico = sum(estadoSanitarioSector$critico),
+            enfermo = sum(estadoSanitarioSector$enfermo),
+            sano = sum(estadoSanitarioSector$sano)
           );
-        }
-        estadoSanitarioSector <- data.frame(
-          barrio = rownames(tmpEstadoSanitarioSector),
-          muerto = dominio(tmpEstadoSanitarioSector, estadoSanitario$dominio, estadoSanitario$muerto, CHECK),          
-          critico = dominio(tmpEstadoSanitarioSector, estadoSanitario$dominio, estadoSanitario$critico, CHECK),          
-          enfermo = dominio(tmpEstadoSanitarioSector, estadoSanitario$dominio, estadoSanitario$enfermo, CHECK),          
-          sano = dominio(tmpEstadoSanitarioSector, estadoSanitario$dominio, estadoSanitario$sano, CHECK)        
-        );
-        sep <- data.frame(
-          barrio = "Total Individuos",
-          muerto = sum(estadoSanitarioSector$muerto),
-          critico = sum(estadoSanitarioSector$critico),
-          enfermo = sum(estadoSanitarioSector$enfermo),
-          sano = sum(estadoSanitarioSector$sano)
-        );
-        estadoSanitarioSector <- rbind(estadoSanitarioSector, sep);
-        estSanitario <- rbind(estSanitario, estadoSanitarioSector);
-      }    
-      return(estSanitario);
+          estadoSanitarioSector <- rbind(estadoSanitarioSector, sep);
+          estSanitario <- rbind(estSanitario, estadoSanitarioSector);
+        }    
+        return(estSanitario);
+      } else {
+        estSanitario <- "No existen registros";
+        return(estSanitario)
+      }  
     }
   );     
 }
 getEspeciesProcedencia <- function(dataFrame){
-  tmpProcedencia <- as.data.frame.matrix(
-    table(dataFrame$procedencia, dataFrame$habito_crecimiento)
-  );
-  tmpProcedencia$procedencia <- procedencia$encabezado;
-  procedencia <- data.frame(
-    procedencia = tmpProcedencia$procedencia,
-    arboles = tmpProcedencia$"1",
-    xArboles = round((tmpProcedencia$"1"/sum(tmpProcedencia$"1"))*100, 2),
-    arbustos = tmpProcedencia$"2",
-    xArbustos = round((tmpProcedencia$"2"/sum(tmpProcedencia$"2"))*100, 2),
-    palmas = tmpProcedencia$"3",
-    xPalmas = round((tmpProcedencia$"3"/sum(tmpProcedencia$"3"))*100, 2)
-  );
-  maxProcedencia <- max(dataFrame$procedencia);
-  maxHabito <- max(dataFrame$habito_crecimiento);
-  especies <- data.frame(0);
-  for (i in 1:maxProcedencia){
-    for (j in 1:maxHabito){
-      tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$procedencia == i & dataFrame$habito_crecimiento == j)));
-      especies[i,as.character(j)] <- tmpEspecies;
-    }
-  }
-  #angelica moncaleano
-  procedencia$especiesArboles <- especies$"1";
-  procedencia$xEspeciesArboles <- round((especies$"1"/sum(especies$"1"))*100, 2);
-  procedencia$especiesArbustos <- especies$"2";
-  procedencia$xEspeciesArbustos <- round((especies$"2"/sum(especies$"2"))*100, 2);
-  procedencia$especiesPalmas <- especies$"3";
-  procedencia$xEspeciesPalmas <- round((especies$"3"/sum(especies$"3"))*100, 2);
-  procedencia <- procedencia[c(1,2,3,8,9,4,5,10,11,6,7,12,13)];
-  procedencia$totalIndividuos <- procedencia$arboles + procedencia$arbustos + procedencia$palmas;
-  procedencia$totalEspecies <- procedencia$especiesArboles + procedencia$especiesArbustos + procedencia$especiesPalmas;
-  filaTotal <- data.frame(
-    procedencia = "Total",
-    arboles = sum(procedencia$arboles),
-    xArboles = round(sum(procedencia$xArboles)),
-    especiesArboles = sum(procedencia$especiesArboles),
-    xEspeciesArboles = round(sum(procedencia$xEspeciesArboles)),
-    arbustos = sum(procedencia$arbustos),
-    xArbustos = round(sum(procedencia$xArbustos)),
-    especiesArbustos = sum(procedencia$especiesArbustos),
-    xEspeciesArbustos = round(sum(procedencia$xEspeciesArbustos)),
-    palmas = sum(procedencia$palmas),
-    xPalmas = round(sum(procedencia$xPalmas)),
-    especiesPalmas = sum(procedencia$especiesPalmas),
-    xEspeciesPalmas = round(sum(procedencia$xEspeciesPalmas)),
-    totalIndividuos = sum(procedencia$totalIndividuos),
-    totalEspecies = sum(procedencia$totalEspecies)
-  );
-  procedencia <- rbind(procedencia, filaTotal);
-  return(procedencia);
+  if(nrow(dataFrame) > 0){
+    tmpProcedencia <- as.data.frame.matrix(
+      table(dataFrame$procedencia, dataFrame$habito_crecimiento)
+    );
+    tmpProcedencia$procedencia <- procedencia$encabezado;
+    procedencia <- data.frame(
+      procedencia = tmpProcedencia$procedencia,
+      arboles = tmpProcedencia$"1",
+      xArboles = round((tmpProcedencia$"1"/sum(tmpProcedencia$"1"))*100, 2),
+      arbustos = tmpProcedencia$"2",
+      xArbustos = round((tmpProcedencia$"2"/sum(tmpProcedencia$"2"))*100, 2),
+      palmas = tmpProcedencia$"3",
+      xPalmas = round((tmpProcedencia$"3"/sum(tmpProcedencia$"3"))*100, 2)
+    );
+    maxProcedencia <- max(dataFrame$procedencia);
+    maxHabito <- max(dataFrame$habito_crecimiento);
+    especies <- data.frame(0);
+    for (i in 1:maxProcedencia){
+      for (j in 1:maxHabito){
+        tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$procedencia == i & dataFrame$habito_crecimiento == j)));
+        especies[i,as.character(j)] <- tmpEspecies;
+      }
+    }    
+    procedencia$especiesArboles <- especies$"1";
+    procedencia$xEspeciesArboles <- round((especies$"1"/sum(especies$"1"))*100, 2);
+    procedencia$especiesArbustos <- especies$"2";
+    procedencia$xEspeciesArbustos <- round((especies$"2"/sum(especies$"2"))*100, 2);
+    procedencia$especiesPalmas <- especies$"3";
+    procedencia$xEspeciesPalmas <- round((especies$"3"/sum(especies$"3"))*100, 2);
+    procedencia <- procedencia[c(1,2,3,8,9,4,5,10,11,6,7,12,13)];
+    procedencia$totalIndividuos <- procedencia$arboles + procedencia$arbustos + procedencia$palmas;
+    procedencia$totalEspecies <- procedencia$especiesArboles + procedencia$especiesArbustos + procedencia$especiesPalmas;
+    filaTotal <- data.frame(
+      procedencia = "Total",
+      arboles = sum(procedencia$arboles),
+      xArboles = round(sum(procedencia$xArboles)),
+      especiesArboles = sum(procedencia$especiesArboles),
+      xEspeciesArboles = round(sum(procedencia$xEspeciesArboles)),
+      arbustos = sum(procedencia$arbustos),
+      xArbustos = round(sum(procedencia$xArbustos)),
+      especiesArbustos = sum(procedencia$especiesArbustos),
+      xEspeciesArbustos = round(sum(procedencia$xEspeciesArbustos)),
+      palmas = sum(procedencia$palmas),
+      xPalmas = round(sum(procedencia$xPalmas)),
+      especiesPalmas = sum(procedencia$especiesPalmas),
+      xEspeciesPalmas = round(sum(procedencia$xEspeciesPalmas)),
+      totalIndividuos = sum(procedencia$totalIndividuos),
+      totalEspecies = sum(procedencia$totalEspecies)
+    );
+    procedencia <- rbind(procedencia, filaTotal);
+    return(procedencia);
+  } else {
+    procedencia <- "No existen registros";
+    return(procedencia);
+  } 
 }
 getEspeciesHabito <- function(dataFrame){
-  tmpHabito <- as.data.frame(
-    table(dataFrame$habito_crecimiento)
-  );
-  habito <- data.frame(
-    habito = encabezado(habito$encabezado, tmpHabito$Var1),
-    individuos = tmpHabito$Freq,
-    xi = round((tmpHabito$Freq/sum(tmpHabito$Freq))*100, 2)
-  );
-  maxHabito <- max(dataFrame$habito_crecimiento);
-  especies <- data.frame(0);
-  for (i in 1:maxHabito){
-    tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$habito_crecimiento == i)));
-    especies[as.character(i),1] <- tmpEspecies;
-  }
-  habito$especies <- especies$X0;
-  habito$xe <- round((habito$especies/sum(habito$especies))*100, 2)
-  habito <- habito[c(1,4,5,2,3)];
-  filaTotal <- data.frame(
-    habito = "Total",
-    especies = sum(habito$especies),
-    xe = round(sum(habito$xe)),
-    individuos = sum(habito$individuos),
-    xi = round(sum(habito$xi))
-  );
-  habito <- rbind(habito, filaTotal);
-  return(habito);
+  if(nrow(dataFrame) > 0){
+    tmpHabito <- as.data.frame(
+      table(dataFrame$habito_crecimiento)
+    );
+    habito <- data.frame(
+      habito = encabezado(habito$encabezado, tmpHabito$Var1),
+      individuos = tmpHabito$Freq,
+      xi = round((tmpHabito$Freq/sum(tmpHabito$Freq))*100, 2)
+    );
+    maxHabito <- max(dataFrame$habito_crecimiento);
+    especies <- data.frame(0);
+    for (i in 1:maxHabito){
+      tmpEspecies <- length(unique(subset(dataFrame$nom_cientifico, dataFrame$habito_crecimiento == i)));
+      especies[as.character(i),1] <- tmpEspecies;
+    }
+    habito$especies <- especies$X0;
+    habito$xe <- round((habito$especies/sum(habito$especies))*100, 2)
+    habito <- habito[c(1,4,5,2,3)];
+    filaTotal <- data.frame(
+      habito = "Total",
+      especies = sum(habito$especies),
+      xe = round(sum(habito$xe)),
+      individuos = sum(habito$individuos),
+      xi = round(sum(habito$xi))
+    );
+    habito <- rbind(habito, filaTotal);
+    return(habito);
+  } else {
+    habito <- "No existen registros";
+    return(habito);
+  }   
 }
 getValorEstetico <- function(dataFrame, informe){
   switch(informe,
     general={
-      tmpValorEstetico <- as.data.frame.matrix(
-        table(dataFrame$valor_estetico, dataFrame$habito_crecimiento)
-      );
-      tmpValorEstetico$valorEstetico <- encabezado(valorEstetico$encabezado, row.names(tmpValorEstetico));
-      valorEstetico <- data.frame(
-        valorEstetico = tmpValorEstetico$valorEstetico,
-        arboles = tmpValorEstetico$"1",
-        xArboles = round((tmpValorEstetico$"1"/sum(tmpValorEstetico$"1"))*100, 2),
-        arbustos = tmpValorEstetico$"2",
-        xArbustos = round((tmpValorEstetico$"2"/sum(tmpValorEstetico$"2"))*100, 2),
-        palmas = tmpValorEstetico$"3",
-        xPalmas = round((tmpValorEstetico$"3"/sum(tmpValorEstetico$"3"))*100, 2)
-      );
-      valorEstetico$totalIndividuos <- valorEstetico$arboles + valorEstetico$arbustos + valorEstetico$palmas;
-      valorEstetico$xIndividuos <- round((valorEstetico$totalIndividuos/sum(valorEstetico$totalIndividuos))*100, 2);
-      filaTotal <- data.frame(
-        valorEstetico = "Total",
-        arboles = sum(valorEstetico$arboles),
-        xArboles = round(sum(valorEstetico$xArboles)),
-        arbustos = sum(valorEstetico$arbustos),
-        xArbustos = round(sum(valorEstetico$xArbustos)),
-        palmas = sum(valorEstetico$palmas),
-        xPalmas = round(sum(valorEstetico$xPalmas)),
-        totalIndividuos = sum(valorEstetico$totalIndividuos),
-        xIndividuos = round(sum(valorEstetico$xIndividuos))
-      );
-      valorEstetico <- rbind(valorEstetico, filaTotal);
-      return(valorEstetico);
+      if(nrow(dataFrame) > 0){
+        tmpValorEstetico <- as.data.frame.matrix(
+          table(dataFrame$valor_estetico, dataFrame$habito_crecimiento)
+        );
+        tmpValorEstetico$valorEstetico <- encabezado(valorEstetico$encabezado, row.names(tmpValorEstetico));
+        valorEstetico <- data.frame(
+          valorEstetico = tmpValorEstetico$valorEstetico,
+          arboles = tmpValorEstetico$"1",
+          xArboles = round((tmpValorEstetico$"1"/sum(tmpValorEstetico$"1"))*100, 2),
+          arbustos = tmpValorEstetico$"2",
+          xArbustos = round((tmpValorEstetico$"2"/sum(tmpValorEstetico$"2"))*100, 2),
+          palmas = tmpValorEstetico$"3",
+          xPalmas = round((tmpValorEstetico$"3"/sum(tmpValorEstetico$"3"))*100, 2)
+        );
+        valorEstetico$totalIndividuos <- valorEstetico$arboles + valorEstetico$arbustos + valorEstetico$palmas;
+        valorEstetico$xIndividuos <- round((valorEstetico$totalIndividuos/sum(valorEstetico$totalIndividuos))*100, 2);
+        filaTotal <- data.frame(
+          valorEstetico = "Total",
+          arboles = sum(valorEstetico$arboles),
+          xArboles = round(sum(valorEstetico$xArboles)),
+          arbustos = sum(valorEstetico$arbustos),
+          xArbustos = round(sum(valorEstetico$xArbustos)),
+          palmas = sum(valorEstetico$palmas),
+          xPalmas = round(sum(valorEstetico$xPalmas)),
+          totalIndividuos = sum(valorEstetico$totalIndividuos),
+          xIndividuos = round(sum(valorEstetico$xIndividuos))
+        );
+        valorEstetico <- rbind(valorEstetico, filaTotal);
+        return(valorEstetico);
+      } else {
+        valorEstetico <- "No existen registros";
+        return(valorEstetico);
+      } 
     },
     especifico={
-      maxHabito <- max(dataFrame$habito_crecimiento);
-      vlrEstetico <- data.frame();
-      for (i in 1:maxHabito){
-        sector <- subset(dataFrame, habito_crecimiento == i);
-        if("barrio" %in% colnames(dataFrame)){
-          tmpValorEsteticoSector <- as.data.frame.matrix(
-            table(factor(sector$barrio), sector$valor_estetico),
-            stringsAsFactors=FALSE
+      if(nrow(dataFrame) > 0){
+        maxHabito <- max(dataFrame$habito_crecimiento);
+        vlrEstetico <- data.frame();
+        for (i in 1:maxHabito){
+          sector <- subset(dataFrame, habito_crecimiento == i);
+          if("barrio" %in% colnames(dataFrame)){
+            tmpValorEsteticoSector <- as.data.frame.matrix(
+              table(factor(sector$barrio), sector$valor_estetico),
+              stringsAsFactors=FALSE
+            );
+          } else {
+            tmpValorEsteticoSector <- as.data.frame.matrix(
+              table(factor(sector$institucion), sector$valor_estetico),
+              stringsAsFactors=FALSE
+            );
+          }
+          valorEsteticoSector <- data.frame(
+            barrio = rownames(tmpValorEsteticoSector),
+            emblematico = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$emb, CHECK),          
+            esencial = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$ese, CHECK),          
+            deseable = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$des, CHECK),          
+            indiferente = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$ind, CHECK),          
+            inaceptable = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$ina, CHECK)          
           );
-        } else {
-          tmpValorEsteticoSector <- as.data.frame.matrix(
-            table(factor(sector$institucion), sector$valor_estetico),
-            stringsAsFactors=FALSE
+          sep <- data.frame(
+            barrio = "Total Individuos",
+            emblematico = sum(valorEsteticoSector$emblematico),
+            esencial = sum(valorEsteticoSector$esencial),
+            deseable = sum(valorEsteticoSector$deseable),
+            indiferente = sum(valorEsteticoSector$indiferente),
+            inaceptable = sum(valorEsteticoSector$inaceptable)
           );
-        }
-        valorEsteticoSector <- data.frame(
-          barrio = rownames(tmpValorEsteticoSector),
-          emblematico = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$emb, CHECK),          
-          esencial = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$ese, CHECK),          
-          deseable = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$des, CHECK),          
-          indiferente = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$ind, CHECK),          
-          inaceptable = dominio(tmpValorEsteticoSector, valorEstetico$dominio, valorEstetico$ina, CHECK)          
-        );
-        sep <- data.frame(
-          barrio = "Total Individuos",
-          emblematico = sum(valorEsteticoSector$emblematico),
-          esencial = sum(valorEsteticoSector$esencial),
-          deseable = sum(valorEsteticoSector$deseable),
-          indiferente = sum(valorEsteticoSector$indiferente),
-          inaceptable = sum(valorEsteticoSector$inaceptable)
-        );
-        valorEsteticoSector <- rbind(valorEsteticoSector, sep);
-        vlrEstetico <- rbind(vlrEstetico, valorEsteticoSector);
-      }    
-      return(vlrEstetico);
+          valorEsteticoSector <- rbind(valorEsteticoSector, sep);
+          vlrEstetico <- rbind(vlrEstetico, valorEsteticoSector);
+        }    
+        return(vlrEstetico);
+      } else {
+        vlrEstetico <- "No existen registros";
+        return(vlrEstetico)
+      } 
     }
   );    
 }
 getAlturas <- function(dataFrame, opcion){
   switch(opcion,
     "1"={
-      maxHabito <- max(dataFrame$habito_crecimiento);
-      alturaTotal <- data.frame();
-      for (i in 1:maxHabito) {
-        sector <- subset(dataFrame, habito_crecimiento == i);
-        inferior <- min(sector$altura_total);
-        superior <- max(sector$altura_total);
-        sturges <- (1 + 3.322) * log10(nrow(sector));
+      if(nrow(dataFrame) > 0){
+        maxHabito <- max(dataFrame$habito_crecimiento);
+        alturaTotal <- data.frame();
+        for (i in 1:maxHabito) {
+          sector <- subset(dataFrame, habito_crecimiento == i);
+          inferior <- min(sector$altura_total);
+          superior <- max(sector$altura_total);
+          sturges <- (1 + 3.322) * log10(nrow(sector));
+          clase <- (superior-inferior)/sturges
+          rangos <- cut(
+            sector$altura_total, 
+            breaks = seq(inferior, superior+clase, by = clase), 
+            include.lowest = TRUE
+          );
+          tmpAlturaTotal <- as.data.frame(
+            table(rangos),
+            stringsAsFactors=FALSE
+          );
+          colnames(tmpAlturaTotal) <- c("rango", "individuos");
+          for (j in 1:nrow(tmpAlturaTotal)){
+            cadena <- tmpAlturaTotal$rango[j];
+            cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
+            listaRango <- strsplit(cadenaRango, ",");
+            r1 <- as.double(listaRango[[1]][1]);
+            r2 <- as.double(listaRango[[1]][2]);
+            if(j == 1){
+              especies <- factor(subset(sector$nom_cientifico, sector$altura_total >= r1 & sector$altura_total <= r2));
+            } else{
+              especies <- factor(subset(sector$nom_cientifico, sector$altura_total > r1 & sector$altura_total <= r2));
+            }
+            dfEspecies <- as.data.frame(table(especies));
+            if(nrow(dfEspecies) > 0 ) {
+              especieMasComun <- as.character(
+                dfEspecies[order(-dfEspecies$Freq),1][1]
+              );
+              tmpAlturaTotal$nombreComun[j] <- as.character(
+                sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
+              );
+              #tmpAlturaTotal$nombreComun[j] = especieMasComun;
+            } else {
+              tmpAlturaTotal$nombreComun[j] <- "Ninguno";
+            }
+              
+          }
+          sep <- data.frame(
+            rango = "Total Individuos",
+            individuos = sum(as.integer(tmpAlturaTotal$individuos)),
+            nombreComun = "---",
+            stringsAsFactors=FALSE
+          );
+          tmpAlturaTotal <- rbind(tmpAlturaTotal, sep);
+          alturaTotal <- rbind(alturaTotal, tmpAlturaTotal);
+        }
+        return(alturaTotal);
+      } else {
+        alturaTotal <- "No existen registros";
+        return(alturaTotal);
+      }
+    },
+    "2"={
+      if(nrow(dataFrame) > 0){
+        alturaFuste <- data.frame();  
+        inferior <- min(dataFrame$altura_fuste);
+        superior <- max(dataFrame$altura_fuste);
+        sturges <- (1 + 3.322) * log10(nrow(dataFrame));
         clase <- (superior-inferior)/sturges
         rangos <- cut(
-          sector$altura_total, 
+          dataFrame$altura_fuste, 
           breaks = seq(inferior, superior+clase, by = clase), 
           include.lowest = TRUE
         );
-        tmpAlturaTotal <- as.data.frame(
+        tmpAlturaFuste <- as.data.frame(
           table(rangos),
           stringsAsFactors=FALSE
         );
-        colnames(tmpAlturaTotal) <- c("rango", "individuos");
-        for (j in 1:nrow(tmpAlturaTotal)){
-          cadena <- tmpAlturaTotal$rango[j];
+        colnames(tmpAlturaFuste) <- c("rango", "individuos");
+        for (i in 1:nrow(tmpAlturaFuste)){
+          cadena <- tmpAlturaFuste$rango[i];
           cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
           listaRango <- strsplit(cadenaRango, ",");
           r1 <- as.double(listaRango[[1]][1]);
           r2 <- as.double(listaRango[[1]][2]);
-          if(j == 1){
-            especies <- factor(subset(sector$nom_cientifico, sector$altura_total >= r1 & sector$altura_total <= r2));
-          } else{
-            especies <- factor(subset(sector$nom_cientifico, sector$altura_total > r1 & sector$altura_total <= r2));
+          if(i == 1){
+            especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$altura_fuste >= r1 & dataFrame$altura_fuste <= r2));
+          } else {
+            especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$altura_fuste > r1 & dataFrame$altura_fuste <= r2));
           }
           dfEspecies <- as.data.frame(table(especies));
-          if(nrow(dfEspecies) > 0 ) {
-            especieMasComun <- as.character(
-              dfEspecies[order(-dfEspecies$Freq),1][1]
-            );
-            tmpAlturaTotal$nombreComun[j] <- as.character(
-              sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
-            );
-            #tmpAlturaTotal$nombreComun[j] = especieMasComun;
-          } else {
-            tmpAlturaTotal$nombreComun[j] <- "Ninguno";
-          }
-            
+          especieMasComun <- as.character(
+            dfEspecies[order(-dfEspecies$Freq),1][1]
+          );
+          tmpAlturaFuste$nombreComun[i] <- as.character(
+            dataFrame$nom_comun[ dataFrame$nom_cientifico == especieMasComun ][1]
+          );
+          #tmpAlturaFuste$nombreComun[i] = especieMasComun;
         }
         sep <- data.frame(
           rango = "Total Individuos",
-          individuos = sum(as.integer(tmpAlturaTotal$individuos)),
+          individuos = sum(as.integer(tmpAlturaFuste$individuos)),
           nombreComun = "---",
           stringsAsFactors=FALSE
         );
-        tmpAlturaTotal <- rbind(tmpAlturaTotal, sep);
-        alturaTotal <- rbind(alturaTotal, tmpAlturaTotal);
-      }
-      return(alturaTotal);
-    },
-    "2"={
-      alturaFuste <- data.frame();  
-      inferior <- min(dataFrame$altura_fuste);
-      superior <- max(dataFrame$altura_fuste);
-      sturges <- (1 + 3.322) * log10(nrow(dataFrame));
-      clase <- (superior-inferior)/sturges
-      rangos <- cut(
-        dataFrame$altura_fuste, 
-        breaks = seq(inferior, superior+clase, by = clase), 
-        include.lowest = TRUE
-      );
-      tmpAlturaFuste <- as.data.frame(
-        table(rangos),
-        stringsAsFactors=FALSE
-      );
-      colnames(tmpAlturaFuste) <- c("rango", "individuos");
-      for (i in 1:nrow(tmpAlturaFuste)){
-        cadena <- tmpAlturaFuste$rango[i];
-        cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
-        listaRango <- strsplit(cadenaRango, ",");
-        r1 <- as.double(listaRango[[1]][1]);
-        r2 <- as.double(listaRango[[1]][2]);
-        if(i == 1){
-          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$altura_fuste >= r1 & dataFrame$altura_fuste <= r2));
-        } else {
-          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$altura_fuste > r1 & dataFrame$altura_fuste <= r2));
-        }
-        dfEspecies <- as.data.frame(table(especies));
-        especieMasComun <- as.character(
-          dfEspecies[order(-dfEspecies$Freq),1][1]
-        );
-        tmpAlturaFuste$nombreComun[i] <- as.character(
-          dataFrame$nom_comun[ dataFrame$nom_cientifico == especieMasComun ][1]
-        );
-        #tmpAlturaFuste$nombreComun[i] = especieMasComun;
-      }
-      sep <- data.frame(
-        rango = "Total Individuos",
-        individuos = sum(as.integer(tmpAlturaFuste$individuos)),
-        nombreComun = "---",
-        stringsAsFactors=FALSE
-      );
-      tmpAlturaFuste <- rbind(tmpAlturaFuste, sep);
-      alturaFuste <- rbind(alturaFuste, tmpAlturaFuste);
-      return(alturaFuste);
+        tmpAlturaFuste <- rbind(tmpAlturaFuste, sep);
+        alturaFuste <- rbind(alturaFuste, tmpAlturaFuste);
+        return(alturaFuste);
+      } else {
+        alturaFuste <- "No existen registros";
+        return(alturaFuste);
+      } 
     }
   );    
 }
 getDiametros <- function(dataFrame, opcion){
   switch(opcion,
     "1"={
-      maxHabito <- max(dataFrame$habito_crecimiento);
-      diametroNormal <- data.frame();
-      for (i in 1:maxHabito) {
-        sector <- subset(dataFrame, habito_crecimiento == i);
-        inferior <- min(sector$diametro_normal);
-        superior <- max(sector$diametro_normal);
-        sturges <- (1 + 3.322) * log10(nrow(sector));
+      if(nrow(dataFrame) > 0){
+        maxHabito <- max(dataFrame$habito_crecimiento);
+        diametroNormal <- data.frame();
+        for (i in 1:maxHabito) {
+          sector <- subset(dataFrame, habito_crecimiento == i);
+          inferior <- min(sector$diametro_normal);
+          superior <- max(sector$diametro_normal);
+          sturges <- (1 + 3.322) * log10(nrow(sector));
+          clase <- (superior-inferior)/sturges
+          rangos <- cut(
+            sector$diametro_normal, 
+            breaks = seq(inferior, superior+clase, by = clase), 
+            include.lowest = TRUE
+          );
+          tmpDiametroNormal <- as.data.frame(
+            table(rangos),
+            stringsAsFactors=FALSE
+          );
+          colnames(tmpDiametroNormal) <- c("rango", "individuos");
+          for (j in 1:nrow(tmpDiametroNormal)){
+            cadena <- tmpDiametroNormal$rango[j];
+            cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
+            listaRango <- strsplit(cadenaRango, ",");
+            r1 <- as.double(listaRango[[1]][1]);
+            r2 <- as.double(listaRango[[1]][2]);
+            if(j == 1){
+              especies <- factor(subset(sector$nom_cientifico, sector$diametro_normal >= r1 & sector$diametro_normal <= r2));
+            } else{
+              especies <- factor(subset(sector$nom_cientifico, sector$diametro_normal > r1 & sector$diametro_normal <= r2));
+            }
+            dfEspecies <- as.data.frame(table(especies));
+            especieMasComun <- as.character(
+              dfEspecies[order(-dfEspecies$Freq),1][1]
+            );
+            tmpDiametroNormal$nombreComun[j] <- as.character(
+              sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
+            );
+            #tmpDiametroNormal$nombreComun[j] = especieMasComun;
+          }
+          sep <- data.frame(
+            rango = "Total Individuos",
+            individuos = sum(as.integer(tmpDiametroNormal$individuos)),
+            nombreComun = "---",
+            stringsAsFactors=FALSE
+          );
+          tmpDiametroNormal <- rbind(tmpDiametroNormal, sep);
+          diametroNormal <- rbind(diametroNormal, tmpDiametroNormal);
+        }
+        return(diametroNormal);
+      } else {
+        diametroNormal <- "No existen registros";
+        return(diametroNormal);
+      } 
+    },
+    "2"={
+      if(nrow(dataFrame) > 0){
+        diametroCopa <- data.frame();  
+        inferior <- min(dataFrame$diametro_copa);
+        superior <- max(dataFrame$diametro_copa);
+        sturges <- (1 + 3.322) * log10(nrow(dataFrame));
         clase <- (superior-inferior)/sturges
         rangos <- cut(
-          sector$diametro_normal, 
+          dataFrame$diametro_copa, 
           breaks = seq(inferior, superior+clase, by = clase), 
           include.lowest = TRUE
         );
-        tmpDiametroNormal <- as.data.frame(
+        tmpDiametroCopa <- as.data.frame(
           table(rangos),
           stringsAsFactors=FALSE
         );
-        colnames(tmpDiametroNormal) <- c("rango", "individuos");
-        for (j in 1:nrow(tmpDiametroNormal)){
-          cadena <- tmpDiametroNormal$rango[j];
+        colnames(tmpDiametroCopa) <- c("rango", "individuos");
+        for (i in 1:nrow(tmpDiametroCopa)){
+          cadena <- tmpDiametroCopa$rango[i];
           cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
           listaRango <- strsplit(cadenaRango, ",");
           r1 <- as.double(listaRango[[1]][1]);
           r2 <- as.double(listaRango[[1]][2]);
-          if(j == 1){
-            especies <- factor(subset(sector$nom_cientifico, sector$diametro_normal >= r1 & sector$diametro_normal <= r2));
-          } else{
-            especies <- factor(subset(sector$nom_cientifico, sector$diametro_normal > r1 & sector$diametro_normal <= r2));
+          if(i == 1){
+            especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_copa >= r1 & dataFrame$diametro_copa <= r2));
+          } else {
+            especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_copa > r1 & dataFrame$diametro_copa <= r2));
           }
           dfEspecies <- as.data.frame(table(especies));
           especieMasComun <- as.character(
             dfEspecies[order(-dfEspecies$Freq),1][1]
           );
-          tmpDiametroNormal$nombreComun[j] <- as.character(
-            sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
+          tmpDiametroCopa$nombreComun[i] <- as.character(
+            dataFrame$nom_comun[ dataFrame$nom_cientifico == especieMasComun ][1]
           );
-          #tmpDiametroNormal$nombreComun[j] = especieMasComun;
+          #tmpDiametroCopa$nombreComun[i] = especieMasComun;
         }
         sep <- data.frame(
           rango = "Total Individuos",
-          individuos = sum(as.integer(tmpDiametroNormal$individuos)),
+          individuos = sum(as.integer(tmpDiametroCopa$individuos)),
           nombreComun = "---",
           stringsAsFactors=FALSE
         );
-        tmpDiametroNormal <- rbind(tmpDiametroNormal, sep);
-        diametroNormal <- rbind(diametroNormal, tmpDiametroNormal);
+        tmpDiametroCopa <- rbind(tmpDiametroCopa, sep);
+        diametroCopa <- rbind(diametroCopa, tmpDiametroCopa);
+        return(diametroCopa);
+      } else {
+        diametroCopa <- "No existen registros";
+        return(diametroCopa);
       }
-      return(diametroNormal);
-    },
-    "2"={
-      diametroCopa <- data.frame();  
-      inferior <- min(dataFrame$diametro_copa);
-      superior <- max(dataFrame$diametro_copa);
-      sturges <- (1 + 3.322) * log10(nrow(dataFrame));
+    }
+  );
+}
+getVolumen <- function(dataFrame){
+  if(nrow(dataFrame) > 0){
+    maxHabito <- max(dataFrame$habito_crecimiento);
+    volumen <- data.frame();
+    for (i in 1:maxHabito) {
+      sector <- subset(dataFrame, habito_crecimiento == i);
+      inferior <- min(sector$volumen);
+      superior <- max(sector$volumen);
+      sturges <- (1 + 3.322) * log10(nrow(sector));
       clase <- (superior-inferior)/sturges
       rangos <- cut(
-        dataFrame$diametro_copa, 
+        sector$volumen, 
         breaks = seq(inferior, superior+clase, by = clase), 
         include.lowest = TRUE
       );
-      tmpDiametroCopa <- as.data.frame(
+      tmpVolumen <- as.data.frame(
         table(rangos),
         stringsAsFactors=FALSE
       );
-      colnames(tmpDiametroCopa) <- c("rango", "individuos");
-      for (i in 1:nrow(tmpDiametroCopa)){
-        cadena <- tmpDiametroCopa$rango[i];
+      colnames(tmpVolumen) <- c("rango", "individuos");
+      for (j in 1:nrow(tmpVolumen)){
+        cadena <- tmpVolumen$rango[j];
         cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
         listaRango <- strsplit(cadenaRango, ",");
         r1 <- as.double(listaRango[[1]][1]);
         r2 <- as.double(listaRango[[1]][2]);
-        if(i == 1){
-          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_copa >= r1 & dataFrame$diametro_copa <= r2));
-        } else {
-          especies <- factor(subset(dataFrame$nom_cientifico, dataFrame$diametro_copa > r1 & dataFrame$diametro_copa <= r2));
+        if(j == 1){
+          especies <- factor(subset(sector$nom_cientifico, sector$volumen >= r1 & sector$volumen <= r2));
+        } else{
+          especies <- factor(subset(sector$nom_cientifico, sector$volumen > r1 & sector$volumen <= r2));
         }
         dfEspecies <- as.data.frame(table(especies));
         especieMasComun <- as.character(
           dfEspecies[order(-dfEspecies$Freq),1][1]
         );
-        tmpDiametroCopa$nombreComun[i] <- as.character(
-          dataFrame$nom_comun[ dataFrame$nom_cientifico == especieMasComun ][1]
+        tmpVolumen$nombreComun[j] <- as.character(
+          sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
         );
-        #tmpDiametroCopa$nombreComun[i] = especieMasComun;
+        #tmpVolumen$nombreComun[j] = especieMasComun;
       }
       sep <- data.frame(
         rango = "Total Individuos",
-        individuos = sum(as.integer(tmpDiametroCopa$individuos)),
+        individuos = sum(as.integer(tmpVolumen$individuos)),
         nombreComun = "---",
         stringsAsFactors=FALSE
       );
-      tmpDiametroCopa <- rbind(tmpDiametroCopa, sep);
-      diametroCopa <- rbind(diametroCopa, tmpDiametroCopa);
-      return(diametroCopa);
+      tmpVolumen <- rbind(tmpVolumen, sep);
+      volumen <- rbind(volumen, tmpVolumen);
     }
-  );
-}
-getVolumen <- function(dataFrame){
-  maxHabito <- max(dataFrame$habito_crecimiento);
-  volumen <- data.frame();
-  for (i in 1:maxHabito) {
-    sector <- subset(dataFrame, habito_crecimiento == i);
-    inferior <- min(sector$volumen);
-    superior <- max(sector$volumen);
-    sturges <- (1 + 3.322) * log10(nrow(sector));
-    clase <- (superior-inferior)/sturges
-    rangos <- cut(
-      sector$volumen, 
-      breaks = seq(inferior, superior+clase, by = clase), 
-      include.lowest = TRUE
-    );
-    tmpVolumen <- as.data.frame(
-      table(rangos),
-      stringsAsFactors=FALSE
-    );
-    colnames(tmpVolumen) <- c("rango", "individuos");
-    for (j in 1:nrow(tmpVolumen)){
-      cadena <- tmpVolumen$rango[j];
-      cadenaRango <- substr(cadena, 2, nchar(cadena)-1);
-      listaRango <- strsplit(cadenaRango, ",");
-      r1 <- as.double(listaRango[[1]][1]);
-      r2 <- as.double(listaRango[[1]][2]);
-      if(j == 1){
-        especies <- factor(subset(sector$nom_cientifico, sector$volumen >= r1 & sector$volumen <= r2));
-      } else{
-        especies <- factor(subset(sector$nom_cientifico, sector$volumen > r1 & sector$volumen <= r2));
-      }
-      dfEspecies <- as.data.frame(table(especies));
-      especieMasComun <- as.character(
-        dfEspecies[order(-dfEspecies$Freq),1][1]
-      );
-      tmpVolumen$nombreComun[j] <- as.character(
-        sector$nom_comun[ sector$nom_cientifico == especieMasComun ][1]
-      );
-      #tmpVolumen$nombreComun[j] = especieMasComun;
-    }
-    sep <- data.frame(
-      rango = "Total Individuos",
-      individuos = sum(as.integer(tmpVolumen$individuos)),
-      nombreComun = "---",
-      stringsAsFactors=FALSE
-    );
-    tmpVolumen <- rbind(tmpVolumen, sep);
-    volumen <- rbind(volumen, tmpVolumen);
-  }
-  return(volumen);
+    return(volumen);
+  } else {
+    volumen <- "No existen registros";
+    return(volumen);
+  } 
 }
 getPropiedadesFisicas <- function(dataFrame){
   propiedadesFisicas <- data.frame(0);
@@ -1094,17 +1203,22 @@ getPropiedadesSanitarias <- function(dataFrame){
   return(propiedadesSanitarias);
 }
 getConflictos <- function(dataFrame){
-  tmpConflictos <- contarConflictos(dataFrame, conteo$general, darValor(dataFrame, conteo$limite));  
-  total <- darValor(dataFrame, conteo$total);
-  conflictos <- data.frame(
-    conflictos = conflictos$nombres,
-    sinConflicto = tmpConflictos$sinConflicto,
-    xsi = round((tmpConflictos$sinConflicto/total)*100, 2),
-    conConflicto = tmpConflictos$conConflicto,
-    xno = round((tmpConflictos$conConflicto/total)*100, 2),
-    individuos = tmpConflictos$sinConflicto + tmpConflictos$conConflicto
-  );
-  return(conflictos);
+  if(nrow(dataFrame) > 0) {
+    tmpConflictos <- contarConflictos(dataFrame, conteo$general, darValor(dataFrame, conteo$limite));  
+    total <- darValor(dataFrame, conteo$total);
+    conflictos <- data.frame(
+      conflictos = conflictos$nombres,
+      sinConflicto = tmpConflictos$sinConflicto,
+      xsi = round((tmpConflictos$sinConflicto/total)*100, 2),
+      conConflicto = tmpConflictos$conConflicto,
+      xno = round((tmpConflictos$conConflicto/total)*100, 2),
+      individuos = tmpConflictos$sinConflicto + tmpConflictos$conConflicto
+    );
+    return(conflictos);
+  } else {
+    conflictos <- "No existen registros";
+    return(conflictos)
+  }   
 }
 getRiesgos <- function(dataFrame){
   riesgos <- data.frame(0);

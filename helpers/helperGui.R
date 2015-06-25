@@ -71,6 +71,10 @@ generarInformes <- function(){
 		riesgos(comuna)
 		contador <- contador+1
 	}
+	if(tclvalue(valoresCheckBox$cb10) == "1"){
+		print("especies")
+		contador <- contador+1
+	}
 	if(tclvalue(valoresCheckBox$cb11) == "1"){
 		procedenciaGeneral(comuna)
 		contador <- contador+1
@@ -127,6 +131,6 @@ generarInformes <- function(){
 		valorEsteticoEspecifico(comuna)
 		contador <- contador+1
 	}
-	mensajeInformes <- paste("Se han generado un total de ", contador, " informes, los cuales\nse encuentran en la carpeta 'data' de la aplicación", sep="")
+	mensajeInformes <- paste("Se han generado un total de ", contador, " informe(s), los cuales\nse encuentran en la carpeta 'data' de la aplicación", sep="")
 	tkmessageBox(title = "Mensaje", message = mensajeInformes, type = "ok")
 }

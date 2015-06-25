@@ -1,7 +1,8 @@
 configurarEntorno <- function(){
   suppressMessages(require(gdata));
   Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre1.8.0_45');
-  require(xlsx, quietly = TRUE);  
+  require(xlsx, quietly = TRUE);
+  require(tcltk);
   configurarVaribales();
 }
 configurarVaribales <- function(){
@@ -18,6 +19,7 @@ configurarVaribales <- function(){
     cb7 = tclVar("1"),
     cb8 = tclVar("1"),
     cb9 = tclVar("1"),
+    cb10 = tclVar("1"),
     cb11 = tclVar("1"),
     cb12 = tclVar("1"),
     cb13 = tclVar("1"),
