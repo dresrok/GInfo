@@ -32,7 +32,7 @@ configurarEntorno <- function(){
 
 Cambiando la variable `JAVA_HOME` por la dirección de instalación de su equipo.
 
-#Ejecución
+##Ejecución
 Para abrir la aplicación con **RStudio** por favor de doble clic sobre el archivo **`GInfo.Rproj`** y ejecute en la interfaz del **IDE** el archivo **`app.R`**
 
 Licencia
